@@ -1,0 +1,13 @@
+{
+  "name": "Espontáneos Travel",
+  "short_name": "Espontáneos",
+  "description": "Turismo rural, cultural, de naturaleza y sin barreras en el Eje Cafetero, Colombia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf9f4",
+  "theme_color": "#3f5a2b",
+  "lang": "es",
+  "icons": [
+    { "src": "assets/img/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
