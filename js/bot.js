@@ -28,7 +28,7 @@
       when_q:"¿Para cuándo lo planeas?", w1:"Esta semana", w2:"Este mes", w3:"Más adelante", w4:"Fechas flexibles",
       handoff:"¡Perfecto! Aquí está tu resumen 👇 Toca el botón y te atiende un asesor por WhatsApp (respondemos en menos de 24 h).",
       s_exp:"Experiencia", s_people:"Personas", s_when:"Fecha", s_access:"Accesibilidad: sí",
-      prices_text:"Nuestras experiencias van *desde USD 38 por persona* (los planes de varios días desde USD 390). El precio varía según el grupo, el transporte y lo que incluya cada plan.\n\nPara separar tu cupo se paga un *anticipo del 50%* y el resto el día de la experiencia.",
+      prices_text:"Cada experiencia se cotiza *a tu medida* 💚 El valor depende del plan, el número de personas, el transporte y lo que incluya.\n\nCuéntanos qué te interesa y te damos una *cotización personalizada sin compromiso*. Para separar tu cupo se paga un *anticipo del 50%* y el resto el día de la experiencia.",
       book_text:"Reservar es muy fácil:\n1️⃣ Eliges tu experiencia\n2️⃣ Nos escribes por WhatsApp con fecha y n.º de personas\n3️⃣ Separas tu cupo con el *50% de anticipo*\n4️⃣ Pagas el resto el día del tour\n\n¿Te paso con un asesor?",
       access_text:"En Espontáneos Travel creemos en un *turismo sin barreras* ♿\n\nAdaptamos rutas, transporte y ritmos, con acompañamiento especializado, para que todas las personas disfruten el Paisaje Cafetero con autonomía y seguridad. Cuéntanos tus necesidades y lo planeamos a tu medida.",
       access_book:"Quiero una experiencia accesible",
@@ -58,7 +58,7 @@
       when_q:"When are you planning it?", w1:"This week", w2:"This month", w3:"Later on", w4:"Flexible dates",
       handoff:"Perfect! Here's your summary 👇 Tap the button and an advisor will help you on WhatsApp (we reply within 24 h).",
       s_exp:"Experience", s_people:"People", s_when:"Date", s_access:"Accessibility: yes",
-      prices_text:"Our experiences start *from USD 38 per person* (multi-day trips from USD 390). The price depends on group size, transport and what each plan includes.\n\nTo hold your spot you pay a *50% deposit* and the rest on the day of the experience.",
+      prices_text:"Every experience is *tailored and quoted for you* 💚 The price depends on the plan, number of people, transport and what's included.\n\nTell us what you're interested in and we'll send a *free personalised quote*. To hold your spot you pay a *50% deposit* and the rest on the day of the experience.",
       book_text:"Booking is easy:\n1️⃣ Choose your experience\n2️⃣ Message us on WhatsApp with date & number of people\n3️⃣ Hold your spot with a *50% deposit*\n4️⃣ Pay the rest on the tour day\n\nShall I connect you with an advisor?",
       access_text:"At Espontáneos Travel we believe in *barrier-free tourism* ♿\n\nWe adapt routes, transport and pacing, with specialised support, so everyone can enjoy the Coffee Landscape with autonomy and safety. Tell us your needs and we'll tailor it for you.",
       access_book:"I'd like an accessible experience",
@@ -88,7 +88,7 @@
       when_q:"Pour quand le prévoyez-vous ?", w1:"Cette semaine", w2:"Ce mois-ci", w3:"Plus tard", w4:"Dates flexibles",
       handoff:"Parfait ! Voici votre récapitulatif 👇 Touchez le bouton et un conseiller vous répond sur WhatsApp (réponse sous 24 h).",
       s_exp:"Expérience", s_people:"Personnes", s_when:"Date", s_access:"Accessibilité : oui",
-      prices_text:"Nos expériences commencent *dès 38 USD par personne* (séjours de plusieurs jours dès 390 USD). Le prix dépend du groupe, du transport et du contenu de chaque formule.\n\nPour réserver votre place, un *acompte de 50%* est demandé, le solde le jour de l'expérience.",
+      prices_text:"Chaque expérience est *sur mesure et sur devis* 💚 Le prix dépend de la formule, du nombre de personnes, du transport et du contenu.\n\nDites-nous ce qui vous intéresse et nous vous enverrons un *devis personnalisé gratuit*. Pour réserver, un *acompte de 50%* est demandé, le solde le jour de l'expérience.",
       book_text:"Réserver est très simple :\n1️⃣ Choisissez votre expérience\n2️⃣ Écrivez-nous sur WhatsApp (date et nombre de personnes)\n3️⃣ Réservez avec un *acompte de 50%*\n4️⃣ Payez le solde le jour du tour\n\nJe vous mets en relation avec un conseiller ?",
       access_text:"Chez Espontáneos Travel, nous croyons au *tourisme sans barrières* ♿\n\nNous adaptons itinéraires, transport et rythme, avec un accompagnement spécialisé, pour que chacun profite du Paysage du Café en autonomie et sécurité. Dites-nous vos besoins.",
       access_book:"Je veux une expérience accessible",
@@ -118,7 +118,7 @@
       when_q:"Für wann planen Sie es?", w1:"Diese Woche", w2:"Diesen Monat", w3:"Später", w4:"Flexible Daten",
       handoff:"Perfekt! Hier ist Ihre Zusammenfassung 👇 Tippen Sie auf den Button und ein Berater hilft Ihnen auf WhatsApp (Antwort binnen 24 Std.).",
       s_exp:"Erlebnis", s_people:"Personen", s_when:"Datum", s_access:"Barrierefreiheit: ja",
-      prices_text:"Unsere Erlebnisse beginnen *ab 38 USD pro Person* (Mehrtagesreisen ab 390 USD). Der Preis hängt von Gruppe, Transport und Leistungen ab.\n\nZur Reservierung wird eine *Anzahlung von 50%* fällig, der Rest am Tag des Erlebnisses.",
+      prices_text:"Jedes Erlebnis wird *individuell für Sie kalkuliert* 💚 Der Preis hängt vom Programm, der Personenzahl, dem Transport und den Leistungen ab.\n\nSagen Sie uns, was Sie interessiert, und wir senden ein *kostenloses persönliches Angebot*. Zur Reservierung wird eine *Anzahlung von 50%* fällig, der Rest am Tag des Erlebnisses.",
       book_text:"Buchen ist ganz einfach:\n1️⃣ Erlebnis wählen\n2️⃣ Per WhatsApp mit Datum & Personenzahl schreiben\n3️⃣ Platz mit *50% Anzahlung* sichern\n4️⃣ Rest am Tourtag zahlen\n\nSoll ich Sie mit einem Berater verbinden?",
       access_text:"Bei Espontáneos Travel glauben wir an *barrierefreien Tourismus* ♿\n\nWir passen Routen, Transport und Tempo an, mit spezialisierter Begleitung, damit alle die Kaffeelandschaft selbstbestimmt und sicher genießen. Sagen Sie uns Ihre Bedürfnisse.",
       access_book:"Ich möchte ein barrierefreies Erlebnis",
@@ -148,7 +148,7 @@
       when_q:"Para quando você planeja?", w1:"Esta semana", w2:"Este mês", w3:"Mais adiante", w4:"Datas flexíveis",
       handoff:"Perfeito! Aqui está seu resumo 👇 Toque no botão e um consultor te atende pelo WhatsApp (respondemos em até 24 h).",
       s_exp:"Experiência", s_people:"Pessoas", s_when:"Data", s_access:"Acessibilidade: sim",
-      prices_text:"Nossas experiências começam *a partir de USD 38 por pessoa* (roteiros de vários dias a partir de USD 390). O preço varia conforme o grupo, o transporte e o que cada plano inclui.\n\nPara garantir sua vaga paga-se um *sinal de 50%* e o restante no dia da experiência.",
+      prices_text:"Cada experiência é *sob medida e com orçamento próprio* 💚 O valor depende do plano, do número de pessoas, do transporte e do que inclui.\n\nConte o que te interessa e enviamos um *orçamento personalizado sem compromisso*. Para garantir sua vaga paga-se um *sinal de 50%* e o restante no dia da experiência.",
       book_text:"Reservar é muito fácil:\n1️⃣ Escolha sua experiência\n2️⃣ Fale no WhatsApp com data e n.º de pessoas\n3️⃣ Garanta a vaga com *50% de sinal*\n4️⃣ Pague o restante no dia do tour\n\nQuer que eu te passe para um consultor?",
       access_text:"Na Espontáneos Travel acreditamos no *turismo sem barreiras* ♿\n\nAdaptamos rotas, transporte e ritmo, com acompanhamento especializado, para que todos aproveitem a Paisagem Cafeeira com autonomia e segurança. Conte suas necessidades.",
       access_book:"Quero uma experiência acessível",
@@ -289,7 +289,7 @@
       const cid = id.slice(4);
       const catName = EspoApp.catLabel(cid);
       const tours = EspoApp.tours().filter(x => x.cat === cid);
-      const lines = tours.map(x => { const tx = EspoApp.tourText(x); return "• " + tx.name + " — " + L.from + " USD " + x.priceFrom; }).join("\n");
+      const lines = tours.map(x => "• " + EspoApp.tourText(x).name).join("\n");
       const chips = tours.map(x => ({ label: EspoApp.tourText(x).name, to: "tour:" + x.id }));
       chips.push({ label: L.see_web, filter: cid });
       chips.push({ label: L.back, to: "exp" });

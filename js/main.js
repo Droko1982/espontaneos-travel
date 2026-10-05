@@ -27,8 +27,10 @@
   /* ---------- Images: topical placeholder CDN with robust fallback ---------- */
   function imgUrl(kw, seed, w, h) {
     if (kw && kw.startsWith("local:")) return "assets/img/" + kw.slice(6);
+    if (kw && kw.startsWith("drive:")) return "https://lh3.googleusercontent.com/d/" + kw.slice(6) + "=w" + w + "-h" + h;
     return `https://loremflickr.com/${w}/${h}/${encodeURIComponent(kw)}?lock=${seed}`;
   }
+  function driveUrl(id, w, h) { return "https://lh3.googleusercontent.com/d/" + id + "=w" + w + "-h" + h; }
   function svgFallback(w, h, label) {
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
       <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
@@ -38,29 +40,36 @@
     </svg>`;
     return "data:image/svg+xml;charset=utf-8," + svg.replace(/\s{2,}/g, " ").trim();
   }
-  // Global error handler chain: loremflickr -> picsum -> svg
+  // Fallback chain: Drive lh3 -> Drive thumbnail -> svg ; loremflickr -> picsum -> svg
   window.__imgErr = function (el) {
     const stage = el.getAttribute("data-stage") || "0";
+    const drive = el.getAttribute("data-drive");
     const seed = el.getAttribute("data-seed") || "1";
     const w = el.getAttribute("data-w") || 1200, h = el.getAttribute("data-h") || 800;
-    if (stage === "0") {
-      el.setAttribute("data-stage", "1");
-      el.src = `https://picsum.photos/seed/esp${seed}/${w}/${h}`;
-    } else {
-      el.setAttribute("data-stage", "2");
-      el.onerror = null;
-      el.src = svgFallback(w, h, "Espontáneos Travel");
+    if (drive) {
+      if (stage === "0") { el.setAttribute("data-stage", "1"); el.src = "https://drive.google.com/thumbnail?id=" + drive + "&sz=w" + w; return; }
+      el.setAttribute("data-stage", "2"); el.onerror = null; el.src = svgFallback(w, h, "Espontáneos Travel"); return;
     }
+    if (stage === "0") { el.setAttribute("data-stage", "1"); el.src = `https://picsum.photos/seed/esp${seed}/${w}/${h}`; }
+    else { el.setAttribute("data-stage", "2"); el.onerror = null; el.src = svgFallback(w, h, "Espontáneos Travel"); }
   };
   function imgTag(kw, seed, w, h, alt, cls, loading) {
+    const drive = kw && kw.startsWith("drive:") ? kw.slice(6) : "";
     return `<img src="${imgUrl(kw, seed, w, h)}" alt="${esc(alt)}" class="${cls || ""}"
       loading="${loading || "lazy"}" decoding="async" width="${w}" height="${h}"
-      data-seed="${seed}" data-w="${w}" data-h="${h}" data-stage="0" onerror="window.__imgErr(this)">`;
+      ${drive ? `data-drive="${drive}"` : `data-seed="${seed}"`} data-w="${w}" data-h="${h}" data-stage="0" onerror="window.__imgErr(this)">`;
+  }
+  // Tour helpers for the real data model
+  function coverKw(tour) { return (tour.imgs && tour.imgs.length) ? "drive:" + tour.imgs[0] : tour.fb; }
+  function tourImgList(tour) {
+    if (tour.imgs && tour.imgs.length) return tour.imgs.map(id => ({ drive: id }));
+    return [{ kw: tour.fb, seed: (tour.id.charCodeAt(0) + tour.id.length) }];
   }
 
   /* ---------- Language helpers ---------- */
   function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N[DEFAULT_LANG][key] || key; }
-  function tourText(tour) { return tour.t[currentLang] || tour.t[DEFAULT_LANG]; }
+  function tourSummary(tour) { return (tour.sum && (tour.sum[currentLang] || tour.sum.en || tour.sum.es)) || ""; }
+  function tourText(tour) { return { name: tour.name, summary: tourSummary(tour) }; }
   function catLabel(cat) { const c = CATEGORIES.find(x => x.id === cat); return c ? (c[currentLang] || c.es) : cat; }
 
   function detectLang() {
@@ -95,24 +104,21 @@
     if (!list.length) { grid.innerHTML = `<p class="tours-empty">${esc(t("tours_empty"))}</p>`; return; }
     grid.innerHTML = list.map((tour, i) => {
       const tx = tourText(tour);
-      const price = tour.priceFrom;
+      const nphoto = (tour.imgs && tour.imgs.length) || 0;
       return `<article class="tour-card reveal" data-delay="${(i % 3) + 1}" data-id="${tour.id}" tabindex="0" role="button" aria-label="${esc(tx.name)}">
         <div class="tour-card__media">
-          ${imgTag(tour.img, tour.seed, 800, 560, tx.name, "", "lazy")}
+          ${imgTag(coverKw(tour), (tour.id.charCodeAt(0) + tour.id.length), 800, 560, tx.name, "", "lazy")}
           <span class="tour-card__cat">${esc(catLabel(tour.cat))}</span>
-          <span class="tour-card__fav" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.1C.3 8.6 1.9 5 5.3 5c2 0 3.4 1.1 4.2 2.3h1C11.3 6.1 12.7 5 14.7 5 18.1 5 19.7 8.6 22 11.9 19.5 16.4 12 21 12 21z"/></svg>
-          </span>
+          ${nphoto ? `<span class="tour-card__count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.2"/><path d="M8 5l1.5-2h5L16 5"/></svg>${nphoto}</span>` : ""}
         </div>
         <div class="tour-card__body">
           <div class="tour-card__meta">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t("dur_" + tour.durationKey))}</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/></svg>${esc(t("grp_" + tour.groupKey))}</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(t("loc_region"))}</span>
           </div>
           <h3>${esc(tx.name)}</h3>
           <p class="tour-card__desc">${esc(tx.summary)}</p>
           <div class="tour-card__foot">
-            <div class="tour-card__price"><small>${esc(t("card_from"))}</small><b><span class="cur">USD </span>${price}</b> <span class="cur">${esc(t("card_pp"))}</span></div>
+            <div class="tour-card__price"><b class="quote">${esc(t("card_quote"))}</b></div>
             <span class="tour-card__more">${esc(t("card_details"))}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
@@ -141,17 +147,17 @@
   function renderGallery() {
     const wrap = $("#gallery");
     if (!wrap) return;
+    const list = GALLERY.map(g => ({ drive: g.id, cap: g.cap }));
     wrap.innerHTML = GALLERY.map((g, i) => {
-      const cap = (GALLERY_CAPS[g.k] && (GALLERY_CAPS[g.k][currentLang] || GALLERY_CAPS[g.k].es)) || "";
-      return `<figure class="gallery__item" data-idx="${i}" tabindex="0" role="button" aria-label="${esc(cap)}">
-        ${imgTag(g.img, g.seed, 700, (i % 3 === 0 ? 900 : 560), cap, "", "lazy")}
-        <figcaption class="gallery__cap">${esc(cap)}</figcaption>
+      return `<figure class="gallery__item" data-idx="${i}" tabindex="0" role="button" aria-label="${esc(g.cap)}">
+        ${imgTag("drive:" + g.id, i, 700, (i % 3 === 0 ? 900 : 560), g.cap, "", "lazy")}
+        <figcaption class="gallery__cap">${esc(g.cap)}</figcaption>
       </figure>`;
     }).join("");
     $$(".gallery__item", wrap).forEach(f => {
       const idx = +f.getAttribute("data-idx");
-      f.addEventListener("click", () => openLightbox(idx));
-      f.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(idx); } });
+      f.addEventListener("click", () => openLightbox(list, idx));
+      f.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(list, idx); } });
     });
   }
 
@@ -161,17 +167,29 @@
     if (!tour) return;
     const tx = tourText(tour);
     const m = $("#modal");
-    $("#modal-hero").style.backgroundImage = `url('${imgUrl(tour.img, tour.seed, 1200, 700)}')`;
+    const imgs = tourImgList(tour);
+    const heroUrl = imgs[0].drive ? driveUrl(imgs[0].drive, 1200, 700) : imgUrl(imgs[0].kw, imgs[0].seed, 1200, 700);
+    $("#modal-hero").style.backgroundImage = `url('${heroUrl}')`;
     $("#modal-cat").textContent = catLabel(tour.cat);
     $("#modal-title").textContent = tx.name;
+    const photoMeta = (tour.imgs && tour.imgs.length)
+      ? `<span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.2"/></svg>${tour.imgs.length} ${esc(t("card_photos"))}</span>` : "";
     $("#modal-meta").innerHTML =
-      `<span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t("dur_" + tour.durationKey))}</span>
-       <span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>${esc(t("grp_" + tour.groupKey))}</span>
-       <span class="m price">${esc(t("card_from"))} <b>USD ${tour.priceFrom}</b> ${esc(t("card_pp"))}</span>`;
-    $("#modal-desc").textContent = tx.desc;
+      `<span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(t("loc_region"))}</span>
+       ${photoMeta}
+       <span class="m price"><b>${esc(t("card_quote"))}</b></span>`;
+    $("#modal-desc").textContent = tx.summary + "\n\n" + t("modal_tagline");
+    // gallery strip
+    const gal = $("#modal-gallery");
+    const lbData = imgs.map(im => ({ drive: im.drive, kw: im.kw, seed: im.seed, cap: tx.name }));
+    gal.innerHTML = imgs.map((im, ix) => {
+      const tag = im.drive ? imgTag("drive:" + im.drive, ix, 320, 240, tx.name, "", "lazy") : imgTag(im.kw, im.seed, 320, 240, tx.name, "", "lazy");
+      return `<button class="modal__thumb" data-ix="${ix}" aria-label="${esc(tx.name)}">${tag}</button>`;
+    }).join("");
+    $$(".modal__thumb", gal).forEach(b => b.addEventListener("click", () => openLightbox(lbData, +b.getAttribute("data-ix"))));
     $("#modal-incl-title").textContent = t("modal_includes");
-    $("#modal-incl").innerHTML = tx.includes.map(it =>
-      `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>${esc(it)}</li>`).join("");
+    $("#modal-incl").innerHTML = ["inc1", "inc2", "inc3", "inc4", "inc5"].map(k =>
+      `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>${esc(t(k))}</li>`).join("");
     const wa = $("#modal-wa");
     wa.href = waLink(`${t("wa_tour")} ${tx.name}`);
     wa.querySelector("span").textContent = t("modal_wa");
@@ -179,27 +197,29 @@
     q.querySelector("span").textContent = t("modal_quote");
     q.onclick = (e) => { e.preventDefault(); closeModal(); const sel = $("#f-tour"); if (sel) sel.value = tx.name; location.hash = "#contacto"; };
     m.classList.add("open");
+    $("#modal-body-scroll") && ($("#modal-body-scroll").scrollTop = 0);
     document.body.style.overflow = "hidden";
     $("#modal-close").focus();
   }
   function closeModal() { $("#modal").classList.remove("open"); document.body.style.overflow = ""; }
 
-  /* ---------- Lightbox ---------- */
-  let lbIndex = 0;
-  function openLightbox(i) {
-    lbIndex = i; updateLightbox();
+  /* ---------- Lightbox (generic list) ---------- */
+  let lbList = [], lbIndex = 0;
+  function openLightbox(list, i) {
+    lbList = list || []; lbIndex = i || 0; updateLightbox();
     $("#lightbox").classList.add("open"); document.body.style.overflow = "hidden";
   }
   function updateLightbox() {
-    const g = GALLERY[lbIndex];
-    const cap = (GALLERY_CAPS[g.k] && (GALLERY_CAPS[g.k][currentLang] || GALLERY_CAPS[g.k].es)) || "";
+    const g = lbList[lbIndex]; if (!g) return;
     const img = $("#lightbox-img");
-    img.setAttribute("data-seed", g.seed); img.setAttribute("data-w", 1400); img.setAttribute("data-h", 950); img.setAttribute("data-stage", "0");
+    img.removeAttribute("data-drive"); img.removeAttribute("data-seed");
+    img.setAttribute("data-w", 1400); img.setAttribute("data-h", 950); img.setAttribute("data-stage", "0");
     img.onerror = function () { window.__imgErr(this); };
-    img.src = imgUrl(g.img, g.seed, 1400, 950);
-    img.alt = cap; $("#lightbox-cap").textContent = cap;
+    if (g.drive) { img.setAttribute("data-drive", g.drive); img.src = driveUrl(g.drive, 1400, 950); }
+    else { img.setAttribute("data-seed", g.seed || 1); img.src = imgUrl(g.kw, g.seed || 1, 1400, 950); }
+    img.alt = g.cap || ""; $("#lightbox-cap").textContent = g.cap || "";
   }
-  function lbNav(d) { lbIndex = (lbIndex + d + GALLERY.length) % GALLERY.length; updateLightbox(); }
+  function lbNav(d) { if (!lbList.length) return; lbIndex = (lbIndex + d + lbList.length) % lbList.length; updateLightbox(); }
   function closeLightbox() { $("#lightbox").classList.remove("open"); document.body.style.overflow = ""; }
 
   /* ---------- Apply i18n ---------- */
@@ -297,9 +317,8 @@
     const items = TOURS.map((x, i) => ({
       "@type": "ListItem", "position": i + 1,
       "item": {
-        "@type": "TouristTrip", "name": tourText(x).name, "description": tourText(x).summary,
-        "touristType": catLabel(x.cat),
-        "offers": { "@type": "Offer", "price": x.priceFrom, "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+        "@type": "TouristTrip", "name": x.name, "description": tourSummary(x),
+        "touristType": catLabel(x.cat), "provider": { "@type": "TravelAgency", "name": "Espontáneos Travel" }
       }
     }));
     const data = { "@context": "https://schema.org", "@type": "ItemList", "name": t("tours_title"), "itemListElement": items };
@@ -424,6 +443,8 @@
   };
 
   function init() {
+    // merge generated tour-UI strings into I18N
+    if (window.I18N_EXTRA) { SUPPORTED.forEach(lg => { if (I18N[lg] && I18N_EXTRA[lg]) Object.assign(I18N[lg], I18N_EXTRA[lg]); }); }
     currentLang = detectLang();
     initTheme();
     initChrome();
