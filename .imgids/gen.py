@@ -196,6 +196,64 @@ T = [
   "A mindful, healthy eating experience.","alimentacion","healthy,food,mindful"),
 ]
 
+# FR / DE / PT summaries per tour id
+TR = {
+ "finca":("De la graine à la tasse dans une ferme traditionnelle, avec dégustation de café d'origine.","Vom Samen zur Tasse auf einer traditionellen Finca, mit Verkostung von Ursprungskaffee.","Da semente à xícara numa fazenda tradicional, com degustação de café de origem."),
+ "cocorasalento":("Les plus hauts palmiers à cire du monde et le village le plus coloré du Quindío.","Die höchsten Wachspalmen der Welt und das bunteste Dorf Quindíos.","As palmeiras de cera mais altas do mundo e o vilarejo mais colorido do Quindío."),
+ "fulldayfcs":("Le meilleur du Quindío en une journée : Filandia, vallée de Cocora et Salento.","Das Beste von Quindío an einem Tag: Filandia, Cocora-Tal und Salento.","O melhor do Quindío em um dia: Filandia, Vale de Cocora e Salento."),
+ "filandia":("Le village patrimonial, son belvédère et les maîtres vanniers.","Das historische Dorf, sein Aussichtspunkt und die Korbflechtmeister.","O vilarejo patrimônio, seu mirante e os mestres da cestaria."),
+ "cordillera":("Trois villages de montagne et un belvédère de café inoubliable.","Drei Bergdörfer und ein unvergesslicher Kaffee-Aussichtspunkt.","Três vilarejos da cordilheira e um mirante de café inesquecível."),
+ "compartidocs":("Tour en groupe partagé vers la vallée de Cocora et Salento, confortable et économique.","Geteilte Gruppentour ins Cocora-Tal und nach Salento, komfortabel und günstig.","Tour em grupo compartilhado ao Vale de Cocora e Salento, confortável e econômico."),
+ "cocoraacaime":("Trek dans la vallée de Cocora et Acaime, refuge de colibris parmi les palmiers géants.","Trek ins Cocora-Tal und nach Acaime, Kolibri-Refugium zwischen Riesenpalmen.","Trek ao Vale de Cocora e Acaime, refúgio de beija-flores entre palmeiras gigantes."),
+ "aves":("La Colombie, n°1 mondial des oiseaux : toucans, tangaras et des dizaines de colibris.","Kolumbien, Nr. 1 der Vogelwelt: Tukane, Tangaren und Dutzende Kolibris.","A Colômbia, nº 1 do mundo em aves: tucanos, saíras e dezenas de beija-flores."),
+ "palmacera":("Marchez parmi les palmiers à cire, arbre national, dans la forêt de nuages andine.","Wandern Sie zwischen Wachspalmen, dem Nationalbaum, im Anden-Nebelwald.","Caminhe entre palmeiras de cera, a árvore nacional, na floresta de névoa andina."),
+ "orquideas":("Parcourez jardins et forêts à la recherche des plus belles orchidées du tropique.","Entdecken Sie Gärten und Wälder auf der Suche nach den schönsten Orchideen der Tropen.","Percorra jardins e florestas atrás das orquídeas mais belas do trópico."),
+ "ranas":("Expérience nocturne guidée pour découvrir grenouilles et amphibiens de la forêt humide.","Geführtes Nacht-Erlebnis zu Fröschen und Amphibien des Regenwaldes.","Experiência noturna guiada para descobrir rãs e anfíbios da mata úmida."),
+ "trekreservas":("Randonnée dans des réserves naturelles privées, biodiversité et paysages intacts.","Wanderung durch private Naturreservate, Biodiversität und unberührte Landschaften.","Caminhada por reservas naturais privadas, biodiversidade e paisagens intactas."),
+ "cocoraacaime2":("La plus grande forêt de palmiers à cire du monde, un sanctuaire naturel unique.","Der größte Wachspalmenwald der Welt, ein einzigartiges Naturheiligtum.","A maior floresta de palmeiras de cera do mundo, um santuário natural único."),
+ "paramo":("Montez vers un écosystème unique, le páramo andin, château d'eau des Andes.","Aufstieg zum einzigartigen Páramo, dem Wasserspeicher der Anden.","Suba a um ecossistema único, o páramo andino, fábrica de água dos Andes."),
+ "campesino":("Vivez la journée rurale : traite, potager, feu de bois et traditions paysannes.","Erleben Sie den Landtag: Melken, Garten, Holzfeuer und bäuerliche Traditionen.","Viva o dia rural: ordenha, horta, fogão a lenha e tradições camponesas."),
+ "cacao":("De la fève à la tablette : culture, récolte et chocolat artisanal avec les familles.","Von der Bohne zur Tafel: Anbau, Ernte und handwerkliche Schokolade mit Familien.","Do grão à barra: cultivo, colheita e chocolate artesanal com as famílias."),
+ "cana":("L'art sucré de la canne : de la coupe au moulin traditionnel et à la panela.","Die süße Kunst des Zuckerrohrs: vom Schnitt zur Mühle und zur Panela.","A doce arte da cana: do corte ao engenho tradicional e à rapadura."),
+ "abejas":("Le monde des abeilles, du miel et de la pollinisation avec des apiculteurs locaux.","Die Welt der Bienen, des Honigs und der Bestäubung mit lokalen Imkern.","O mundo das abelhas, do mel e da polinização com apicultores locais."),
+ "frutas":("Découvrez et dégustez les fruits exotiques du tropique colombien, du verger à l'assiette.","Entdecken und probieren Sie die exotischen Früchte der kolumbianischen Tropen, direkt vom Garten.","Descubra e deguste as frutas exóticas do trópico colombiano direto do pomar."),
+ "platano":("Découvrez une culture emblématique : semis, récolte et cuisine de la banane plantain.","Lernen Sie eine typische Kulturpflanze kennen: Anbau, Ernte und Kochen mit Kochbanane.","Conheça um cultivo emblemático: plantio, colheita e cozinha da banana-da-terra."),
+ "termales":("Détendez-vous dans les sources thermales (Santa Rosa, San Vicente, El Otoño ou Tierra Viva).","Entspannen Sie in heißen Quellen (Santa Rosa, San Vicente, El Otoño oder Tierra Viva).","Relaxe nas águas termais (Santa Rosa, San Vicente, El Otoño ou Tierra Viva)."),
+ "conexion":("Une journée pour se reconnecter : nature, mouvement et énergie renouvelée.","Ein Tag zum Auftanken: Natur, Bewegung und neue Energie.","Um dia para reconectar: natureza, movimento e energia renovada."),
+ "yoga":("Yoga sur mesure dans les cadres naturels du Paysage du Café.","Individuelles Yoga in der Natur der Kaffeelandschaft.","Yoga sob medida nos cenários naturais da Paisagem Cafeeira."),
+ "senderovida":("Marche consciente sur des sentiers forestiers, pour le bien-être et l'introspection.","Achtsamer Waldspaziergang für Wohlbefinden und Selbstreflexion.","Caminhada consciente por trilhas de floresta, para bem-estar e introspecção."),
+ "equino":("Bien-être et connaissance de soi avec l'accompagnement des chevaux.","Wohlbefinden und Selbsterkenntnis mit Unterstützung von Pferden.","Bem-estar e autoconhecimento com o acompanhamento de cavalos."),
+ "rituales":("Rituels holistiques pour équilibrer corps, esprit et âme.","Ganzheitliche Rituale für die Balance von Körper, Geist und Seele.","Rituais holísticos para equilibrar corpo, mente e espírito."),
+ "respiracion":("Techniques de respiration et immersion dans le froid pour la vitalité et la résilience.","Atemtechniken und Kälteimmersion für Vitalität und Resilienz.","Técnicas de respiração e imersão no frio para vitalidade e resiliência."),
+ "parapente":("Envolez-vous en parapente et admirez le Paysage du Café depuis le ciel.","Fliegen Sie mit dem Gleitschirm und bewundern Sie die Kaffeelandschaft von oben.","Voe de parapente e contemple a Paisagem Cafeeira do alto."),
+ "cabalgatamaria":("Balade à cheval entre rivière et montagne à travers le Quindío rural.","Ausritt zwischen Fluss und Berg durch das ländliche Quindío.","Cavalgada entre rio e montanha pelas paisagens do Quindío rural."),
+ "cabalgatadeluxe":("Balade à cheval premium en cordillère, panoramas d'altitude et attentions particulières.","Premium-Ausritt in der Kordillere mit Höhenpanoramen und besonderen Extras.","Cavalgada premium pela cordilheira, paisagens de altitude e detalhes especiais."),
+ "paratrike":("Vol en paratrike, l'aventure aérienne motorisée pour tous.","Paratrike-Flug, das motorisierte Luftabenteuer für alle.","Voo de paratrike, a aventura aérea motorizada para todos."),
+ "parquecafe":("Le parc à thème emblématique de la Région du Café : culture, attractions et café.","Der bekannteste Themenpark der Kaffeeregion: Kultur, Attraktionen und Kaffee.","O parque temático emblema da Região Cafeeira: cultura, atrações e café."),
+ "panaca":("Le plus grand parc de nature et d'agriculture : animaux et spectacles.","Der größte Natur- und Agrarpark: Tiere und Shows.","O maior parque de natureza e agropecuária: animais e shows."),
+ "recuca":("Vivez la culture du café de façon interactive : costumes et récolte du café.","Erleben Sie die Kaffeekultur interaktiv: verkleiden und Kaffee ernten.","Viva a cultura cafeeira de forma interativa: vista-se e colha café."),
+ "ukumari":("L'un des bio-parcs les plus modernes d'Amérique latine, faune de plusieurs continents.","Einer der modernsten Bioparks Lateinamerikas, Tierwelt mehrerer Kontinente.","Um dos bioparques mais modernos da América Latina, fauna de vários continentes."),
+ "arrieros":("Tradition des muletiers, humour et culture paisa dans un parc à thème unique.","Maultiertreiber-Tradition, Humor und Paisa-Kultur in einem einzigartigen Themenpark.","Tradição dos arrieiros, humor e cultura paisa num parque temático único."),
+ "botanico":("Serre à papillons et forêt : la biodiversité du Quindío dans un jardin vivant.","Schmetterlingshaus und Wald: Quindíos Biodiversität in einem lebendigen Garten.","Borboletário e floresta: a biodiversidade do Quindío num jardim vivo."),
+ "laberinto":("Du plaisir en famille dans un grand labyrinthe vert aux mille chemins.","Familienspaß in einem großen grünen Labyrinth mit tausend Wegen.","Diversão em família num grande labirinto verde de mil caminhos."),
+ "armenia":("Découvrez la capitale du Quindío : histoire, parcs et culture locale.","Entdecken Sie Quindíos Hauptstadt: Geschichte, Parks und lokale Kultur.","Conheça a capital do Quindío: história, parques e cultura local."),
+ "cuyabro":("Art local et café d'origine lors d'un circuit urbain au goût authentique.","Lokale Kunst und Ursprungskaffee auf einer Stadttour mit echtem Flair.","Arte local e café de origem num passeio urbano com sabor autêntico."),
+ "cartago":("Tourisme communautaire à Cartago, berceau des plus belles broderies de Colombie.","Gemeinschaftstourismus in Cartago, Heimat der schönsten Stickereien Kolumbiens.","Turismo comunitário em Cartago, berço dos melhores bordados da Colômbia."),
+ "pereira":("Découvrez la « Perle de l'Otún » : belvédères, culture et vie urbaine du café.","Entdecken Sie die Perle des Otún: Aussichtspunkte, Kultur und Kaffee-Stadtleben.","Descubra a 'Pérola do Otún': mirantes, cultura e vida urbana cafeeira."),
+ "manizales":("Cathédrale, téléphérique et architecture de montagne de la ville accueillante.","Kathedrale, Seilbahn und Bergarchitektur der gastfreundlichen Stadt.","Catedral, teleférico e arquitetura de montanha da cidade acolhedora."),
+ "catacafe":("Dégustation professionnelle de cafés de spécialité avec un barista expert.","Professionelle Verkostung von Spezialitätenkaffee mit einem erfahrenen Barista.","Degustação profissional de cafés especiais com um barista experiente."),
+ "gastronomica":("Une expérience gastronomique à travers les saveurs de la Colombie.","Ein kulinarisches Erlebnis durch die Aromen Kolumbiens.","Uma experiência gastronômica pelos sabores da Colômbia."),
+ "cajaviajera":("Une expérience sensorielle et itinérante autour du café d'origine.","Ein sinnliches, reisendes Erlebnis rund um Ursprungskaffee.","Uma experiência sensorial e itinerante em torno do café de origem."),
+ "cataquesos":("Dégustation guidée de fromages affinés d'origine colombienne.","Geführte Verkostung gereifter Käse kolumbianischen Ursprungs.","Degustação guiada de queijos maturados de origem colombiana."),
+ "catacocteles":("Mixologie d'auteur avec spiritueux et ingrédients locaux.","Signature-Mixologie mit lokalen Spirituosen und Zutaten.","Mixologia autoral com destilados e insumos locais."),
+ "greenteam":("Une retraite d'entreprise durable : nature, équipe et sens.","Ein nachhaltiges Firmen-Retreat: Natur, Team und Sinn.","Um retiro corporativo sustentável: natureza, equipe e propósito."),
+ "artesanos":("Rencontre avec des artisans locaux et leurs métiers traditionnels.","Begegnung mit lokalen Kunsthandwerkern und ihren traditionellen Handwerken.","Encontro com artesãos locais e seus ofícios tradicionais."),
+ "siembra":("Plantez des arbres dans une réserve naturelle et laissez une empreinte positive.","Pflanzen Sie Bäume in einem Naturreservat und hinterlassen Sie positive Spuren.","Plante árvores numa reserva natural e deixe uma marca positiva."),
+ "tallerrespiracion":("Atelier guidé de respiration consciente pour groupes et équipes.","Geführter Workshop für bewusstes Atmen für Gruppen und Teams.","Oficina guiada de respiração consciente para grupos e equipes."),
+ "rodizio":("Une expérience gastronomique de type rodizio gaucho brésilien.","Ein kulinarisches Erlebnis im Stil eines brasilianischen Gaucho-Rodízio.","Uma experiência gastronômica estilo rodízio gaúcho brasileiro."),
+ "alimentacion":("Une expérience d'alimentation consciente et saine.","Ein Erlebnis bewusster, gesunder Ernährung.","Uma experiência de alimentação consciente e saudável."),
+}
+
 def esc(s): return s.replace("\\","\\\\").replace('"','\\"')
 
 tours_js = []
@@ -203,11 +261,15 @@ gallery_ids = []
 for (tid,cat,name,es,en,key,fb) in T:
     arr = imgs.get(key, [])
     arr = [a for a in arr if a and len(a) > 20][:10]
+    BORROW = {"cocoraacaime2": "palmacera"}  # La Carbonera = bosque de palma de cera
+    if not arr and tid in BORROW:
+        arr = [a for a in imgs.get(BORROW[tid], []) if a and len(a) > 20][:6]
     imgs_js = ",".join('"%s"'%a for a in arr)
     cover_fb = '"%s"'%fb
+    fr, de, pt = TR.get(tid, ("", "", ""))
     tours_js.append(
-      '  { id:"%s", cat:"%s", name:"%s", fb:%s, imgs:[%s], sum:{ es:"%s", en:"%s" } }'
-      % (tid, cat, esc(name), cover_fb, imgs_js, esc(es), esc(en)))
+      '  { id:"%s", cat:"%s", name:"%s", fb:%s, imgs:[%s], sum:{ es:"%s", en:"%s", fr:"%s", de:"%s", pt:"%s" } }'
+      % (tid, cat, esc(name), cover_fb, imgs_js, esc(es), esc(en), esc(fr), esc(de), esc(pt)))
     if arr:
         gallery_ids.append((arr[0], name))
 
