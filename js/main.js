@@ -226,6 +226,7 @@
     $$(".lang__item").forEach(it => it.classList.toggle("active", it.getAttribute("data-lang") === currentLang));
 
     renderFilters(); renderTours(); renderGallery(); renderTourSelect(); injectTourJsonLd();
+    document.dispatchEvent(new CustomEvent("espo:lang", { detail: currentLang }));
   }
   function setMeta(attr, key, val) {
     let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -404,6 +405,24 @@
   }
 
   /* ---------- Init ---------- */
+  // Public API for the Espo assistant (bot.js) and others
+  window.EspoApp = {
+    getLang: () => currentLang,
+    tours: () => TOURS,
+    categories: () => CATEGORIES,
+    tourText: (tour) => tourText(tour),
+    catLabel: (cat) => catLabel(cat),
+    openTour: (id) => openModal(id),
+    waLink: (msg) => waLink(msg),
+    openWhatsApp: (msg) => window.open(waLink(msg), "_blank", "noopener"),
+    filterTo: (cat) => {
+      activeFilter = cat || "all"; renderFilters(); renderTours();
+      const sec = document.getElementById("experiencias");
+      if (sec) sec.scrollIntoView({ behavior: "smooth" });
+    },
+    t: (k) => t(k)
+  };
+
   function init() {
     currentLang = detectLang();
     initTheme();
