@@ -61,10 +61,13 @@
       ${drive ? `data-drive="${drive}"` : `data-seed="${seed}"`} data-w="${w}" data-h="${h}" data-stage="0" onerror="window.__imgErr(this)">`;
   }
   // Tour helpers for the real data model
-  function coverKw(tour) { return (tour.imgs && tour.imgs.length) ? "drive:" + tour.imgs[0] : tour.fb; }
+  function coverKw(tour) { if (tour.cover) return tour.cover; return (tour.imgs && tour.imgs.length) ? "drive:" + tour.imgs[0] : tour.fb; }
   function tourImgList(tour) {
-    if (tour.imgs && tour.imgs.length) return tour.imgs.map(id => ({ drive: id }));
-    return [{ kw: tour.fb, seed: (tour.id.charCodeAt(0) + tour.id.length) }];
+    const list = (tour.imgs && tour.imgs.length)
+      ? tour.imgs.map(id => ({ drive: id }))
+      : [{ kw: tour.fb, seed: (tour.id.charCodeAt(0) + tour.id.length) }];
+    if (tour.cover) list.unshift({ kw: tour.cover, seed: 0 });
+    return list;
   }
 
   /* ---------- Language helpers ---------- */

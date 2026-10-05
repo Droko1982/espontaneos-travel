@@ -266,6 +266,12 @@ FB_URL = {
  "manizales":    "url:https://commons.wikimedia.org/wiki/Special:FilePath/Manizales%20Montage%20L.jpg?width=1200",
 }
 
+# Iconic wax-palm (palma de cera) cover photos from Wikimedia Commons (CC) for the two palm experiences
+COVER_URL = {
+ "cocoraacaime2": "url:https://commons.wikimedia.org/wiki/Special:FilePath/Palmas%20cera.jpg?width=1400",
+ "palmacera":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/Valle%20Cocora.jpg?width=1400",
+}
+
 def esc(s): return s.replace("\\","\\\\").replace('"','\\"')
 
 tours_js = []
@@ -280,9 +286,10 @@ for (tid,cat,name,es,en,key,fb) in T:
     fb_final = FB_URL[tid] if (not arr and tid in FB_URL) else fb
     cover_fb = '"%s"'%esc(fb_final)
     fr, de, pt = TR.get(tid, ("", "", ""))
+    cover_js = (', cover:"%s"' % esc(COVER_URL[tid])) if tid in COVER_URL else ""
     tours_js.append(
-      '  { id:"%s", cat:"%s", name:"%s", fb:%s, imgs:[%s], sum:{ es:"%s", en:"%s", fr:"%s", de:"%s", pt:"%s" } }'
-      % (tid, cat, esc(name), cover_fb, imgs_js, esc(es), esc(en), esc(fr), esc(de), esc(pt)))
+      '  { id:"%s", cat:"%s", name:"%s", fb:%s%s, imgs:[%s], sum:{ es:"%s", en:"%s", fr:"%s", de:"%s", pt:"%s" } }'
+      % (tid, cat, esc(name), cover_fb, cover_js, imgs_js, esc(es), esc(en), esc(fr), esc(de), esc(pt)))
     if arr:
         gallery_ids.append((arr[0], name))
 
