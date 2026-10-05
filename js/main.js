@@ -27,6 +27,7 @@
   /* ---------- Images: topical placeholder CDN with robust fallback ---------- */
   function imgUrl(kw, seed, w, h) {
     if (kw && kw.startsWith("local:")) return "assets/img/" + kw.slice(6);
+    if (kw && kw.startsWith("url:")) return kw.slice(4);
     if (kw && kw.startsWith("drive:")) return "https://lh3.googleusercontent.com/d/" + kw.slice(6) + "=w" + w + "-h" + h;
     return `https://loremflickr.com/${w}/${h}/${encodeURIComponent(kw)}?lock=${seed}`;
   }

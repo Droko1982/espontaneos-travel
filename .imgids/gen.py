@@ -254,6 +254,18 @@ TR = {
  "alimentacion":("Une expérience d'alimentation consciente et saine.","Ein Erlebnis bewusster, gesunder Ernährung.","Uma experiência de alimentação consciente e saudável."),
 }
 
+# Real Colombian / topical photos (Wikimedia Commons, CC — see CREDITS.md) for folders empty in Drive
+FB_URL = {
+ "paramo":       "url:https://commons.wikimedia.org/wiki/Special:FilePath/Espeletia%20hartwegiana%20o.jpg?width=1200",
+ "arrieros":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/QUIMBAYA.jpg?width=1200",
+ "botanico":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/Mariposario%20del%20Jard%C3%ADn%20Bot%C3%A1nico%20del%20Quindio.JPG?width=1200",
+ "laberinto":    "url:https://commons.wikimedia.org/wiki/Special:FilePath/Longleat%20maze.jpg?width=1200",
+ "catacocteles": "url:https://commons.wikimedia.org/wiki/Special:FilePath/Mojito.jpg?width=1200",
+ "cartago":      "url:https://commons.wikimedia.org/wiki/Special:FilePath/Cartago%20Colombia%20panorama.jpg?width=1200",
+ "pereira":      "url:https://commons.wikimedia.org/wiki/Special:FilePath/Skyline%20Pereira.jpg?width=1200",
+ "manizales":    "url:https://commons.wikimedia.org/wiki/Special:FilePath/Manizales%20Montage%20L.jpg?width=1200",
+}
+
 def esc(s): return s.replace("\\","\\\\").replace('"','\\"')
 
 tours_js = []
@@ -265,7 +277,8 @@ for (tid,cat,name,es,en,key,fb) in T:
     if not arr and tid in BORROW:
         arr = [a for a in imgs.get(BORROW[tid], []) if a and len(a) > 20][:6]
     imgs_js = ",".join('"%s"'%a for a in arr)
-    cover_fb = '"%s"'%fb
+    fb_final = FB_URL[tid] if (not arr and tid in FB_URL) else fb
+    cover_fb = '"%s"'%esc(fb_final)
     fr, de, pt = TR.get(tid, ("", "", ""))
     tours_js.append(
       '  { id:"%s", cat:"%s", name:"%s", fb:%s, imgs:[%s], sum:{ es:"%s", en:"%s", fr:"%s", de:"%s", pt:"%s" } }'
