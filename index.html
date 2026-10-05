@@ -174,7 +174,7 @@
       <div class="hero__stat"><b data-i18n="stat_local_v">Quindío</b><span data-i18n="stat_local">100% local</span></div>
     </div>
   </div>
-  <a class="hero__scroll" href="#nosotros" aria-hidden="true"><span class="mouse"></span><span data-i18n="scroll">Descubre</span></a>
+  <a class="hero__scroll" href="#nosotros" tabindex="-1"><span class="mouse" aria-hidden="true"></span><span data-i18n="scroll">Descubre</span></a>
 </section>
 
 <!-- ============ Trust strip ============ -->
@@ -283,33 +283,6 @@
   </div>
 </section>
 
-<!-- ============ Testimonials ============ -->
-<section class="section" id="testimonios">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="eyebrow" data-i18n="testi_eyebrow">Testimonios</span>
-      <h2 class="section-title" data-i18n="testi_title">Viajeros que ya vivieron la experiencia</h2>
-    </div>
-    <div class="testi-track reveal">
-      <figure class="testi">
-        <div class="testi__stars">★★★★★</div>
-        <blockquote class="testi__text" data-i18n="testi1_text">Una experiencia que va mucho más allá del turismo. Conocer a las familias caficultoras nos cambió la forma de ver el café para siempre.</blockquote>
-        <figcaption class="testi__who"><img class="testi__avatar" src="https://i.pravatar.cc/96?img=47" alt="" loading="lazy" onerror="this.style.display='none'"><span><b data-i18n="testi1_name">Laura G.</b><span data-i18n="testi1_role">Viajera · España</span></span></figcaption>
-      </figure>
-      <figure class="testi">
-        <div class="testi__stars">★★★★★</div>
-        <blockquote class="testi__text" data-i18n="testi2_text">The barrier-free coffee tour was flawless. My mother uses a wheelchair and for the first time she enjoyed a farm with total freedom.</blockquote>
-        <figcaption class="testi__who"><img class="testi__avatar" src="https://i.pravatar.cc/96?img=12" alt="" loading="lazy" onerror="this.style.display='none'"><span><b data-i18n="testi2_name">James P.</b><span data-i18n="testi2_role">Traveller · UK</span></span></figcaption>
-      </figure>
-      <figure class="testi">
-        <div class="testi__stars">★★★★★</div>
-        <blockquote class="testi__text" data-i18n="testi3_text">Organização impecável e guias apaixonados pela sua terra. O Vale de Cocora é inesquecível. Voltaremos com certeza!</blockquote>
-        <figcaption class="testi__who"><img class="testi__avatar" src="https://i.pravatar.cc/96?img=32" alt="" loading="lazy" onerror="this.style.display='none'"><span><b data-i18n="testi3_name">Marina S.</b><span data-i18n="testi3_role">Viajante · Brasil</span></span></figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
 <!-- ============ CTA band ============ -->
 <section class="section">
   <div class="container">
@@ -370,7 +343,7 @@
         </div>
         <div class="field"><label for="f-msg" data-i18n="f_msg">Cuéntanos qué buscas</label><textarea id="f-msg" name="message" data-i18n-ph="f_msg_ph" placeholder="Fechas, intereses, necesidades de accesibilidad, idioma preferido…"></textarea></div>
         <input type="hidden" name="_template" value="table">
-        <input type="text" name="_honey" style="display:none">
+        <input type="text" name="_honey" id="f-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <button class="btn btn--primary btn--block" id="f-submit" type="submit" data-i18n="f_submit">Enviar solicitud</button>
         <p class="form__note" data-i18n="f_note">También puedes escribirnos directo por WhatsApp. Respuesta en menos de 24 h.</p>
       </form>
