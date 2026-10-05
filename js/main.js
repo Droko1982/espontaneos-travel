@@ -447,8 +447,8 @@
   };
 
   function init() {
-    // merge generated tour-UI strings into I18N
-    if (window.I18N_EXTRA) { SUPPORTED.forEach(lg => { if (I18N[lg] && I18N_EXTRA[lg]) Object.assign(I18N[lg], I18N_EXTRA[lg]); }); }
+    // merge generated tour-UI strings into I18N (I18N_EXTRA is a top-level const in data.js)
+    if (typeof I18N_EXTRA !== "undefined") { SUPPORTED.forEach(lg => { if (I18N[lg] && I18N_EXTRA[lg]) Object.assign(I18N[lg], I18N_EXTRA[lg]); }); }
     currentLang = detectLang();
     initTheme();
     initChrome();

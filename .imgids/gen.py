@@ -256,20 +256,20 @@ TR = {
 
 # Real Colombian / topical photos (Wikimedia Commons, CC — see CREDITS.md) for folders empty in Drive
 FB_URL = {
- "paramo":       "url:https://commons.wikimedia.org/wiki/Special:FilePath/Espeletia%20hartwegiana%20o.jpg?width=1200",
- "arrieros":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/QUIMBAYA.jpg?width=1200",
- "botanico":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/Mariposario%20del%20Jard%C3%ADn%20Bot%C3%A1nico%20del%20Quindio.JPG?width=1200",
- "laberinto":    "url:https://commons.wikimedia.org/wiki/Special:FilePath/Longleat%20maze.jpg?width=1200",
- "catacocteles": "url:https://commons.wikimedia.org/wiki/Special:FilePath/Mojito.jpg?width=1200",
- "cartago":      "url:https://commons.wikimedia.org/wiki/Special:FilePath/Cartago%20Colombia%20panorama.jpg?width=1200",
- "pereira":      "url:https://commons.wikimedia.org/wiki/Special:FilePath/Skyline%20Pereira.jpg?width=1200",
- "manizales":    "url:https://commons.wikimedia.org/wiki/Special:FilePath/Manizales%20Montage%20L.jpg?width=1200",
+ "paramo":       "local:paramo.jpg",
+ "arrieros":     "local:quimbaya.jpg",
+ "botanico":     "local:botanico.jpg",
+ "laberinto":    "local:laberinto.jpg",
+ "catacocteles": "local:cocteles.jpg",
+ "cartago":      "local:cartago.jpg",
+ "pereira":      "local:pereira.jpg",
+ "manizales":    "local:manizales.jpg",
 }
 
 # Iconic wax-palm (palma de cera) cover photos from Wikimedia Commons (CC) for the two palm experiences
 COVER_URL = {
- "cocoraacaime2": "url:https://commons.wikimedia.org/wiki/Special:FilePath/Palmas%20cera.jpg?width=1400",
- "palmacera":     "url:https://commons.wikimedia.org/wiki/Special:FilePath/Valle%20Cocora.jpg?width=1400",
+ "cocoraacaime2": "local:palma1.jpg",
+ "palmacera":     "local:palma2.jpg",
 }
 
 def esc(s): return s.replace("\\","\\\\").replace('"','\\"')
