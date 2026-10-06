@@ -23,6 +23,10 @@
   .a-sample{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg-soft);border-radius:var(--r-sm)}
   .a-muted{color:var(--text-muted);font-size:.9rem}
   h1{font-size:1.5rem} h2{font-size:1.1rem;margin-bottom:.8rem}
+  .a-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.6rem}
+  .a-grid input,.a-grid select{padding:.7rem .8rem;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--text);font:inherit}
+  .a-card textarea{width:100%;padding:.8rem;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--text);font:inherit;resize:vertical;line-height:1.5}
+  @media(max-width:520px){.a-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -53,6 +57,24 @@
   </div>
 
   <div class="a-card">
+    <h2>Crear viaje personalizado (sin editar archivos)</h2>
+    <p class="a-muted" style="margin-bottom:1rem">Llena los datos y genera un enlace/QR con toda la info dentro. No requiere subir nada ni desplegar: perfecto para reservas nuevas al instante.</p>
+    <div class="a-grid">
+      <input id="f-name" placeholder="Nombre del viajero">
+      <select id="f-lang"><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option></select>
+      <input id="f-party" type="number" min="1" value="2" placeholder="N.º personas">
+      <input id="f-region" placeholder="Región" value="Eje Cafetero · Quindío">
+      <input id="f-host" placeholder="WhatsApp anfitrión (solo números)" value="573187200023">
+      <input id="f-guide" placeholder="Guía (nombre)">
+      <input id="f-glangs" placeholder="Idiomas del guía (ej. es, en)" value="es, en">
+      <input id="f-hotel" placeholder="Hotel">
+      <input id="f-area" placeholder="Zona / ciudad" value="Pereira">
+    </div>
+    <textarea id="f-itin" rows="6" placeholder="Itinerario — una línea por parada:  fecha | hora | título&#10;2026-10-10 | 08:00 | Recogida en el hotel&#10;2026-10-10 | 09:30 | Finca Cafetera · Tour del Café&#10;2026-10-11 | 08:30 | Valle de Cocora y Salento&#10;2026-10-11 | 16:00 | Aguas Termales (Santa Rosa)"></textarea>
+    <button class="btn btn--primary" id="f-build" style="margin-top:.6rem">Generar enlace + QR personalizado</button>
+  </div>
+
+  <div class="a-card">
     <h2>Reservas de ejemplo</h2>
     <div class="a-samples" id="samples"><p class="a-muted">Cargando…</p></div>
   </div>
@@ -62,17 +84,35 @@
 
 <script>
   var base = location.href.replace(/[^/]*$/, ""); // carpeta actual
-  function build(code){
-    code = (code||"").trim().toUpperCase();
-    if(!code) return;
-    var url = base + "viaje.html?code=" + encodeURIComponent(code);
+  function showQR(url){
     var qr = "https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=10&data=" + encodeURIComponent(url);
     document.getElementById("qr").src = qr;
     var link = document.getElementById("link"); link.textContent = url; link.href = url;
     document.getElementById("open").href = url;
     document.getElementById("dl").href = qr;
     document.getElementById("out").style.display = "flex";
+    window.scrollTo({top:0,behavior:"smooth"});
   }
+  function build(code){ code=(code||"").trim().toUpperCase(); if(!code) return; showQR(base + "viaje.html?code=" + encodeURIComponent(code)); }
+  function encB(obj){ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+  function rnd(){ var c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",s=""; for(var i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)]; return "ESP-"+s; }
+  function v(id){ var e=document.getElementById(id); return e?e.value.trim():""; }
+  document.getElementById("f-build").addEventListener("click", function(){
+    var area = v("f-area")||"Quindío";
+    var itin=[];
+    (document.getElementById("f-itin").value||"").split("\n").forEach(function(line){
+      var p=line.split("|").map(function(x){return x.trim();});
+      if(p[0] && p.length>=3){ itin.push({date:p[0], time:p[1], title:p[2], maps:"https://www.google.com/maps/search/"+encodeURIComponent(p[2]+" "+area)}); }
+    });
+    var phone=(v("f-host")||"573187200023").replace(/\D/g,"");
+    var booking={ code:rnd(), lang:v("f-lang")||"es", name:v("f-name")||"Viajero", party:parseInt(v("f-party")||"1",10)||1,
+      region:v("f-region")||"Eje Cafetero", status:"confirmada",
+      host:{name:"Anfitrión Espontáneos", phone:phone}, driver:{name:"Conductor de recogida", phone:phone},
+      guide:{name:v("f-guide")||"Por asignar", langs:(v("f-glangs")||"es").split(",").map(function(x){return x.trim();}).filter(Boolean)},
+      hotel:{name:v("f-hotel"), area:area, maps:"https://www.google.com/maps/search/"+encodeURIComponent(v("f-hotel")+" "+area)},
+      itinerary:itin };
+    showQR(base + "viaje.html?d=" + encB(booking));
+  });
   document.getElementById("gen").addEventListener("click", function(){ build(document.getElementById("code").value); });
   document.getElementById("code").addEventListener("keydown", function(e){ if(e.key==="Enter") build(this.value); });
   document.getElementById("copy").addEventListener("click", function(){ navigator.clipboard && navigator.clipboard.writeText(document.getElementById("link").textContent); this.textContent="¡Copiado!"; var b=this; setTimeout(function(){b.textContent="Copiar enlace";},1500); });

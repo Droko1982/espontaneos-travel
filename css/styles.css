@@ -660,6 +660,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 .c-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: var(--r-lg); padding: clamp(1.1rem, 4vw, 1.4rem); box-shadow: var(--shadow-sm); }
 .c-card__title { font-size: 1.2rem; margin-bottom: 1rem; }
+.c-itin-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.c-itin-head .c-card__title { margin: 0; }
+.c-cal-btn { display: inline-flex; align-items: center; gap: .35rem; padding: .5rem .9rem; border-radius: var(--r-pill); border: 1.5px solid var(--border); background: var(--bg-elev); color: var(--brand); font-weight: 650; font-size: .85rem; cursor: pointer; }
+.c-cal-btn:hover { border-color: var(--brand); background: var(--bg-soft); }
 
 .c-itin { display: grid; gap: 0; }
 .c-step { display: grid; grid-template-columns: 70px 20px 1fr; align-items: start; gap: .5rem; padding-bottom: 1.1rem; position: relative; }

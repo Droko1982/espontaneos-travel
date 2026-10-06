@@ -307,19 +307,19 @@ gallery_js = ",\n".join('  { id:"%s", cap:"%s" }'%(g,esc(n)) for g,n in gal)
 cats_js = ",\n".join('  { id:"%s", es:"%s", en:"%s", fr:"%s", de:"%s", pt:"%s" }'%c for c in CATS)
 
 extra = {
- "es":{"card_quote":"Cotiza tu plan","card_photos":"fotos","loc_region":"Eje Cafetero, Quindío",
+ "es":{"card_quote":"Cotiza tu plan","nav_trip":"Mi viaje","card_photos":"fotos","loc_region":"Eje Cafetero, Quindío",
    "modal_gallery":"Galería de la experiencia","modal_tagline":"Diseñamos esta experiencia a tu medida: fechas, ritmo, transporte y opción de turismo accesible. Cotiza sin compromiso.",
    "inc1":"Guía local certificado","inc2":"Transporte según el plan","inc3":"Experiencia y entradas indicadas","inc4":"Acompañamiento Espontáneos Travel","inc5":"Opción de turismo accesible"},
- "en":{"card_quote":"Get a quote","card_photos":"photos","loc_region":"Coffee Region, Quindío",
+ "en":{"card_quote":"Get a quote","nav_trip":"My trip","card_photos":"photos","loc_region":"Coffee Region, Quindío",
    "modal_gallery":"Experience gallery","modal_tagline":"We tailor this experience to you: dates, pace, transport and an accessible-tourism option. Get a free quote.",
    "inc1":"Certified local guide","inc2":"Transport as per plan","inc3":"Experience & listed entrances","inc4":"Espontáneos Travel support","inc5":"Accessible-tourism option"},
- "fr":{"card_quote":"Devis gratuit","card_photos":"photos","loc_region":"Région du Café, Quindío",
+ "fr":{"card_quote":"Devis gratuit","nav_trip":"Mon voyage","card_photos":"photos","loc_region":"Région du Café, Quindío",
    "modal_gallery":"Galerie de l'expérience","modal_tagline":"Nous adaptons cette expérience : dates, rythme, transport et option de tourisme accessible. Devis sans engagement.",
    "inc1":"Guide local certifié","inc2":"Transport selon le programme","inc3":"Expérience et entrées indiquées","inc4":"Accompagnement Espontáneos Travel","inc5":"Option de tourisme accessible"},
- "de":{"card_quote":"Angebot anfordern","card_photos":"Fotos","loc_region":"Kaffeeregion, Quindío",
+ "de":{"card_quote":"Angebot anfordern","nav_trip":"Meine Reise","card_photos":"Fotos","loc_region":"Kaffeeregion, Quindío",
    "modal_gallery":"Erlebnis-Galerie","modal_tagline":"Wir gestalten dieses Erlebnis individuell: Termine, Tempo, Transport und barrierefreie Option. Kostenloses Angebot.",
    "inc1":"Zertifizierter lokaler Guide","inc2":"Transport laut Programm","inc3":"Erlebnis & genannte Eintritte","inc4":"Espontáneos-Travel-Begleitung","inc5":"Barrierefreie Option"},
- "pt":{"card_quote":"Solicite orçamento","card_photos":"fotos","loc_region":"Região Cafeeira, Quindío",
+ "pt":{"card_quote":"Solicite orçamento","nav_trip":"Minha viagem","card_photos":"fotos","loc_region":"Região Cafeeira, Quindío",
    "modal_gallery":"Galeria da experiência","modal_tagline":"Desenhamos esta experiência sob medida: datas, ritmo, transporte e opção de turismo acessível. Cotação sem compromisso.",
    "inc1":"Guia local certificado","inc2":"Transporte conforme o plano","inc3":"Experiência e entradas indicadas","inc4":"Acompanhamento Espontáneos Travel","inc5":"Opção de turismo acessível"},
 }

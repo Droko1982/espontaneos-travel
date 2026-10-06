@@ -39,6 +39,31 @@
     const area = (booking && booking.hotel && booking.hotel.area) || "Eje Cafetero";
     return "https://www.google.com/maps/search/" + encodeURIComponent(q + " " + area);
   }
+  function titleOf(it) { const t = it.title; if (typeof t === "string") return t; return (t && (t[lang] || t.es || t.en)) || ""; }
+
+  /* ---------- Self-contained booking links (?d=base64) ---------- */
+  function b64urlDecode(s) { s = String(s).replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; try { return decodeURIComponent(escape(atob(s))); } catch (e) { return null; } }
+  function decodeBooking(s) { try { const j = b64urlDecode(s); return j ? JSON.parse(j) : null; } catch (e) { return null; } }
+
+  /* ---------- Add to calendar (.ics) ---------- */
+  const CAL_LABEL = { es: "Añadir a mi calendario", en: "Add to my calendar", fr: "Ajouter à mon calendrier", de: "Zu meinem Kalender", pt: "Adicionar ao meu calendário" };
+  function pad2(n) { return String(n).padStart(2, "0"); }
+  function icsFmt(d) { return d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "T" + pad2(d.getHours()) + pad2(d.getMinutes()) + "00"; }
+  function buildICS() {
+    const o = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Espontaneos Travel//Concierge//EN", "CALSCALE:GREGORIAN"];
+    (booking.itinerary || []).forEach((it, i) => {
+      const s = itemDate(it), e = new Date(s.getTime() + 90 * 60000);
+      o.push("BEGIN:VEVENT", "UID:esp-" + ((booking.code || "x") + "-" + i) + "@espontaneostravel.com",
+        "DTSTAMP:" + icsFmt(new Date()), "DTSTART:" + icsFmt(s), "DTEND:" + icsFmt(e),
+        "SUMMARY:" + String(titleOf(it)).replace(/[,;\\]/g, " "),
+        "LOCATION:" + String(booking.region || "").replace(/[,;]/g, " "),
+        "DESCRIPTION:Espontáneos Travel · " + (booking.code || ""), "END:VEVENT");
+    });
+    o.push("END:VCALENDAR"); return o.join("\r\n");
+  }
+  function downloadICS() {
+    try { const blob = new Blob([buildICS()], { type: "text/calendar;charset=utf-8" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "mi-viaje-espontaneos.ics"; document.body.appendChild(a); a.click(); a.remove(); } catch (e) {}
+  }
 
   /* ---------- Theme ---------- */
   function initTheme() {
@@ -99,7 +124,7 @@
       nextWrap.innerHTML = `
         <span class="c-next__label">⏭️ ${esc(U().next_stop)}</span>
         <div class="c-next__row">
-          <div><b>${esc(fill(it.title[lang] || it.title.es))}</b><span>${esc(fmtDay(it))} · ${esc(it.time || "")}</span></div>
+          <div><b>${esc(fill(titleOf(it)))}</b><span>${esc(fmtDay(it))} · ${esc(it.time || "")}</span></div>
           ${it.maps ? `<a class="c-mini" href="${esc(it.maps)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>` : ""}
         </div>`;
     } else { nextWrap.style.display = "none"; }
@@ -111,10 +136,11 @@
         <span class="c-step__time">${esc(it.time || "")}<small>${esc(fmtDay(it))}</small></span>
         <span class="c-step__dot"></span>
         <span class="c-step__body">
-          <b>${esc(fill(it.title[lang] || it.title.es))}</b>
+          <b>${esc(fill(titleOf(it)))}</b>
           ${it.maps ? `<a href="${esc(it.maps)}" target="_blank" rel="noopener" class="c-step__map">${esc(U().maps_btn)} →</a>` : ""}
         </span>
       </li>`).join("");
+    const calBtn = $("#c-cal"); if (calBtn) { const cl = $("#c-cal-label"); if (cl) cl.textContent = CAL_LABEL[lang] || CAL_LABEL.es; calBtn.onclick = downloadICS; }
 
     // actions (sticky)
     const host = booking.host || {}; const drv = booking.driver || {};
@@ -184,7 +210,7 @@
     const k = topicById(id); if (!k) return;
     const act = k.action || "info";
     if (act === "dyn:schedule") {
-      const lines = booking.itinerary.map(it => "• " + (it.time || "") + " · " + fmtDay(it) + " — " + (it.title[lang] || it.title.es)).join("\n");
+      const lines = booking.itinerary.map(it => "• " + (it.time || "") + " · " + fmtDay(it) + " — " + (titleOf(it))).join("\n");
       botSay([U().itinerary + ":\n" + lines, U().more]).then(() => chips([{ label: U().m_change, topic: "change" }].concat(menuChips().filter(m => m.topic !== "schedule"))));
       return;
     }
@@ -253,8 +279,11 @@
       if (m) runTopic(m);
       else botSay([U().no_match]).then(() => chips([{ label: U().wa_host, kind: "wa", wa: true, waMsg: (U().wa_q || U().wa_generic) + " " + q }, { label: U().back }]));
     });
+    let storedLang = null; try { storedLang = localStorage.getItem("esp_lang"); } catch (e) {}
+    if (SUPPORTED.includes(storedLang)) lang = storedLang;
+    const dparam = getParam("d");
+    if (dparam) { const b = decodeBooking(dparam); if (b) { booking = b; if (!storedLang && SUPPORTED.includes(b.lang)) lang = b.lang; } renderAll(); return; }
     const code = (getParam("code") || "").trim().toUpperCase();
-    try { const s = localStorage.getItem("esp_lang"); if (SUPPORTED.includes(s)) lang = s; } catch (e) {}
     fetch("data/bookings.json", { cache: "no-store" })
       .then(r => r.json())
       .then(db => {
