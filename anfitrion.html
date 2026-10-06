@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel del anfitrión · Espontáneos Travel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;550;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script>(function(){try{var t=localStorage.getItem("esp_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<style>
+  .a-wrap{max-width:720px;margin:0 auto;padding:2rem clamp(1rem,4vw,1.5rem);}
+  .a-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1.5rem;}
+  .a-head img{width:48px;height:48px}
+  .a-card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--r-lg);padding:1.4rem;box-shadow:var(--shadow-sm);margin-bottom:1.2rem}
+  .a-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+  .a-row input{flex:1;min-width:200px;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--text);font:inherit;text-transform:uppercase}
+  .a-qr{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;margin-top:1.2rem}
+  .a-qr img{width:200px;height:200px;border-radius:14px;background:#fff;padding:8px;border:1px solid var(--border)}
+  .a-link{word-break:break-all;font-size:.9rem;color:var(--brand);font-weight:600}
+  .a-samples{display:grid;gap:.5rem}
+  .a-sample{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg-soft);border-radius:var(--r-sm)}
+  .a-muted{color:var(--text-muted);font-size:.9rem}
+  h1{font-size:1.5rem} h2{font-size:1.1rem;margin-bottom:.8rem}
+</style>
+</head>
+<body>
+<div class="a-wrap">
+  <div class="a-head">
+    <img src="assets/img/logo.png" alt="">
+    <div><h1>Panel del anfitrión</h1><span class="a-muted">Genera el QR del viajero · Espontáneos Travel</span></div>
+  </div>
+
+  <div class="a-card">
+    <h2>Generar código / QR</h2>
+    <div class="a-row">
+      <input type="text" id="code" placeholder="Código de reserva (ej. ESP-7Q2X9)">
+      <button class="btn btn--primary" id="gen">Generar QR</button>
+    </div>
+    <div id="out" class="a-qr" style="display:none">
+      <img id="qr" alt="QR">
+      <div>
+        <p class="a-muted" style="margin-bottom:.3rem">Enlace del viajero (imprímelo o compártelo):</p>
+        <a id="link" class="a-link" href="#" target="_blank" rel="noopener"></a>
+        <div class="a-row" style="margin-top:.8rem">
+          <button class="btn btn--ghost btn--sm" id="copy">Copiar enlace</button>
+          <a class="btn btn--ghost btn--sm" id="open" href="#" target="_blank" rel="noopener">Abrir vista del viajero</a>
+          <a class="btn btn--ghost btn--sm" id="dl" href="#" download="qr.png">Descargar QR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="a-card">
+    <h2>Reservas de ejemplo</h2>
+    <div class="a-samples" id="samples"><p class="a-muted">Cargando…</p></div>
+  </div>
+
+  <p class="a-muted">Flujo: el viajero <b>escanea el QR</b> al llegar → se abre su itinerario y el conserje Espo responde sus preguntas 24/7 (web) y lo conecta contigo por WhatsApp. Las reservas se editan en <code>data/bookings.json</code> (o luego desde Google Sheets).</p>
+</div>
+
+<script>
+  var base = location.href.replace(/[^/]*$/, ""); // carpeta actual
+  function build(code){
+    code = (code||"").trim().toUpperCase();
+    if(!code) return;
+    var url = base + "viaje.html?code=" + encodeURIComponent(code);
+    var qr = "https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=10&data=" + encodeURIComponent(url);
+    document.getElementById("qr").src = qr;
+    var link = document.getElementById("link"); link.textContent = url; link.href = url;
+    document.getElementById("open").href = url;
+    document.getElementById("dl").href = qr;
+    document.getElementById("out").style.display = "flex";
+  }
+  document.getElementById("gen").addEventListener("click", function(){ build(document.getElementById("code").value); });
+  document.getElementById("code").addEventListener("keydown", function(e){ if(e.key==="Enter") build(this.value); });
+  document.getElementById("copy").addEventListener("click", function(){ navigator.clipboard && navigator.clipboard.writeText(document.getElementById("link").textContent); this.textContent="¡Copiado!"; var b=this; setTimeout(function(){b.textContent="Copiar enlace";},1500); });
+
+  fetch("data/bookings.json",{cache:"no-store"}).then(function(r){return r.json();}).then(function(db){
+    var box = document.getElementById("samples"); box.innerHTML="";
+    Object.keys(db.bookings||{}).forEach(function(code){
+      var b=db.bookings[code];
+      var row=document.createElement("div"); row.className="a-sample";
+      row.innerHTML='<span><b>'+code+'</b> · '+(b.name||"")+' <span class="a-muted">('+(b.party||1)+' pax)</span></span>';
+      var btn=document.createElement("button"); btn.className="btn btn--brand btn--sm"; btn.textContent="QR";
+      btn.addEventListener("click",function(){ document.getElementById("code").value=code; build(code); window.scrollTo({top:0,behavior:"smooth"}); });
+      row.appendChild(btn); box.appendChild(row);
+    });
+  }).catch(function(){ document.getElementById("samples").innerHTML='<p class="a-muted">No se pudo cargar bookings.json</p>'; });
+</script>
+</body>
+</html>

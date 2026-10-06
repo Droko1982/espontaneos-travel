@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Conserje · Espontáneos Travel</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3f5a2b" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f140c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;550;650;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script>(function(){try{var t=localStorage.getItem("esp_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body class="c-body">
+
+<header class="c-top">
+  <a class="brand" href="index.html">
+    <img src="assets/img/logo.png" alt="Espontáneos Travel" width="40" height="40">
+    <span class="brand__text"><span class="brand__name">Espontáneos Travel</span><span class="brand__tag" id="c-brand-sub">Conserje de viaje</span></span>
+  </a>
+  <div class="c-top__actions">
+    <div class="c-langs" id="c-langs"></div>
+    <button class="icon-btn" id="c-theme" aria-label="Tema"></button>
+  </div>
+</header>
+
+<!-- Gate: cuando no hay código o no se encuentra -->
+<section class="c-gate" id="c-gate" style="display:none"></section>
+
+<!-- App -->
+<main class="c-app" id="c-app" style="display:none">
+  <section class="c-welcome" id="c-welcome"></section>
+  <section class="c-next" id="c-next"></section>
+
+  <section class="c-card">
+    <h2 class="c-card__title" id="c-itin-title">Tu itinerario</h2>
+    <ul class="c-itin" id="c-itin"></ul>
+  </section>
+
+  <section class="c-card c-assistant">
+    <div class="c-assistant__head">
+      <span class="c-assistant__ava">E</span>
+      <div><b>Espo</b><span class="c-assistant__status">· online</span></div>
+    </div>
+    <div class="c-chat" id="c-chat"></div>
+    <div class="c-chips" id="c-chips"></div>
+    <div class="c-foot" id="c-foot">Respuestas guiadas · tu anfitrión confirma los detalles</div>
+  </section>
+</main>
+
+<div class="c-actions" id="c-actions"></div>
+
+<script src="js/kb.js"></script>
+<script src="js/concierge.js"></script>
+</body>
+</html>
