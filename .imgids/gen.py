@@ -270,6 +270,7 @@ FB_URL = {
 COVER_URL = {
  "cocoraacaime2": "local:palma1.jpg",
  "palmacera":     "local:palma2.jpg",
+ "termales":      "local:termales.jpg",
 }
 
 def esc(s): return s.replace("\\","\\\\").replace('"','\\"')
