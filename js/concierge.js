@@ -161,8 +161,20 @@
   }
   function backMenu() { botSay([U().more]).then(() => chips(menuChips())); }
 
+  function allTopics() { return CKB.concat(typeof CKB_EXTRA !== "undefined" ? CKB_EXTRA : []); }
+  function topicById(id) { return allTopics().find(x => x.id === id); }
+  function norm(s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  function matchTopic(text) {
+    const t = norm(text); if (!t || typeof CKB_KW === "undefined") return null;
+    let best = null, score = 0;
+    Object.keys(CKB_KW).forEach(id => {
+      let s = 0; (CKB_KW[id] || []).forEach(k => { const nk = norm(k); if (nk && t.indexOf(nk) >= 0) s += nk.length > 3 ? 2 : 1; });
+      if (s > score) { score = s; best = id; }
+    });
+    return score > 0 ? best : null;
+  }
   function runTopic(id) {
-    const k = CKB.find(x => x.id === id); if (!k) return;
+    const k = topicById(id); if (!k) return;
     const act = k.action || "info";
     if (act === "dyn:schedule") {
       const lines = booking.itinerary.map(it => "• " + (it.time || "") + " · " + fmtDay(it) + " — " + (it.title[lang] || it.title.es)).join("\n");
@@ -213,6 +225,7 @@
     $("#c-gate").style.display = "none"; $("#c-app").style.display = "";
     $("#c-brand-sub").textContent = U().brand;
     $("#c-foot").textContent = U().foot;
+    const ai = $("#c-ask-in"); if (ai && U().ask_ph) ai.placeholder = U().ask_ph;
     renderBooking();
     startChat();
   }
@@ -223,7 +236,16 @@
 
   function boot() {
     initTheme();
+    if (typeof CUI_EXTRA !== "undefined") { SUPPORTED.forEach(l => { if (CUI[l] && CUI_EXTRA[l]) Object.assign(CUI[l], CUI_EXTRA[l]); }); }
     $("#c-theme").addEventListener("click", () => { const n = effTheme() === "dark" ? "light" : "dark"; document.documentElement.setAttribute("data-theme", n); try { localStorage.setItem("esp_theme", n); } catch (e) {} paintThemeIcon(); });
+    const askForm = $("#c-ask");
+    if (askForm) askForm.addEventListener("submit", (e) => {
+      e.preventDefault(); const inp = $("#c-ask-in"); const q = (inp.value || "").trim();
+      if (!q || busy) return; inp.value = ""; addMsg("<span>" + esc(q) + "</span>", "user");
+      const m = matchTopic(q);
+      if (m) runTopic(m);
+      else botSay([U().no_match]).then(() => chips([{ label: U().wa_host, kind: "wa", wa: true, waMsg: (U().wa_q || U().wa_generic) + " " + q }, { label: U().back }]));
+    });
     const code = (getParam("code") || "").trim().toUpperCase();
     try { const s = localStorage.getItem("esp_lang"); if (SUPPORTED.includes(s)) lang = s; } catch (e) {}
     fetch("data/bookings.json", { cache: "no-store" })

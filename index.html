@@ -75,6 +75,8 @@
     "Avistamiento de aves", "Turismo rural comunitario", "Turismo accesible / sin barreras",
     "Cabalgatas", "Parapente", "Aguas termales", "Cata de café especial", "Turismo de bienestar"],
   "address": { "@type": "PostalAddress", "addressLocality": "Armenia", "addressRegion": "Quindío", "addressCountry": "CO" },
+  "geo": { "@type": "GeoCoordinates", "latitude": 4.5339, "longitude": -75.6811 },
+  "openingHours": "Mo-Su 07:00-19:00",
   "identifier": { "@type": "PropertyValue", "name": "RNT", "value": "917395" },
   "knowsLanguage": ["es","en","fr","de","pt"],
   "sameAs": ["https://instagram.com/espontaneostravel/", "https://facebook.com/espontaneostravel"]
@@ -283,6 +285,18 @@
   </div>
 </section>
 
+<!-- ============ FAQ ============ -->
+<section class="section section--soft" id="faq">
+  <div class="container" style="max-width:820px;">
+    <div class="section-head center reveal">
+      <span class="eyebrow" id="faq-eyebrow">Preguntas frecuentes</span>
+      <h2 class="section-title" id="faq-title">Resolvemos tus dudas</h2>
+      <p class="section-sub" id="faq-sub">Lo que más nos preguntan antes de viajar al Eje Cafetero.</p>
+    </div>
+    <div class="faq" id="faq-list"></div>
+  </div>
+</section>
+
 <!-- ============ CTA band ============ -->
 <section class="section">
   <div class="container">
@@ -370,6 +384,7 @@
         <div class="footer__links">
           <a href="#experiencias" data-i18n="fl_tours">Experiencias</a>
           <a href="#galeria" data-i18n="fl_gallery">Galería</a>
+          <a href="#faq">FAQ</a>
           <a href="#sin-barreras" data-i18n="fl_access">Turismo sin barreras</a>
           <a href="#contacto" data-i18n="fl_book">Reservar</a>
         </div>
@@ -441,6 +456,7 @@
 <script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <script src="js/bot.js"></script>
+<script src="js/faq.js"></script>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

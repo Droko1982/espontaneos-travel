@@ -8,7 +8,7 @@
 const CUI = {
   es: {
     brand: "Conserje de viaje", sub: "Espontáneos Travel",
-    greet: "¡Hola {name}! 👋 Soy Espo, tu anfitrión digital durante tu viaje por {region}. Estoy aquí 24/7. ¿En qué te ayudo?",
+    greet: "¡Hola {name}! 👋 Soy Manuela, tu anfitriona durante tu viaje por {region}. Estoy contigo 24/7. ¿En qué te ayudo hoy?",
     menu_prompt: "Elige un tema o escríbenos:",
     next_stop: "Tu próxima parada", itinerary: "Tu itinerario", trip_done: "¡Tu viaje está completo! Gracias por viajar con nosotros 💚",
     status: "Reserva", party: "Viajeros", guide: "Tu guía", hotel: "Tu hotel", today: "Hoy", tomorrow: "Mañana",
@@ -29,7 +29,7 @@ const CUI = {
   },
   en: {
     brand: "Travel concierge", sub: "Espontáneos Travel",
-    greet: "Hi {name}! 👋 I'm Espo, your digital host during your trip around {region}. I'm here 24/7. How can I help?",
+    greet: "Hi {name}! 👋 I'm Manuela, your host during your trip around {region}. I'm with you 24/7. How can I help today?",
     menu_prompt: "Pick a topic or message us:",
     next_stop: "Your next stop", itinerary: "Your itinerary", trip_done: "Your trip is complete! Thanks for travelling with us 💚",
     status: "Booking", party: "Travellers", guide: "Your guide", hotel: "Your hotel", today: "Today", tomorrow: "Tomorrow",
@@ -50,7 +50,7 @@ const CUI = {
   },
   fr: {
     brand: "Conciergerie de voyage", sub: "Espontáneos Travel",
-    greet: "Bonjour {name} ! 👋 Je suis Espo, votre hôte numérique pendant votre voyage dans {region}. Disponible 24/7. Comment aider ?",
+    greet: "Bonjour {name} ! 👋 Je suis Manuela, votre hôtesse pendant votre voyage dans {region}. Disponible 24/7. Comment puis-je aider aujourd'hui ?",
     menu_prompt: "Choisissez un thème ou écrivez-nous :",
     next_stop: "Votre prochaine étape", itinerary: "Votre itinéraire", trip_done: "Votre voyage est terminé ! Merci d'avoir voyagé avec nous 💚",
     status: "Réservation", party: "Voyageurs", guide: "Votre guide", hotel: "Votre hôtel", today: "Aujourd'hui", tomorrow: "Demain",
@@ -71,7 +71,7 @@ const CUI = {
   },
   de: {
     brand: "Reise-Concierge", sub: "Espontáneos Travel",
-    greet: "Hallo {name}! 👋 Ich bin Espo, Ihr digitaler Gastgeber während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich helfen?",
+    greet: "Hallo {name}! 👋 Ich bin Manuela, Ihre Gastgeberin während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich heute helfen?",
     menu_prompt: "Wählen Sie ein Thema oder schreiben Sie uns:",
     next_stop: "Ihr nächster Halt", itinerary: "Ihr Programm", trip_done: "Ihre Reise ist abgeschlossen! Danke, dass Sie mit uns gereist sind 💚",
     status: "Buchung", party: "Reisende", guide: "Ihr Guide", hotel: "Ihr Hotel", today: "Heute", tomorrow: "Morgen",
@@ -92,7 +92,7 @@ const CUI = {
   },
   pt: {
     brand: "Concierge de viagem", sub: "Espontáneos Travel",
-    greet: "Olá {name}! 👋 Sou o Espo, seu anfitrião digital durante sua viagem por {region}. Estou aqui 24/7. Como posso ajudar?",
+    greet: "Olá {name}! 👋 Sou a Manuela, sua anfitriã durante sua viagem por {region}. Estou com você 24/7. Como posso ajudar hoje?",
     menu_prompt: "Escolha um tema ou escreva:",
     next_stop: "Sua próxima parada", itinerary: "Seu itinerário", trip_done: "Sua viagem está completa! Obrigado por viajar conosco 💚",
     status: "Reserva", party: "Viajantes", guide: "Seu guia", hotel: "Seu hotel", today: "Hoje", tomorrow: "Amanhã",
@@ -214,4 +214,144 @@ const CKB = [
         fr:"🚨 Urgences en Colombie : *123*. Police 123 · Ambulance 125 · Pompiers 119. Enregistrez aussi le numéro de votre hôte (ci-dessous). En excursion, prévenez votre guide.",
         de:"🚨 Notfälle in Kolumbien: *123*. Polizei 123 · Krankenwagen 125 · Feuerwehr 119. Speichern Sie auch die Nummer Ihres Gastgebers (unten). Auf Tour sofort Guide informieren.",
         pt:"🚨 Emergências na Colômbia: *123*. Polícia 123 · Ambulância 125 · Bombeiros 119. Salve também o número do seu anfitrião (abaixo). Em passeio, avise seu guia na hora." } }
+];
+
+/* Strings extra de interfaz (input de texto libre) */
+const CUI_EXTRA = {
+  es: { ask_ph: "Escríbeme tu pregunta…", send: "Enviar", no_match: "No estoy 100% segura de eso, pero tu anfitrión te responde al instante 👇", wa_q: "Hola, soy {name} (reserva {code}). Mi pregunta es:" },
+  en: { ask_ph: "Type your question…", send: "Send", no_match: "I'm not 100% sure about that, but your host will answer right away 👇", wa_q: "Hi, I'm {name} (booking {code}). My question is:" },
+  fr: { ask_ph: "Écrivez votre question…", send: "Envoyer", no_match: "Je n'en suis pas tout à fait sûre, mais votre hôte vous répond tout de suite 👇", wa_q: "Bonjour, je suis {name} (réservation {code}). Ma question :" },
+  de: { ask_ph: "Schreiben Sie Ihre Frage…", send: "Senden", no_match: "Da bin ich nicht ganz sicher, aber Ihr Gastgeber antwortet sofort 👇", wa_q: "Hallo, ich bin {name} (Buchung {code}). Meine Frage:" },
+  pt: { ask_ph: "Escreva sua pergunta…", send: "Enviar", no_match: "Não tenho 100% de certeza disso, mas seu anfitrião responde na hora 👇", wa_q: "Olá, sou {name} (reserva {code}). Minha pergunta é:" }
+};
+
+/* Palabras clave (sin tildes, minúsculas) para entender preguntas escritas libremente */
+const CKB_KW = {
+  schedule:["horario","horarios","itinerario","agenda","programa","plan","schedule","itinerary","time","times","horaire","zeitplan","programacao"],
+  guide:["guia","guide","guida","fuhrer","idioma del guia","mi guia","quien es mi guia"],
+  change:["cambiar","cambio","mover","reprogramar","change","reschedule","modifier","andern","mudar","otra hora","otro dia"],
+  taxi:["taxi","cab","uber","didi","indrive","cabify","transporte","carro","auto","ride","vtc"],
+  lost:["perdido","perdida","lejos","no encuentro","ubicarme","lost","far","i am far","orientacion","perdu","verirrt","perdido do hotel"],
+  restaurants:["restaurante","restaurantes","comer","comida","restaurant","food","eat","donde comer","almuerzo","cena","dinner","lunch","manger"],
+  money:["dinero","plata","cambio","cajero","atm","efectivo","peso","pesos","money","exchange","cash","currency","banco","geld","argent","dinheiro"],
+  weather:["clima","tiempo","temperatura","weather","lluvia","rain","meteo","wetter","frio","calor","grados"],
+  clothing:["ropa","vestir","que llevo puesto","clothes","wear","what to wear","vetements","kleidung","roupa","zapatos","chaqueta","abrigo"],
+  diet:["dieta","vegetariano","vegano","vegan","gluten","alergia","alergias","allergy","diet","celiaco","intolerancia","sin carne","regime"],
+  access:["silla de ruedas","wheelchair","accesible","accesibilidad","discapacidad","movilidad","coche de bebe","coche bebe","baby seat","stroller","barreras","rollstuhl","cadeira de rodas","sin barreras","fauteuil"],
+  health:["salud","medico","medicamento","medicamentos","medicina","pastillas","health","meds","medicine","condicion fisica","fitness","altura","soroche","enfermo","dolor","gesundheit","sante"],
+  wifi:["wifi","wi-fi","internet","senal","señal","signal","datos","cobertura","red","conexion"],
+  pack:["que llevar","empacar","maleta","equipaje","pack","packing","luggage","que meto","que empaco","valise","koffer","bagagem","llevar"],
+  tips:["propina","propinas","tip","tipping","gratification","trinkgeld","gorjeta","cuanto dejar"],
+  phrases:["frases","espanol","palabras","idioma","como se dice","phrases","spanish","words","language","hablar"],
+  reco:["recomendacion","recomendaciones","que hacer","que ver","sugerencias","recommend","what to do","must see","consejos","tips de viaje","inexplorada","unexplored","fuera de lo comun"],
+  emergency:["emergencia","emergencias","emergency","ayuda urgente","policia","ambulancia","hospital","urgence","notfall","emergencia medica","123"],
+  airport:["aeropuerto","airport","vuelo","vuelos","flight","axm","pei","el eden","matecana","aeroport","flughafen","traslado aeropuerto","del aeropuerto"],
+  checkin:["check in","check-in","checkin","check out","checkout","entrada hotel","salida hotel","guardar maletas","equipaje hotel","hora de entrada","late checkout"],
+  sim:["sim","chip","esim","datos moviles","mobile data","phone","celular","claro","tigo","movistar","internet movil","numero local"],
+  power:["enchufe","toma","corriente","electricidad","voltaje","adaptador","plug","socket","power","voltage","adapter","110","steckdose"],
+  water:["agua","water","agua potable","tomar agua","drinking water","grifo","wasser","agua de la llave"],
+  altitude:["altura","altitud","soroche","mal de altura","altitude","altitude sickness","mareo","oxigeno","hohenkrankheit"],
+  safety:["seguridad","seguro","peligro","safe","safety","is it safe","robo","estafa","scam","cuidado","danger","sicherheit"],
+  pharmacy:["farmacia","droguería","drogueria","pharmacy","drugstore","medicina","pastillas","pharmacie","apotheke","farmacia cercana"],
+  children:["niños","ninos","niño","bebe","bebes","hijos","children","kids","baby","family","familia","apto para niños","kinder","criancas"],
+  souvenirs:["souvenir","souvenirs","recuerdos","comprar","artesania","artesanias","regalos","shopping","que comprar","cafe para llevar","handicraft","geschenke"],
+  includes:["incluye","que incluye","incluido","included","what is included","mi plan incluye","inclus","inklusive","inclui"],
+  insurance:["seguro","seguro de viaje","asistencia medica","insurance","travel insurance","assurance","versicherung","seguro medico","cobertura"],
+  vaccines:["vacuna","vacunas","fiebre amarilla","vaccine","vaccines","yellow fever","vaccin","impfung","vacina"],
+  extend:["agregar","extender","mas dias","mas experiencias","add","extend","extra","upgrade","otra experiencia","mas tours","prolongar"],
+  feedback:["reseña","resena","review","opinion","calificar","feedback","google","estrellas","avis","bewertung","avaliacao"]
+};
+
+/* Temas adicionales (sin botón en el menú; se llegan escribiendo la pregunta) */
+const CKB_EXTRA = [
+  { id:"airport", action:"info", a:{
+    es:"Los aeropuertos son *El Edén (AXM, Armenia)* y *Matecaña (PEI, Pereira)*, a 20–40 min de la mayoría de hoteles. Coordinamos tu *traslado*; dinos tu vuelo y hora y te recogemos.",
+    en:"The airports are *El Edén (AXM, Armenia)* and *Matecaña (PEI, Pereira)*, 20–40 min from most hotels. We arrange your *transfer*; send us your flight and time and we'll pick you up.",
+    fr:"Aéroports : *El Edén (AXM, Armenia)* et *Matecaña (PEI, Pereira)*, à 20–40 min des hôtels. Nous organisons votre *transfert* ; envoyez vol et heure.",
+    de:"Flughäfen: *El Edén (AXM, Armenia)* und *Matecaña (PEI, Pereira)*, 20–40 Min. zu den Hotels. Wir organisieren Ihren *Transfer*; senden Sie Flug und Zeit.",
+    pt:"Aeroportos: *El Edén (AXM, Armenia)* e *Matecaña (PEI, Pereira)*, a 20–40 min dos hotéis. Organizamos seu *traslado*; envie voo e horário." } },
+  { id:"checkin", action:"info", a:{
+    es:"Check-in en hoteles suele ser desde las *15:00* y check-out hasta las *12:00*. Guardamos tu equipaje si llegas antes o sales después. ¿Necesitas late check-out? Avísanos.",
+    en:"Hotel check-in is usually from *3 pm* and check-out until *12 pm*. We can store your luggage if you arrive early or leave late. Need a late check-out? Tell us.",
+    fr:"Check-in dès *15h*, check-out jusqu'à *12h*. Bagages gardés si besoin. Late check-out ? Dites-le.",
+    de:"Check-in meist ab *15 Uhr*, Check-out bis *12 Uhr*. Gepäckaufbewahrung möglich. Späten Check-out? Sagen Sie Bescheid.",
+    pt:"Check-in geralmente a partir das *15h*, check-out até *12h*. Guardamos a bagagem se precisar. Late check-out? Avise." } },
+  { id:"sim", action:"info", a:{
+    es:"Puedes comprar una *SIM local* (Claro, Tigo o Movistar) con tu pasaporte — datos muy baratos. O una *eSIM* antes de viajar. En el aeropuerto y centros comerciales las venden.",
+    en:"You can buy a *local SIM* (Claro, Tigo or Movistar) with your passport — data is very cheap. Or an *eSIM* before you travel. Sold at the airport and malls.",
+    fr:"Achetez une *SIM locale* (Claro, Tigo, Movistar) avec passeport — données bon marché. Ou une *eSIM* avant le départ. En vente à l'aéroport.",
+    de:"Kaufen Sie eine *lokale SIM* (Claro, Tigo, Movistar) mit Reisepass — günstige Daten. Oder eine *eSIM* vor der Reise. Am Flughafen erhältlich.",
+    pt:"Compre um *SIM local* (Claro, Tigo ou Movistar) com passaporte — dados baratos. Ou um *eSIM* antes de viajar. Vendem no aeroporto." } },
+  { id:"power", action:"info", a:{
+    es:"La corriente es *110V* y los enchufes son *tipo A/B* (iguales a EE. UU.). Si vienes de Europa, trae un *adaptador*.",
+    en:"Power is *110V* and plugs are *type A/B* (same as the US). Coming from Europe? Bring an *adapter*.",
+    fr:"Courant *110V*, prises *type A/B* (comme aux USA). Depuis l'Europe ? Prenez un *adaptateur*.",
+    de:"Strom *110V*, Stecker *Typ A/B* (wie USA). Aus Europa? *Adapter* mitbringen.",
+    pt:"Energia *110V*, tomadas *tipo A/B* (como nos EUA). Vindo da Europa? Traga um *adaptador*." } },
+  { id:"water", action:"info", a:{
+    es:"El agua del grifo es *potable en las ciudades* (Armenia, Pereira, Manizales). En zonas rurales, mejor *agua embotellada*. Lleva tu botella y la rellenamos.",
+    en:"Tap water is *safe in the cities* (Armenia, Pereira, Manizales). In rural areas, prefer *bottled water*. Bring your bottle and we'll refill it.",
+    fr:"Eau du robinet *potable en ville*. En zone rurale, préférez l'*eau en bouteille*. Apportez votre gourde.",
+    de:"Leitungswasser ist *in den Städten trinkbar*. Ländlich besser *Flaschenwasser*. Bringen Sie Ihre Flasche mit.",
+    pt:"Água da torneira é *potável nas cidades*. Em zonas rurais, prefira *água engarrafada*. Traga sua garrafa." } },
+  { id:"altitude", action:"info", a:{
+    es:"La mayoría de recorridos están a altura cómoda. En zonas altas (*páramo ~3.000 m*) puede dar leve *soroche*: sube despacio, hidrátate y un *té de coca* ayuda. Si tienes condición cardiaca/respiratoria, consúltalo con tu médico y avísanos.",
+    en:"Most tours are at comfortable altitude. In high areas (*páramo ~3,000 m*) mild *altitude sickness* can occur: go slowly, hydrate and *coca tea* helps. With a heart/breathing condition, check with your doctor and tell us.",
+    fr:"La plupart des excursions sont à altitude confortable. En altitude (*páramo ~3 000 m*), léger *mal des montagnes* possible : montez doucement, hydratez-vous, le *thé de coca* aide. Condition cardiaque/respiratoire ? Consultez votre médecin.",
+    de:"Die meisten Touren sind in angenehmer Höhe. In Höhenlagen (*Páramo ~3.000 m*) leichte *Höhenkrankheit* möglich: langsam gehen, trinken, *Coca-Tee* hilft. Bei Herz-/Atemproblemen Arzt fragen und uns informieren.",
+    pt:"A maioria dos passeios está em altitude confortável. Em zonas altas (*páramo ~3.000 m*) pode dar leve *mal de altitude*: suba devagar, hidrate-se e *chá de coca* ajuda. Com condição cardíaca/respiratória, consulte seu médico." } },
+  { id:"safety", action:"info", a:{
+    es:"El Eje Cafetero es una región *tranquila y muy turística*. Con precauciones normales estarás bien: usa taxis/apps, cuida tus pertenencias, evita mostrar objetos de valor y sigue las indicaciones de tu guía. Cualquier duda, escríbeme.",
+    en:"The Coffee Region is *calm and very touristy*. With normal precautions you'll be fine: use taxis/apps, mind your belongings, avoid flashing valuables and follow your guide. Any doubt, message me.",
+    fr:"La région du café est *calme et très touristique*. Avec des précautions normales, tout ira bien : taxis/apps, surveillez vos affaires, pas d'objets de valeur en vue, suivez votre guide.",
+    de:"Die Kaffeeregion ist *ruhig und sehr touristisch*. Mit normaler Vorsicht alles gut: Taxis/Apps nutzen, auf Wertsachen achten, nichts offen zeigen, dem Guide folgen.",
+    pt:"A Região Cafeeira é *tranquila e muito turística*. Com precauções normais você fica bem: use táxis/apps, cuide dos pertences, evite exibir objetos de valor e siga seu guia." } },
+  { id:"pharmacy", action:"info", a:{
+    es:"Hay *droguerías (farmacias)* en todos los pueblos; muchos medicamentos se venden sin receta. Cadenas conocidas: Cruz Verde, Farmatodo, La Rebaja. Si necesitas una cercana, escríbeme tu ubicación.",
+    en:"There are *pharmacies (droguerías)* in every town; many meds are sold without prescription. Known chains: Cruz Verde, Farmatodo, La Rebaja. Need a nearby one? Send me your location.",
+    fr:"*Pharmacies (droguerías)* dans chaque ville ; beaucoup de médicaments sans ordonnance. Chaînes : Cruz Verde, Farmatodo, La Rebaja. Besoin d'une proche ? Envoyez votre position.",
+    de:"In jedem Ort gibt es *Apotheken (droguerías)*; viele Medikamente ohne Rezept. Ketten: Cruz Verde, Farmatodo, La Rebaja. Eine in der Nähe? Senden Sie Ihren Standort.",
+    pt:"Há *farmácias (droguerías)* em todas as cidades; muitos remédios sem receita. Redes: Cruz Verde, Farmatodo, La Rebaja. Precisa de uma perto? Mande sua localização." } },
+  { id:"children", action:"wa:wa_generic", a:{
+    es:"¡Viajar en familia es ideal aquí! Fincas, parques temáticos y pueblos son perfectos para *niños*. Dinos las edades y preparamos sillas, ritmo y actividades adecuadas. Toca para contarnos.",
+    en:"Family travel is great here! Farms, theme parks and towns are perfect for *kids*. Tell us their ages and we'll arrange seats, pace and suitable activities. Tap to let us know.",
+    fr:"Voyager en famille est parfait ici ! Fermes, parcs et villages pour les *enfants*. Dites les âges et on prépare sièges, rythme et activités. Touchez pour nous dire.",
+    de:"Familienreisen sind hier top! Fincas, Parks und Dörfer für *Kinder*. Nennen Sie das Alter, wir organisieren Sitze, Tempo und Aktivitäten. Tippen zum Mitteilen.",
+    pt:"Viajar em família é ótimo aqui! Fazendas, parques e vilarejos para *crianças*. Diga as idades e preparamos cadeirinhas, ritmo e atividades. Toque para avisar." } },
+  { id:"souvenirs", action:"maps:artesanías y café souvenirs", a:{
+    es:"Lleva recuerdos únicos: *café de origen*, artesanías en *guadua y bejuco*, sombreros, mochilas y chocolate. Los mejores lugares: *Salento, Filandia y Armenia*. Toca para verlos en el mapa.",
+    en:"Take home unique souvenirs: *origin coffee*, *bamboo/wicker* crafts, hats, bags and chocolate. Best spots: *Salento, Filandia and Armenia*. Tap to see them on the map.",
+    fr:"Souvenirs uniques : *café d'origine*, artisanat en *bambou/osier*, chapeaux, sacs, chocolat. Meilleurs endroits : *Salento, Filandia, Armenia*.",
+    de:"Einzigartige Souvenirs: *Ursprungskaffee*, *Bambus/Korb*-Kunsthandwerk, Hüte, Taschen, Schokolade. Beste Orte: *Salento, Filandia, Armenia*.",
+    pt:"Leve lembranças únicas: *café de origem*, artesanato em *bambu/vime*, chapéus, bolsas e chocolate. Melhores lugares: *Salento, Filandia e Armenia*." } },
+  { id:"includes", action:"wa:wa_generic", a:{
+    es:"Cada plan indica qué incluye (normalmente *guía, transporte, entradas y algunas comidas*). Para el detalle exacto de *tu* reserva, toca el botón y te confirmo todo al instante.",
+    en:"Each plan lists what's included (usually *guide, transport, entrances and some meals*). For the exact details of *your* booking, tap the button and I'll confirm everything.",
+    fr:"Chaque formule précise ce qui est inclus (*guide, transport, entrées, certains repas*). Pour le détail de *votre* réservation, touchez le bouton.",
+    de:"Jedes Paket nennt die Leistungen (meist *Guide, Transport, Eintritte, einige Mahlzeiten*). Für Details *Ihrer* Buchung tippen Sie den Button.",
+    pt:"Cada plano indica o que inclui (geralmente *guia, transporte, entradas e algumas refeições*). Para o detalhe da *sua* reserva, toque no botão." } },
+  { id:"insurance", action:"info", a:{
+    es:"Varios planes incluyen *tarjeta de asistencia médica*. Aun así, recomendamos un *seguro de viaje* personal. Revisa tu cobertura y, ante urgencia, marca *123*.",
+    en:"Several plans include a *medical assistance card*. We still recommend personal *travel insurance*. Check your coverage and, in an emergency, dial *123*.",
+    fr:"Plusieurs formules incluent une *carte d'assistance médicale*. Nous recommandons une *assurance voyage*. Vérifiez votre couverture ; urgence : *123*.",
+    de:"Mehrere Pakete enthalten eine *medizinische Assistenzkarte*. Wir empfehlen dennoch eine *Reiseversicherung*. Prüfen Sie Ihren Schutz; Notruf *123*.",
+    pt:"Vários planos incluem *cartão de assistência médica*. Ainda assim, recomendamos *seguro de viagem*. Verifique sua cobertura; emergência: *123*." } },
+  { id:"vaccines", action:"info", a:{
+    es:"Para el Eje Cafetero *no se exigen vacunas*. Si extiendes tu viaje a selva/Amazonía o zonas bajas, se recomienda *fiebre amarilla*. Consulta siempre a tu médico antes de viajar.",
+    en:"No vaccines are *required* for the Coffee Region. If you extend to jungle/Amazon or lowlands, *yellow fever* is recommended. Always check with your doctor before travelling.",
+    fr:"Aucun vaccin *exigé* pour la région du café. Pour la jungle/Amazonie ou basses terres, *fièvre jaune* recommandée. Consultez votre médecin.",
+    de:"Für die Kaffeeregion sind *keine Impfungen vorgeschrieben*. Bei Dschungel/Amazonas oder Tiefland wird *Gelbfieber* empfohlen. Fragen Sie Ihren Arzt.",
+    pt:"Para a Região Cafeeira *não há vacinas obrigatórias*. Se estender à selva/Amazônia ou terras baixas, *febre amarela* é recomendada. Consulte seu médico." } },
+  { id:"extend", action:"wa:wa_generic", a:{
+    es:"¡Me encanta! Podemos *agregar días o experiencias* — incluyendo rincones de *Colombia inexplorada* fuera de las rutas típicas. Toca el botón y te armo una propuesta a tu medida.",
+    en:"Love it! We can *add days or experiences* — including corners of *unexplored Colombia* off the usual routes. Tap the button and I'll craft a tailored proposal.",
+    fr:"Avec plaisir ! On peut *ajouter des jours ou des expériences* — y compris la *Colombie inexplorée*. Touchez le bouton pour une proposition sur mesure.",
+    de:"Sehr gern! Wir können *Tage oder Erlebnisse hinzufügen* — auch das *unerforschte Kolumbien*. Tippen Sie den Button für ein maßgeschneidertes Angebot.",
+    pt:"Adoro! Podemos *adicionar dias ou experiências* — incluindo a *Colômbia inexplorada*. Toque no botão e preparo uma proposta sob medida." } },
+  { id:"feedback", action:"maps:Espontáneos Travel", a:{
+    es:"¡Gracias por viajar con nosotros! 💚 Si lo disfrutaste, una *reseña* nos ayuda muchísimo a seguir creciendo. Toca para dejarla.",
+    en:"Thanks for travelling with us! 💚 If you enjoyed it, a *review* helps us grow a lot. Tap to leave one.",
+    fr:"Merci d'avoir voyagé avec nous ! 💚 Un *avis* nous aide beaucoup. Touchez pour le laisser.",
+    de:"Danke, dass Sie mit uns gereist sind! 💚 Eine *Bewertung* hilft uns sehr. Tippen zum Hinterlassen.",
+    pt:"Obrigado por viajar conosco! 💚 Uma *avaliação* nos ajuda muito. Toque para deixar." } }
 ];

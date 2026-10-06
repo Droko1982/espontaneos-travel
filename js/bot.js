@@ -11,8 +11,8 @@
 
   const BOT = {
     es: {
-      launch:"¿Te ayudo?", title:"Espo", subtitle:"Asistente de viaje",
-      greet:"¡Hola! 👋 Soy *Espo*, el asistente de Espontáneos Travel.",
+      launch:"¿Te ayudo?", title:"Manuela", subtitle:"Tu anfitriona",
+      greet:"¡Hola! 👋 Soy *Manuela*, tu anfitriona de Espontáneos Travel. Encantada de recibirte 💚",
       menu_prompt:"¿Con qué te ayudo hoy? Elige una opción 👇",
       m_exp:"🌿 Ver experiencias", m_prices:"💲 Precios", m_book:"📅 Cómo reservar",
       m_access:"♿ Turismo sin barreras", m_howget:"📍 Cómo llego", m_pay:"💳 Formas de pago",
@@ -41,8 +41,8 @@
       foot:"Respuestas guiadas · un asesor confirma los detalles"
     },
     en: {
-      launch:"Need help?", title:"Espo", subtitle:"Travel assistant",
-      greet:"Hi! 👋 I'm *Espo*, Espontáneos Travel's assistant.",
+      launch:"Need help?", title:"Manuela", subtitle:"Your travel host",
+      greet:"Hi! 👋 I'm *Manuela*, your Espontáneos Travel host. So glad to have you 💚",
       menu_prompt:"How can I help you today? Pick an option 👇",
       m_exp:"🌿 See experiences", m_prices:"💲 Prices", m_book:"📅 How to book",
       m_access:"♿ Barrier-free tourism", m_howget:"📍 How to get there", m_pay:"💳 Payment methods",
@@ -71,8 +71,8 @@
       foot:"Guided replies · an advisor confirms the details"
     },
     fr: {
-      launch:"Besoin d'aide ?", title:"Espo", subtitle:"Assistant de voyage",
-      greet:"Bonjour ! 👋 Je suis *Espo*, l'assistant d'Espontáneos Travel.",
+      launch:"Besoin d'aide ?", title:"Manuela", subtitle:"Votre hôtesse",
+      greet:"Bonjour ! 👋 Je suis *Manuela*, votre hôtesse chez Espontáneos Travel. Ravie de vous accueillir 💚",
       menu_prompt:"Comment puis-je vous aider ? Choisissez une option 👇",
       m_exp:"🌿 Voir les expériences", m_prices:"💲 Tarifs", m_book:"📅 Comment réserver",
       m_access:"♿ Tourisme sans barrières", m_howget:"📍 Comment venir", m_pay:"💳 Moyens de paiement",
@@ -101,8 +101,8 @@
       foot:"Réponses guidées · un conseiller confirme les détails"
     },
     de: {
-      launch:"Brauchen Sie Hilfe?", title:"Espo", subtitle:"Reise-Assistent",
-      greet:"Hallo! 👋 Ich bin *Espo*, der Assistent von Espontáneos Travel.",
+      launch:"Brauchen Sie Hilfe?", title:"Manuela", subtitle:"Ihre Gastgeberin",
+      greet:"Hallo! 👋 Ich bin *Manuela*, Ihre Gastgeberin bei Espontáneos Travel. Schön, dass Sie da sind 💚",
       menu_prompt:"Wie kann ich helfen? Wählen Sie eine Option 👇",
       m_exp:"🌿 Erlebnisse ansehen", m_prices:"💲 Preise", m_book:"📅 So buchen Sie",
       m_access:"♿ Barrierefreier Tourismus", m_howget:"📍 Anreise", m_pay:"💳 Zahlungsarten",
@@ -131,8 +131,8 @@
       foot:"Geführte Antworten · ein Berater bestätigt die Details"
     },
     pt: {
-      launch:"Precisa de ajuda?", title:"Espo", subtitle:"Assistente de viagem",
-      greet:"Olá! 👋 Sou o *Espo*, assistente da Espontáneos Travel.",
+      launch:"Precisa de ajuda?", title:"Manuela", subtitle:"Sua anfitriã",
+      greet:"Olá! 👋 Sou a *Manuela*, sua anfitriã da Espontáneos Travel. Que bom ter você aqui 💚",
       menu_prompt:"Como posso ajudar hoje? Escolha uma opção 👇",
       m_exp:"🌿 Ver experiências", m_prices:"💲 Preços", m_book:"📅 Como reservar",
       m_access:"♿ Turismo sem barreiras", m_howget:"📍 Como chegar", m_pay:"💳 Formas de pagamento",
@@ -174,7 +174,7 @@
   let launch, panel, body, quick, headTitle, headSub, launchTxt, badge;
 
   function build() {
-    launch = el("button", "espo-launch", `<span class="espo-launch__ava">E<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
+    launch = el("button", "espo-launch", `<span class="espo-launch__ava">M<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
     launch.setAttribute("aria-label", "Espo");
     launchTxt = launch.querySelector(".espo-launch__txt");
     badge = launch.querySelector(".espo-badge");
@@ -183,7 +183,7 @@
     panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Espo");
     panel.innerHTML =
       `<div class="espo-head">
-         <span class="espo-head__ava">E</span>
+         <span class="espo-head__ava">M</span>
          <span class="espo-head__t"><b class="espo-h-title"></b><span class="espo-h-sub"></span></span>
          <button class="espo-head__close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
        </div>
