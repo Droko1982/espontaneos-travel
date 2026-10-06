@@ -556,7 +556,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 .espo-panel {
   position: fixed; right: 20px; bottom: 20px; z-index: 1000;
-  width: min(380px, calc(100vw - 32px)); height: min(600px, calc(100vh - 40px));
+  width: min(340px, calc(100vw - 32px)); height: min(500px, calc(100vh - 120px));
   background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--r-lg);
   box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden;
   opacity: 0; visibility: hidden; transform: translateY(24px) scale(.96); transform-origin: bottom right;
