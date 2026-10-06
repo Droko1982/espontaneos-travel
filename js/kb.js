@@ -274,7 +274,20 @@ const CKB_KW = {
   travelers:["adulto mayor","tercera edad","viajo solo","viajo sola","grupo","grupos","family","elderly","senior","solo","embarazada","pregnant","empresa","corporativo"],
   hospital:["hospital","clinica","medico urgente","doctor","urgencias","hospital cercano","notaufnahme","pronto socorro","ambulancia"],
   locallang:["hablan ingles","english","idioma local","speak english","do they speak","sprechen englisch","falam ingles","entienden ingles"],
-  lostitem:["olvide","perdi","objeto perdido","lost item","i lost","deje olvidado","perdi algo","verloren","esqueci","dejé"]
+  lostitem:["olvide","perdi","objeto perdido","lost item","i lost","deje olvidado","perdi algo","verloren","esqueci","dejé"],
+  visa:["visa","visado","pasaporte","entrar a colombia","entry","requisitos","immigration","migracion","sello","90 dias","necesito visa","passport","einreise","visto"],
+  food:["comida tipica","que comer","platos tipicos","bandeja paisa","trucha","typical food","what to eat","dishes","gastronomia","sancocho","arepa","lechona","essen","comida local","what food"],
+  drinks:["bebida","bebidas","tomar","drink","drinks","aguardiente","ron","jugo","aguapanela","boisson","getranke","chocolate","limonada"],
+  payment:["como pago","como pagar","anticipo","deposito","how to pay","deposit","payment","medios de pago","nequi","pse","datos de pago","pagar reserva","paiement","zahlung","como abono"],
+  culture:["cultura","costumbres","etiqueta","como saludar","customs","etiquette","greeting","como se comportan","kultur","saludo","que no hacer"],
+  swimming:["nadar","piscina","banarse","banarme","swim","swimming","pool","rio para nadar","vestido de bano","nager","schwimmen","me puedo banar"],
+  rain:["lluvia","llueve","si llueve","rain","raining","what if it rains","plan b","pluie","regen","chuva","paraguas","impermeable"],
+  coffee:["cafe","coffee","cafe de origen","tour de cafe","coffee tour","comprar cafe","cata de cafe","kaffee","cafe especial","finca de cafe"],
+  alcohol:["alcohol","cerveza","beer","aguardiente","ron","edad legal","drinking age","fumar","smoking","alkohol","alcool","cigarrillo","tomar trago"],
+  lgbt:["lgbt","gay","lesbiana","queer","homosexual","trans","pareja del mismo sexo","lgbtq","gay friendly","gay-friendly"],
+  duration:["cuanto dura","duracion","how long","duration","cuantas horas","medio dia","dia completo","half day","full day","dauer","quanto dura","tiempo del tour"],
+  privatetours:["privado","privada","private","tour privado","shared","compartido","solo mi grupo","exclusivo","prive","privat","grupo privado","personalizado"],
+  flightdelay:["vuelo retrasado","retraso","flight delay","delayed","mi vuelo cambio","flight changed","retard vol","flugverspatung","voo atrasado","vuelo se retraso"]
 };
 
 /* Temas adicionales (sin botón en el menú; se llegan escribiendo la pregunta) */
@@ -458,5 +471,83 @@ const CKB_EXTRA = [
     en:"Left something behind? Don't worry. Tell us *what* and *where* (hotel, vehicle, tour) and we'll look right away. Tap the button.",
     fr:"Vous avez oublié quelque chose ? Dites-nous *quoi* et *où* (hôtel, véhicule, tour) et nous cherchons tout de suite. Touchez le bouton.",
     de:"Etwas vergessen? Sagen Sie uns *was* und *wo* (Hotel, Fahrzeug, Tour) und wir suchen sofort. Tippen Sie den Button.",
-    pt:"Esqueceu algo? Diga *o quê* e *onde* (hotel, veículo, tour) e procuramos na hora. Toque no botão." } }
+    pt:"Esqueceu algo? Diga *o quê* e *onde* (hotel, veículo, tour) e procuramos na hora. Toque no botão." } },
+  { id:"visa", action:"info", a:{
+    es:"La mayoría de turistas (Europa, EE. UU., Reino Unido, Latinoamérica y muchos más) *no necesitan visa* para entrar a Colombia; recibes un sello de turismo de hasta *90 días* (prorrogable). Lleva pasaporte vigente y tiquete de salida. Verifica según tu nacionalidad en Migración Colombia.",
+    en:"Most tourists (Europe, US, UK, Latin America and many more) *don't need a visa* to enter Colombia; you get a tourist stamp of up to *90 days* (extendable). Bring a valid passport and onward ticket. Check for your nationality with Migración Colombia.",
+    fr:"La plupart des touristes (Europe, USA, R.-U., Amérique latine…) *n'ont pas besoin de visa* ; tampon touristique jusqu'à *90 jours* (prolongeable). Passeport valide et billet de sortie. Vérifiez selon votre nationalité.",
+    de:"Die meisten Touristen (Europa, USA, UK, Lateinamerika…) *brauchen kein Visum*; Touristenstempel bis *90 Tage* (verlängerbar). Gültiger Reisepass und Weiterreiseticket. Je nach Nationalität prüfen.",
+    pt:"A maioria dos turistas (Europa, EUA, Reino Unido, América Latina…) *não precisa de visto*; carimbo de turista de até *90 dias* (prorrogável). Passaporte válido e passagem de saída. Verifique conforme sua nacionalidade." } },
+  { id:"food", action:"info", a:{
+    es:"Prueba lo típico: *bandeja paisa*, *trucha* al ajillo (con patacón), *sancocho*, arepas, empanadas, *lechona* y mucha fruta tropical. Para el dulce: *arequipe*, obleas y panela. ¿Alergias o dieta? Dímelo y lo coordinamos.",
+    en:"Try the classics: *bandeja paisa*, garlic *trout* (with patacón), *sancocho*, arepas, empanadas, *lechona* and lots of tropical fruit. Sweet tooth: *arequipe*, obleas and panela. Allergies or diet? Tell me and we'll coordinate.",
+    fr:"Goûtez les classiques : *bandeja paisa*, *truite* à l'ail (avec patacón), *sancocho*, arepas, empanadas, *lechona* et fruits tropicaux. Sucré : *arequipe*, obleas. Allergies ou régime ? Dites-le-moi.",
+    de:"Probieren Sie die Klassiker: *Bandeja Paisa*, Knoblauch-*Forelle* (mit Patacón), *Sancocho*, Arepas, Empanadas, *Lechona* und Tropenfrüchte. Süß: *Arequipe*, Obleas. Allergien/Diät? Sagen Sie es mir.",
+    pt:"Prove os clássicos: *bandeja paisa*, *truta* ao alho (com patacón), *sancocho*, arepas, empanadas, *lechona* e frutas tropicais. Doce: *arequipe*, obleas. Alergias ou dieta? Me diga." } },
+  { id:"drinks", action:"info", a:{
+    es:"Para beber: por supuesto *café de origen* ☕, además *aguapanela* con queso, chocolate caliente, jugos de frutas exóticas y limonada de coco. Con alcohol: cerveza, *aguardiente* y ron colombiano (con moderación).",
+    en:"To drink: of course *origin coffee* ☕, plus *aguapanela* with cheese, hot chocolate, exotic fruit juices and coconut lemonade. Alcoholic: beer, *aguardiente* and Colombian rum (in moderation).",
+    fr:"À boire : bien sûr le *café d'origine* ☕, *aguapanela* au fromage, chocolat chaud, jus de fruits exotiques, limonade de coco. Alcool : bière, *aguardiente*, rhum colombien (avec modération).",
+    de:"Zum Trinken: natürlich *Ursprungskaffee* ☕, *Aguapanela* mit Käse, heiße Schokolade, exotische Säfte, Kokos-Limonade. Alkohol: Bier, *Aguardiente*, kolumbianischer Rum (in Maßen).",
+    pt:"Para beber: claro, *café de origem* ☕, *aguapanela* com queijo, chocolate quente, sucos de frutas exóticas e limonada de coco. Álcool: cerveja, *aguardiente* e rum colombiano (com moderação)." } },
+  { id:"payment", action:"wa:wa_generic", a:{
+    es:"Para reservar pagas un *anticipo del 50%* y el resto el día del tour. Métodos: *Nequi/Daviplata, transferencia/PSE, efectivo o tarjeta*, en pesos, dólares o euros. Toca el botón y te enviamos los datos de pago.",
+    en:"To book you pay a *50% deposit* and the rest on the tour day. Methods: *Nequi/Daviplata, bank transfer/PSE, cash or card*, in pesos, dollars or euros. Tap the button and we'll send the payment details.",
+    fr:"Pour réserver : *acompte de 50 %*, solde le jour du tour. Moyens : *Nequi/Daviplata, virement/PSE, espèces ou carte*, en pesos, dollars ou euros. Touchez le bouton pour les coordonnées de paiement.",
+    de:"Zur Buchung: *50 % Anzahlung*, Rest am Tourtag. Methoden: *Nequi/Daviplata, Überweisung/PSE, Bargeld oder Karte*, in Pesos, Dollar oder Euro. Tippen Sie für die Zahlungsdaten.",
+    pt:"Para reservar: *sinal de 50%*, restante no dia do tour. Métodos: *Nequi/Daviplata, transferência/PSE, dinheiro ou cartão*, em pesos, dólares ou euros. Toque para os dados de pagamento." } },
+  { id:"culture", action:"info", a:{
+    es:"Los colombianos somos *muy cálidos* 💚. Se saluda con «buenos días/tardes» y una sonrisa; el trato es cercano y amable. La puntualidad es flexible, pero nosotros llegamos a tiempo. Pide permiso para fotografiar personas y disfruta la conversación.",
+    en:"Colombians are *very warm* 💚. Greet with «buenos días/tardes» and a smile; people are friendly and close. Punctuality is relaxed, but we arrive on time. Ask before photographing people and enjoy the chat.",
+    fr:"Les Colombiens sont *très chaleureux* 💚. On salue avec « buenos días/tardes » et un sourire ; contact amical. Ponctualité souple, mais nous sommes à l'heure. Demandez avant de photographier les gens.",
+    de:"Kolumbianer sind *sehr herzlich* 💚. Begrüßung mit «buenos días/tardes» und einem Lächeln; freundlicher Umgang. Pünktlichkeit locker, aber wir sind pünktlich. Vor Fotos von Personen fragen.",
+    pt:"Os colombianos são *muito calorosos* 💚. Cumprimente com «buenos días/tardes» e um sorriso; trato próximo e amável. Pontualidade flexível, mas nós chegamos na hora. Peça permissão para fotografar pessoas." } },
+  { id:"swimming", action:"info", a:{
+    es:"Puedes nadar en las *aguas termales* (Santa Rosa, San Vicente), en *ríos* y piscinas de algunas fincas. Lleva *vestido de baño y toalla*. Te decimos dónde según tu plan y la seguridad del lugar.",
+    en:"You can swim in the *hot springs* (Santa Rosa, San Vicente), in *rivers* and some farm pools. Bring a *swimsuit and towel*. We'll tell you where based on your plan and safety.",
+    fr:"Baignade possible aux *sources thermales* (Santa Rosa, San Vicente), en *rivière* et piscines de certaines fermes. Apportez *maillot et serviette*. Nous indiquons où selon votre programme.",
+    de:"Baden in den *Thermalquellen* (Santa Rosa, San Vicente), in *Flüssen* und Finca-Pools. *Badesachen und Handtuch* mitbringen. Wir sagen Ihnen wo, je nach Programm.",
+    pt:"Dá para nadar nas *águas termais* (Santa Rosa, San Vicente), em *rios* e piscinas de algumas fazendas. Leve *roupa de banho e toalha*. Indicamos onde conforme seu plano." } },
+  { id:"rain", action:"info", a:{
+    es:"Si llueve, ¡no pasa nada! El clima cambia rápido y suele despejar. Tenemos *plan B* con actividades bajo techo (museos del café, talleres, cafés, termales). Trae *impermeable* y seguimos disfrutando. ☔",
+    en:"If it rains, no problem! Weather changes fast and usually clears. We have a *plan B* with indoor activities (coffee museums, workshops, cafés, hot springs). Bring a *rain jacket* and we keep enjoying. ☔",
+    fr:"S'il pleut, pas de souci ! Le temps change vite. Nous avons un *plan B* en intérieur (musées du café, ateliers, cafés, thermes). Prenez un *imperméable*. ☔",
+    de:"Bei Regen kein Problem! Das Wetter wechselt schnell. Wir haben einen *Plan B* drinnen (Kaffeemuseen, Workshops, Cafés, Thermen). *Regenjacke* mitbringen. ☔",
+    pt:"Se chover, tranquilo! O tempo muda rápido. Temos um *plano B* coberto (museus do café, oficinas, cafés, termas). Traga *capa de chuva*. ☔" } },
+  { id:"coffee", action:"info", a:{
+    es:"El café es el alma de esta tierra ☕. Vive un *tour de finca* (de la semilla a la taza) con cata de café de especialidad, y llévate café de origen recién tostado como recuerdo. ¿Quieres añadir una cata o visita? Lo coordino.",
+    en:"Coffee is the soul of this land ☕. Live a *farm tour* (seed to cup) with a specialty cupping, and take home freshly roasted origin coffee. Want to add a tasting or visit? I'll arrange it.",
+    fr:"Le café est l'âme de cette terre ☕. Vivez un *tour de ferme* (de la graine à la tasse) avec dégustation, et rapportez du café d'origine fraîchement torréfié. Ajouter une dégustation ? Je m'en occupe.",
+    de:"Kaffee ist die Seele dieses Landes ☕. Erleben Sie eine *Finca-Tour* (vom Samen zur Tasse) mit Verkostung und nehmen Sie frisch gerösteten Ursprungskaffee mit. Verkostung hinzufügen? Ich organisiere es.",
+    pt:"O café é a alma desta terra ☕. Viva um *tour de fazenda* (da semente à xícara) com degustação e leve café de origem recém-torrado. Quer adicionar uma degustação? Eu organizo." } },
+  { id:"alcohol", action:"info", a:{
+    es:"La edad legal para alcohol es *18 años*. Encuentras cerveza, aguardiente y ron en tiendas y bares. Disfruta con moderación, sobre todo en altura. No conduzcas si bebes; pide un taxi/app.",
+    en:"The legal drinking age is *18*. Beer, aguardiente and rum are sold in shops and bars. Enjoy in moderation, especially at altitude. Don't drink and drive; use a taxi/app.",
+    fr:"L'âge légal pour l'alcool est *18 ans*. Bière, aguardiente et rhum en magasins et bars. À consommer avec modération, surtout en altitude. Ne conduisez pas ; prenez un taxi/app.",
+    de:"Das Mindestalter für Alkohol ist *18*. Bier, Aguardiente und Rum in Läden/Bars. In Maßen genießen, besonders in der Höhe. Nicht fahren; Taxi/App nehmen.",
+    pt:"A idade legal para álcool é *18 anos*. Cerveja, aguardiente e rum em lojas e bares. Com moderação, sobretudo na altitude. Não dirija; use táxi/app." } },
+  { id:"lgbt", action:"info", a:{
+    es:"Eres bienvenid@ tal como eres 🏳️‍🌈. La región es *amable y tranquila*; en las ciudades hay ambiente diverso. Con respeto mutuo disfrutarás sin problema. Si tienes alguna preferencia para tu plan, cuéntanos.",
+    en:"You're welcome exactly as you are 🏳️‍🌈. The region is *friendly and relaxed*; cities have a diverse scene. With mutual respect you'll enjoy without issues. Any preference for your plan? Tell us.",
+    fr:"Vous êtes bienvenu·e tel·le que vous êtes 🏳️‍🌈. La région est *accueillante et tranquille* ; les villes ont une scène diverse. Avec respect mutuel, tout se passe bien. Une préférence ? Dites-nous.",
+    de:"Sie sind willkommen, genau wie Sie sind 🏳️‍🌈. Die Region ist *freundlich und entspannt*; Städte haben eine diverse Szene. Mit gegenseitigem Respekt genießen Sie ohne Probleme. Wünsche? Sagen Sie es uns.",
+    pt:"Você é bem-vind@ exatamente como é 🏳️‍🌈. A região é *acolhedora e tranquila*; as cidades têm cena diversa. Com respeito mútuo, você aproveita sem problemas. Alguma preferência? Conte-nos." } },
+  { id:"duration", action:"info", a:{
+    es:"Tenemos experiencias de *medio día, día completo y planes de varios días*. La mayoría de tours de un día duran 6–9 horas. En tu itinerario ves los horarios exactos; ¿quieres algo más corto o más largo? Lo ajustamos.",
+    en:"We have *half-day, full-day and multi-day* experiences. Most day tours last 6–9 hours. Your itinerary shows the exact times; want something shorter or longer? We'll adjust.",
+    fr:"Nous avons des expériences de *demi-journée, journée entière et plusieurs jours*. La plupart des tours d'une journée durent 6–9 h. Votre itinéraire indique les horaires ; plus court ou plus long ? On ajuste.",
+    de:"Wir haben *Halbtags-, Ganztags- und Mehrtageserlebnisse*. Die meisten Tagestouren dauern 6–9 Std. Ihr Programm zeigt die Zeiten; kürzer oder länger? Wir passen an.",
+    pt:"Temos experiências de *meio dia, dia inteiro e vários dias*. A maioria dos tours de um dia dura 6–9 horas. Seu itinerário mostra os horários; quer mais curto ou mais longo? Ajustamos." } },
+  { id:"privatetours", action:"wa:wa_generic", a:{
+    es:"Ofrecemos tours *privados* (solo tu grupo, a tu ritmo) y *compartidos* (más económicos). También armamos *planes a la medida* y para *grupos o empresas*. Toca el botón y te cotizamos el formato que prefieras.",
+    en:"We offer *private* tours (just your group, your pace) and *shared* ones (cheaper). We also build *custom plans* and options for *groups or companies*. Tap the button for a quote in your preferred format.",
+    fr:"Nous proposons des tours *privés* (votre groupe, votre rythme) et *partagés* (moins chers). Aussi des *plans sur mesure* et pour *groupes/entreprises*. Touchez le bouton pour un devis.",
+    de:"Wir bieten *private* Touren (nur Ihre Gruppe, Ihr Tempo) und *geteilte* (günstiger). Auch *maßgeschneiderte Pläne* und für *Gruppen/Firmen*. Tippen Sie für ein Angebot.",
+    pt:"Oferecemos tours *privativos* (só seu grupo, seu ritmo) e *compartilhados* (mais baratos). Também *planos sob medida* e para *grupos/empresas*. Toque para cotar." } },
+  { id:"flightdelay", action:"wa:wa_generic", a:{
+    es:"¿Tu vuelo se retrasó o cambió? No te preocupes — avísanos cuanto antes por WhatsApp y *reprogramamos tu recogida* y tu itinerario sin estrés. Toca el botón.",
+    en:"Flight delayed or changed? Don't worry — let us know ASAP on WhatsApp and we'll *reschedule your pickup* and itinerary stress-free. Tap the button.",
+    fr:"Vol retardé ou modifié ? Pas de souci — prévenez-nous vite sur WhatsApp et nous *reprogrammons votre prise en charge* et votre itinéraire. Touchez le bouton.",
+    de:"Flug verspätet/geändert? Keine Sorge — melden Sie sich schnell per WhatsApp und wir *verschieben Ihre Abholung* und das Programm. Tippen Sie den Button.",
+    pt:"Voo atrasou ou mudou? Tranquilo — avise-nos logo no WhatsApp e *remarcamos sua retirada* e o itinerário. Toque no botão." } }
 ];
