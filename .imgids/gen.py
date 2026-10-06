@@ -279,7 +279,7 @@ gallery_ids = []
 for (tid,cat,name,es,en,key,fb) in T:
     arr = imgs.get(key, [])
     arr = [a for a in arr if a and len(a) > 20][:10]
-    REORDER = {"termales":1, "abejas":4, "frutas":2, "platano":1, "cocorasalento":6, "fulldayfcs":2}
+    REORDER = {"termales":1, "abejas":4, "frutas":2, "platano":1, "cocorasalento":6, "fulldayfcs":2, "panaca":6}
     if tid in REORDER and 0 <= REORDER[tid] < len(arr):
         arr.insert(0, arr.pop(REORDER[tid]))
     BORROW = {"cocoraacaime2": "palmacera"}  # La Carbonera = bosque de palma de cera
