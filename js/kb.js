@@ -8,7 +8,7 @@
 const CUI = {
   es: {
     brand: "Conserje de viaje", sub: "Espontáneos Travel",
-    greet: "¡Hola {name}! 👋 Soy Manuela, tu anfitriona durante tu viaje por {region}. Estoy contigo 24/7. ¿En qué te ayudo hoy?",
+    greet: "¡Hola {name}! 👋 Soy Yenny, tu anfitriona durante tu viaje por {region}. Estoy contigo 24/7. ¿En qué te ayudo hoy?",
     menu_prompt: "Elige un tema o escríbenos:",
     next_stop: "Tu próxima parada", itinerary: "Tu itinerario", trip_done: "¡Tu viaje está completo! Gracias por viajar con nosotros 💚",
     status: "Reserva", party: "Viajeros", guide: "Tu guía", hotel: "Tu hotel", today: "Hoy", tomorrow: "Mañana",
@@ -29,7 +29,7 @@ const CUI = {
   },
   en: {
     brand: "Travel concierge", sub: "Espontáneos Travel",
-    greet: "Hi {name}! 👋 I'm Manuela, your host during your trip around {region}. I'm with you 24/7. How can I help today?",
+    greet: "Hi {name}! 👋 I'm Yenny, your host during your trip around {region}. I'm with you 24/7. How can I help today?",
     menu_prompt: "Pick a topic or message us:",
     next_stop: "Your next stop", itinerary: "Your itinerary", trip_done: "Your trip is complete! Thanks for travelling with us 💚",
     status: "Booking", party: "Travellers", guide: "Your guide", hotel: "Your hotel", today: "Today", tomorrow: "Tomorrow",
@@ -50,7 +50,7 @@ const CUI = {
   },
   fr: {
     brand: "Conciergerie de voyage", sub: "Espontáneos Travel",
-    greet: "Bonjour {name} ! 👋 Je suis Manuela, votre hôtesse pendant votre voyage dans {region}. Disponible 24/7. Comment puis-je aider aujourd'hui ?",
+    greet: "Bonjour {name} ! 👋 Je suis Yenny, votre hôtesse pendant votre voyage dans {region}. Disponible 24/7. Comment puis-je aider aujourd'hui ?",
     menu_prompt: "Choisissez un thème ou écrivez-nous :",
     next_stop: "Votre prochaine étape", itinerary: "Votre itinéraire", trip_done: "Votre voyage est terminé ! Merci d'avoir voyagé avec nous 💚",
     status: "Réservation", party: "Voyageurs", guide: "Votre guide", hotel: "Votre hôtel", today: "Aujourd'hui", tomorrow: "Demain",
@@ -71,7 +71,7 @@ const CUI = {
   },
   de: {
     brand: "Reise-Concierge", sub: "Espontáneos Travel",
-    greet: "Hallo {name}! 👋 Ich bin Manuela, Ihre Gastgeberin während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich heute helfen?",
+    greet: "Hallo {name}! 👋 Ich bin Yenny, Ihre Gastgeberin während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich heute helfen?",
     menu_prompt: "Wählen Sie ein Thema oder schreiben Sie uns:",
     next_stop: "Ihr nächster Halt", itinerary: "Ihr Programm", trip_done: "Ihre Reise ist abgeschlossen! Danke, dass Sie mit uns gereist sind 💚",
     status: "Buchung", party: "Reisende", guide: "Ihr Guide", hotel: "Ihr Hotel", today: "Heute", tomorrow: "Morgen",
@@ -92,7 +92,7 @@ const CUI = {
   },
   pt: {
     brand: "Concierge de viagem", sub: "Espontáneos Travel",
-    greet: "Olá {name}! 👋 Sou a Manuela, sua anfitriã durante sua viagem por {region}. Estou com você 24/7. Como posso ajudar hoje?",
+    greet: "Olá {name}! 👋 Sou a Yenny, sua anfitriã durante sua viagem por {region}. Estou com você 24/7. Como posso ajudar hoje?",
     menu_prompt: "Escolha um tema ou escreva:",
     next_stop: "Sua próxima parada", itinerary: "Seu itinerário", trip_done: "Sua viagem está completa! Obrigado por viajar conosco 💚",
     status: "Reserva", party: "Viajantes", guide: "Seu guia", hotel: "Seu hotel", today: "Hoje", tomorrow: "Amanhã",
@@ -218,11 +218,11 @@ const CKB = [
 
 /* Strings extra de interfaz (input de texto libre) */
 const CUI_EXTRA = {
-  es: { ask_ph: "Escríbeme tu pregunta…", send: "Enviar", no_match: "No estoy 100% segura de eso, pero tu anfitrión te responde al instante 👇", wa_q: "Hola, soy {name} (reserva {code}). Mi pregunta es:" },
-  en: { ask_ph: "Type your question…", send: "Send", no_match: "I'm not 100% sure about that, but your host will answer right away 👇", wa_q: "Hi, I'm {name} (booking {code}). My question is:" },
-  fr: { ask_ph: "Écrivez votre question…", send: "Envoyer", no_match: "Je n'en suis pas tout à fait sûre, mais votre hôte vous répond tout de suite 👇", wa_q: "Bonjour, je suis {name} (réservation {code}). Ma question :" },
-  de: { ask_ph: "Schreiben Sie Ihre Frage…", send: "Senden", no_match: "Da bin ich nicht ganz sicher, aber Ihr Gastgeber antwortet sofort 👇", wa_q: "Hallo, ich bin {name} (Buchung {code}). Meine Frage:" },
-  pt: { ask_ph: "Escreva sua pergunta…", send: "Enviar", no_match: "Não tenho 100% de certeza disso, mas seu anfitrião responde na hora 👇", wa_q: "Olá, sou {name} (reserva {code}). Minha pergunta é:" }
+  es: { ask_ph: "Escríbeme tu pregunta…", send: "Enviar", more_topics: "➕ Más temas", no_match: "No estoy 100% segura de eso, pero tu anfitrión te responde al instante 👇", wa_q: "Hola, soy {name} (reserva {code}). Mi pregunta es:" },
+  en: { ask_ph: "Type your question…", send: "Send", more_topics: "➕ More topics", no_match: "I'm not 100% sure about that, but your host will answer right away 👇", wa_q: "Hi, I'm {name} (booking {code}). My question is:" },
+  fr: { ask_ph: "Écrivez votre question…", send: "Envoyer", more_topics: "➕ Plus de thèmes", no_match: "Je n'en suis pas tout à fait sûre, mais votre hôte vous répond tout de suite 👇", wa_q: "Bonjour, je suis {name} (réservation {code}). Ma question :" },
+  de: { ask_ph: "Schreiben Sie Ihre Frage…", send: "Senden", more_topics: "➕ Mehr Themen", no_match: "Da bin ich nicht ganz sicher, aber Ihr Gastgeber antwortet sofort 👇", wa_q: "Hallo, ich bin {name} (Buchung {code}). Meine Frage:" },
+  pt: { ask_ph: "Escreva sua pergunta…", send: "Enviar", more_topics: "➕ Mais temas", no_match: "Não tenho 100% de certeza disso, mas seu anfitrião responde na hora 👇", wa_q: "Olá, sou {name} (reserva {code}). Minha pergunta é:" }
 };
 
 /* Palabras clave (sin tildes, minúsculas) para entender preguntas escritas libremente */
@@ -259,7 +259,22 @@ const CKB_KW = {
   insurance:["seguro","seguro de viaje","asistencia medica","insurance","travel insurance","assurance","versicherung","seguro medico","cobertura"],
   vaccines:["vacuna","vacunas","fiebre amarilla","vaccine","vaccines","yellow fever","vaccin","impfung","vacina"],
   extend:["agregar","extender","mas dias","mas experiencias","add","extend","extra","upgrade","otra experiencia","mas tours","prolongar"],
-  feedback:["reseña","resena","review","opinion","calificar","feedback","google","estrellas","avis","bewertung","avaliacao"]
+  feedback:["reseña","resena","review","opinion","calificar","feedback","google","estrellas","avis","bewertung","avaliacao"],
+  transport:["moverme","transporte","jeep","willys","bus","buseta","como llego","como ir","get around","how to get","transport","chiva","colectivo","intermunicipal","fahren"],
+  bathrooms:["baño","banos","baños","bano","toilet","restroom","wc","bathroom","toilettes","banheiro","sanitario"],
+  photography:["foto","fotos","fotografia","camara","drone","dron","photo","photography","camera","appareil photo","kamera","permiso de fotos"],
+  pets:["mascota","mascotas","perro","gato","pet","pets","dog","haustier","cachorro","animal de compania","pet friendly"],
+  laundry:["lavar","lavanderia","ropa sucia","laundry","wash","washing","lessive","wasche","lavar roupa","limpiar ropa"],
+  cancellation:["cancelar","cancelacion","reembolso","devolucion","cancel","refund","annuler","stornieren","politica de cancelacion","cambiar reserva"],
+  nightlife:["noche","rumba","bar","bares","discoteca","nightlife","night","fiesta","vida nocturna","drinks","copas"],
+  holidays:["festivo","festivos","feriado","holiday","temporada alta","high season","puente","vacaciones","feiertag","semana santa"],
+  apps:["app","apps","aplicacion","aplicaciones","que apps","which apps","maps","mapa offline","descargar apps"],
+  distances:["distancia","distancias","cuanto se demora","cuanto tarda","how far","how long","cuanto hay","tiempo de viaje","km","entfernung"],
+  dollars:["dolar","dolares","euro","euros","pagar en dolares","pay in dollars","usd","eur","moneda extranjera","cambio dolar"],
+  travelers:["adulto mayor","tercera edad","viajo solo","viajo sola","grupo","grupos","family","elderly","senior","solo","embarazada","pregnant","empresa","corporativo"],
+  hospital:["hospital","clinica","medico urgente","doctor","urgencias","hospital cercano","notaufnahme","pronto socorro","ambulancia"],
+  locallang:["hablan ingles","english","idioma local","speak english","do they speak","sprechen englisch","falam ingles","entienden ingles"],
+  lostitem:["olvide","perdi","objeto perdido","lost item","i lost","deje olvidado","perdi algo","verloren","esqueci","dejé"]
 };
 
 /* Temas adicionales (sin botón en el menú; se llegan escribiendo la pregunta) */
@@ -353,5 +368,95 @@ const CKB_EXTRA = [
     en:"Thanks for travelling with us! 💚 If you enjoyed it, a *review* helps us grow a lot. Tap to leave one.",
     fr:"Merci d'avoir voyagé avec nous ! 💚 Un *avis* nous aide beaucoup. Touchez pour le laisser.",
     de:"Danke, dass Sie mit uns gereist sind! 💚 Eine *Bewertung* hilft uns sehr. Tippen zum Hinterlassen.",
-    pt:"Obrigado por viajar conosco! 💚 Uma *avaliação* nos ajuda muito. Toque para deixar." } }
+    pt:"Obrigado por viajar conosco! 💚 Uma *avaliação* nos ajuda muito. Toque para deixar." } },
+  { id:"transport", action:"info", a:{
+    es:"Entre pueblos puedes usar *jeeps Willys compartidos* (típicos y económicos), *buses intermunicipales* o te coordinamos *transporte privado*. En tus recorridos reservados, el transporte ya va incluido según el plan.",
+    en:"Between towns use shared *Willys jeeps* (iconic and cheap), *intercity buses*, or we arrange *private transport*. On your booked tours, transport is included per the plan.",
+    fr:"Entre villages : *jeeps Willys partagés*, *bus interurbains*, ou *transport privé* que nous organisons. Sur vos tours réservés, le transport est inclus.",
+    de:"Zwischen Dörfern: geteilte *Willys-Jeeps*, *Überlandbusse* oder von uns organisierter *Privattransport*. Bei gebuchten Touren ist Transport inklusive.",
+    pt:"Entre vilarejos: *jeeps Willys compartilhados*, *ônibus intermunicipais* ou *transporte privado* que organizamos. Nos tours reservados, o transporte já está incluído." } },
+  { id:"bathrooms", action:"info", a:{
+    es:"Hay baños en restaurantes, estaciones, parques y fincas. En algunos públicos cobran una pequeña suma (~1.000 COP). Lleva algo de efectivo y papel por si acaso.",
+    en:"Toilets are in restaurants, stations, parks and farms. Some public ones charge a small fee (~1,000 COP). Carry some cash and tissue just in case.",
+    fr:"Toilettes dans restaurants, gares, parcs et fermes. Certaines publiques sont payantes (~1 000 COP). Prévoyez un peu de liquide et des mouchoirs.",
+    de:"Toiletten in Restaurants, Bahnhöfen, Parks und Fincas. Manche öffentliche kosten wenig (~1.000 COP). Etwas Bargeld und Taschentücher mitnehmen.",
+    pt:"Banheiros em restaurantes, estações, parques e fazendas. Alguns públicos cobram pouco (~1.000 COP). Leve dinheiro e lenço por garantia." } },
+  { id:"photography", action:"info", a:{
+    es:"¡Foto libre! 📸 Para *drones* se necesitan permisos en parques, aeropuertos y zonas protegidas; pregúntanos antes de volar. Respeta a las personas y pide permiso para retratos.",
+    en:"Photos are welcome! 📸 *Drones* need permits in parks, airports and protected areas; ask us before flying. Respect people and ask before portraits.",
+    fr:"Photos bienvenues ! 📸 Les *drones* nécessitent des autorisations (parcs, aéroports, zones protégées) ; demandez avant. Demandez l'accord pour les portraits.",
+    de:"Fotos gern! 📸 *Drohnen* brauchen Genehmigungen (Parks, Flughäfen, Schutzgebiete); fragen Sie vorher. Für Porträts um Erlaubnis bitten.",
+    pt:"Fotos liberadas! 📸 *Drones* exigem permissões (parques, aeroportos, áreas protegidas); pergunte antes. Peça permissão para retratos." } },
+  { id:"pets", action:"wa:wa_generic", a:{
+    es:"¿Viajas con tu mascota? 🐾 Algunos lugares las permiten y otros no. Cuéntanos qué mascota y revisamos qué recorridos y hoteles son pet-friendly. Toca para avisarnos.",
+    en:"Travelling with your pet? 🐾 Some places allow them, others don't. Tell us which pet and we'll check which tours and hotels are pet-friendly. Tap to let us know.",
+    fr:"Vous voyagez avec votre animal ? 🐾 Dites-nous lequel et nous vérifions les tours/hôtels pet-friendly. Touchez pour nous dire.",
+    de:"Mit Haustier unterwegs? 🐾 Sagen Sie uns welches, wir prüfen haustierfreundliche Touren/Hotels. Tippen zum Mitteilen.",
+    pt:"Viaja com seu pet? 🐾 Diga qual e verificamos tours/hotéis pet-friendly. Toque para avisar." } },
+  { id:"laundry", action:"info", a:{
+    es:"Muchos hoteles ofrecen *lavandería* y hay lavanderías locales (por kilo, rápidas). Pídela en recepción o escríbenos y te indicamos una cercana.",
+    en:"Many hotels offer *laundry* and there are local laundromats (by the kilo, fast). Ask at reception or message us for a nearby one.",
+    fr:"Beaucoup d'hôtels proposent la *blanchisserie* ; il y a aussi des laveries locales (au kilo). Demandez à la réception ou écrivez-nous.",
+    de:"Viele Hotels bieten *Wäscheservice*; es gibt lokale Wäschereien (nach Kilo). An der Rezeption fragen oder uns schreiben.",
+    pt:"Muitos hotéis oferecem *lavanderia*; há lavanderias locais (por quilo). Peça na recepção ou fale conosco." } },
+  { id:"cancellation", action:"wa:wa_generic", a:{
+    es:"Los cambios y cancelaciones dependen del plan y la anticipación. Escríbenos tu caso y buscamos la mejor solución (reprogramar suele ser más fácil que cancelar). Toca el botón.",
+    en:"Changes and cancellations depend on the plan and notice. Message us your case and we'll find the best solution (rescheduling is usually easier than cancelling). Tap the button.",
+    fr:"Changements/annulations selon la formule et le délai. Écrivez-nous ; reprogrammer est souvent plus simple qu'annuler. Touchez le bouton.",
+    de:"Änderungen/Stornierungen hängen vom Paket und der Vorlaufzeit ab. Schreiben Sie uns; Umbuchen ist oft einfacher. Tippen Sie den Button.",
+    pt:"Mudanças/cancelamentos dependem do plano e da antecedência. Fale conosco; remarcar costuma ser mais fácil. Toque no botão." } },
+  { id:"nightlife", action:"info", a:{
+    es:"De noche, *Armenia y Pereira* tienen bares y zona rosa; *Salento y Filandia* son más tranquilos y encantadores. ¿Quieres una recomendación? Pregúntame o escríbele a tu anfitrión.",
+    en:"At night, *Armenia and Pereira* have bars and nightlife; *Salento and Filandia* are quieter and charming. Want a recommendation? Ask me or message your host.",
+    fr:"Le soir, *Armenia et Pereira* ont des bars ; *Salento et Filandia* sont plus tranquilles. Une reco ? Demandez-moi.",
+    de:"Abends haben *Armenia und Pereira* Bars; *Salento und Filandia* sind ruhiger. Empfehlung? Fragen Sie mich.",
+    pt:"À noite, *Armenia e Pereira* têm bares; *Salento e Filandia* são mais tranquilos. Quer indicação? Pergunte-me." } },
+  { id:"holidays", action:"info", a:{
+    es:"En *festivos colombianos* y temporada alta (Semana Santa, junio–julio, diciembre–enero) hay más gente y los sitios se llenan. Te recomendamos *reservar con anticipación*.",
+    en:"On *Colombian holidays* and high season (Easter, June–July, December–January) it's busier and sites fill up. We recommend *booking in advance*.",
+    fr:"Pendant les *jours fériés* et la haute saison (Pâques, juin–juillet, décembre–janvier), c'est plus fréquenté. Réservez *à l'avance*.",
+    de:"An *Feiertagen* und in der Hochsaison (Ostern, Juni–Juli, Dezember–Januar) ist mehr los. *Frühzeitig buchen*.",
+    pt:"Em *feriados* e alta temporada (Páscoa, junho–julho, dezembro–janeiro) é mais cheio. Recomendamos *reservar com antecedência*." } },
+  { id:"apps", action:"info", a:{
+    es:"Apps útiles: *Google Maps* o *Maps.me* (mapas sin conexión), *WhatsApp* (para nosotros), *inDrive/DiDi* (taxis), *XE* (cambio de moneda) y tu app bancaria. Descárgalas antes de salir.",
+    en:"Handy apps: *Google Maps* or *Maps.me* (offline), *WhatsApp* (for us), *inDrive/DiDi* (taxis), *XE* (currency) and your banking app. Download them before you go.",
+    fr:"Apps utiles : *Google Maps*/*Maps.me* (hors-ligne), *WhatsApp*, *inDrive/DiDi* (taxis), *XE* (change), votre app bancaire. Téléchargez-les avant.",
+    de:"Nützliche Apps: *Google Maps*/*Maps.me* (offline), *WhatsApp*, *inDrive/DiDi* (Taxis), *XE* (Währung), Ihre Banking-App. Vorher laden.",
+    pt:"Apps úteis: *Google Maps*/*Maps.me* (offline), *WhatsApp*, *inDrive/DiDi* (táxis), *XE* (câmbio), seu app bancário. Baixe antes." } },
+  { id:"distances", action:"info", a:{
+    es:"¡Todo queda cerca! Armenia–Pereira ~45 min, Armenia–Salento ~45 min, Salento–Valle de Cocora ~20 min, Armenia–Manizales ~2 h. Las carreteras son de montaña, con curvas.",
+    en:"Everything's close! Armenia–Pereira ~45 min, Armenia–Salento ~45 min, Salento–Cocora Valley ~20 min, Armenia–Manizales ~2 h. Roads are mountainous and winding.",
+    fr:"Tout est proche ! Armenia–Pereira ~45 min, Armenia–Salento ~45 min, Salento–Cocora ~20 min, Armenia–Manizales ~2 h. Routes de montagne sinueuses.",
+    de:"Alles nah! Armenia–Pereira ~45 Min, Armenia–Salento ~45 Min, Salento–Cocora ~20 Min, Armenia–Manizales ~2 Std. Kurvige Bergstraßen.",
+    pt:"Tudo perto! Armenia–Pereira ~45 min, Armenia–Salento ~45 min, Salento–Cocora ~20 min, Armenia–Manizales ~2 h. Estradas de montanha, sinuosas." } },
+  { id:"dollars", action:"info", a:{
+    es:"La moneda oficial es el *peso colombiano (COP)*. Algunos sitios turísticos aceptan USD o EUR, pero a una tasa menos favorable. Lo mejor: *cambiar a pesos* o pagar con *tarjeta*.",
+    en:"The official currency is the *Colombian peso (COP)*. Some tourist spots accept USD or EUR, but at a worse rate. Best: *exchange to pesos* or pay by *card*.",
+    fr:"La monnaie officielle est le *peso colombien (COP)*. Certains lieux acceptent USD/EUR à un taux moins avantageux. Mieux : *changer en pesos* ou *carte*.",
+    de:"Offizielle Währung: *kolumbianischer Peso (COP)*. Manche Orte nehmen USD/EUR zu schlechterem Kurs. Besser: *in Pesos wechseln* oder *Karte*.",
+    pt:"A moeda oficial é o *peso colombiano (COP)*. Alguns lugares aceitam USD/EUR a taxa pior. Melhor: *trocar para pesos* ou *cartão*." } },
+  { id:"travelers", action:"info", a:{
+    es:"¡Aquí cabe todo el mundo! 💚 Recibimos *familias, adultos mayores, viajeros solos, parejas y grupos/empresas*. Adaptamos el ritmo, el transporte y la accesibilidad a cada persona. Cuéntanos tu caso.",
+    en:"Everyone's welcome here! 💚 We host *families, seniors, solo travellers, couples and groups/companies*. We adapt pace, transport and accessibility to each person. Tell us your case.",
+    fr:"Tout le monde est bienvenu ! 💚 *Familles, seniors, voyageurs solo, couples, groupes/entreprises*. Nous adaptons rythme, transport et accessibilité.",
+    de:"Alle sind willkommen! 💚 *Familien, Senioren, Alleinreisende, Paare, Gruppen/Firmen*. Wir passen Tempo, Transport und Barrierefreiheit an.",
+    pt:"Todos são bem-vindos! 💚 *Famílias, idosos, viajantes solo, casais e grupos/empresas*. Adaptamos ritmo, transporte e acessibilidade." } },
+  { id:"hospital", action:"info", a:{
+    es:"Hay *clínicas y hospitales* en Armenia, Pereira y Manizales, y *droguerías* en los pueblos. Ante una urgencia marca *123*. Si estás en un recorrido, avisa de inmediato a tu guía o anfitrión.",
+    en:"There are *clinics and hospitals* in Armenia, Pereira and Manizales, and *pharmacies* in the towns. In an emergency dial *123*. On a tour, alert your guide or host immediately.",
+    fr:"*Cliniques et hôpitaux* à Armenia, Pereira, Manizales ; *pharmacies* dans les villages. Urgence : *123*. En excursion, prévenez votre guide ou hôte.",
+    de:"*Kliniken und Krankenhäuser* in Armenia, Pereira, Manizales; *Apotheken* in den Orten. Notruf *123*. Auf Tour sofort Guide/Gastgeber informieren.",
+    pt:"*Clínicas e hospitais* em Armenia, Pereira e Manizales; *farmácias* nos vilarejos. Emergência: *123*. Em passeio, avise seu guia ou anfitrião." } },
+  { id:"locallang", action:"info", a:{
+    es:"Los locales hablan *español*; en zonas turísticas algunos hablan algo de inglés. ¡Tranquil@! Tu *guía traduce* y yo te ayudo con frases básicas cuando quieras.",
+    en:"Locals speak *Spanish*; in tourist areas some speak a little English. No worries — your *guide translates* and I can help with basic phrases anytime.",
+    fr:"Les habitants parlent *espagnol* ; en zones touristiques, un peu d'anglais. Votre *guide traduit* et je donne des phrases de base.",
+    de:"Einheimische sprechen *Spanisch*; in Touristengebieten etwas Englisch. Ihr *Guide übersetzt* und ich helfe mit Basissätzen.",
+    pt:"Os locais falam *espanhol*; em áreas turísticas, um pouco de inglês. Seu *guia traduz* e eu ajudo com frases básicas." } },
+  { id:"lostitem", action:"wa:wa_generic", a:{
+    es:"¿Olvidaste algo? No te preocupes. Dinos *qué objeto* y *dónde* (hotel, vehículo, recorrido) y lo buscamos de inmediato. Toca el botón.",
+    en:"Left something behind? Don't worry. Tell us *what* and *where* (hotel, vehicle, tour) and we'll look right away. Tap the button.",
+    fr:"Vous avez oublié quelque chose ? Dites-nous *quoi* et *où* (hôtel, véhicule, tour) et nous cherchons tout de suite. Touchez le bouton.",
+    de:"Etwas vergessen? Sagen Sie uns *was* und *wo* (Hotel, Fahrzeug, Tour) und wir suchen sofort. Tippen Sie den Button.",
+    pt:"Esqueceu algo? Diga *o quê* e *onde* (hotel, veículo, tour) e procuramos na hora. Toque no botão." } }
 ];

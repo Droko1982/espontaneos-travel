@@ -145,13 +145,20 @@
       wrap.appendChild(b);
     });
   }
-  function menuChips() { return CKB.map(k => ({ label: U()[k.menu], topic: k.id })); }
+  const PRIMARY = ["schedule", "change", "taxi", "lost", "restaurants", "money", "weather", "access", "health", "reco"];
+  function menuChips(all) {
+    const src = all ? CKB : CKB.filter(k => PRIMARY.indexOf(k.id) >= 0);
+    const arr = src.map(k => ({ label: U()[k.menu], topic: k.id }));
+    if (!all) arr.push({ label: U().more_topics || "➕", more: true });
+    return arr;
+  }
   function startChat() {
     $("#c-chat").innerHTML = "";
     botSay([U().greet, U().menu_prompt]).then(() => chips(menuChips()));
   }
   function onChip(c) {
     if (busy) return;
+    if (c.more) { chips(menuChips(true)); return; }
     if (c.topic) {
       addMsg("<span>" + esc(U()[CKB.find(k => k.id === c.topic).menu]) + "</span>", "user");
       runTopic(c.topic);
