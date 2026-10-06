@@ -539,7 +539,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 /* ---------- Espo chat assistant ---------- */
 .espo-launch {
-  position: fixed; right: 20px; bottom: 86px; z-index: 128;
+  position: fixed; right: 20px; bottom: 86px; z-index: 999;
   display: inline-flex; align-items: center; gap: .55rem; padding: .55rem .55rem;
   background: var(--brand); color: var(--on-brand); border-radius: var(--r-pill);
   box-shadow: var(--shadow-lg); transition: transform .3s var(--ease), background .3s;
@@ -555,7 +555,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .espo-badge { position: absolute; top: -4px; left: -4px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff; font-size: .72rem; font-weight: 700; display: grid; place-items: center; box-shadow: var(--shadow-sm); animation: pulse 2.4s infinite; }
 
 .espo-panel {
-  position: fixed; right: 20px; bottom: 20px; z-index: 130;
+  position: fixed; right: 20px; bottom: 20px; z-index: 1000;
   width: min(380px, calc(100vw - 32px)); height: min(600px, calc(100vh - 40px));
   background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--r-lg);
   box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden;

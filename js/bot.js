@@ -199,6 +199,11 @@
 
     launch.addEventListener("click", openPanel);
     panel.querySelector(".espo-head__close").addEventListener("click", closePanel);
+    // Robust closing: Esc key and clicking outside the panel
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && opened) closePanel(); });
+    document.addEventListener("click", (e) => {
+      if (opened && !panel.contains(e.target) && !launch.contains(e.target)) closePanel();
+    });
     refreshStatic();
   }
 
