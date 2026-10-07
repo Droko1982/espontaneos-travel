@@ -202,7 +202,12 @@
     // Robust closing: Esc key and clicking outside the panel
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && opened) closePanel(); });
     document.addEventListener("click", (e) => {
-      if (opened && !panel.contains(e.target) && !launch.contains(e.target)) closePanel();
+      if (!opened) return;
+      // Use composedPath: it is captured at click time, so re-rendered (detached) chips
+      // are still recognized as "inside the panel" and don't trigger a close.
+      const path = (typeof e.composedPath === "function") ? e.composedPath() : [];
+      if (path.length) { if (path.indexOf(panel) === -1 && path.indexOf(launch) === -1) closePanel(); }
+      else if (!panel.contains(e.target) && !launch.contains(e.target)) closePanel();
     });
     refreshStatic();
   }
