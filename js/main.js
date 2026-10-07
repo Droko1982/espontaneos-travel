@@ -293,15 +293,32 @@
     setThemeIcon();
   }
 
-  /* ---------- Reveal on scroll ---------- */
-  let io;
-  function observeReveals() {
-    if (!("IntersectionObserver" in window)) { $$(".reveal").forEach(el => el.classList.add("in")); return; }
-    if (!io) io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    $$(".reveal:not(.in)").forEach(el => io.observe(el));
+  /* ---------- Reveal on scroll (robust: IntersectionObserver + scroll fallback) ---------- */
+  let io, revealWired = false;
+  function revealInView() {
+    const h = window.innerHeight || document.documentElement.clientHeight;
+    $$(".reveal:not(.in)").forEach(el => { const r = el.getBoundingClientRect(); if (r.top < h - 30 && r.bottom > 0) el.classList.add("in"); });
   }
+  function observeReveals() {
+    if ("IntersectionObserver" in window) {
+      if (!io) io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+      }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+      $$(".reveal:not(.in)").forEach(el => io.observe(el));
+    } else {
+      $$(".reveal").forEach(el => el.classList.add("in"));
+    }
+    revealInView();
+    if (!revealWired) {
+      revealWired = true;
+      let ticking = false;
+      const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { ticking = false; revealInView(); }); };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      window.addEventListener("load", () => { observeReveals(); revealInView(); });
+    }
+  }
+  window.__revealScan = function () { observeReveals(); revealInView(); };
 
   /* ---------- Hero slideshow ---------- */
   function initHero() {

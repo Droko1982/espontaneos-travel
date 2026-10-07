@@ -40,6 +40,7 @@
         <div class="faq-a">${esc(f.a[L] || f.a.es)}</div>
       </details>`).join("");
     injectJsonLd();
+    if (window.__revealScan) window.__revealScan();
   }
   function injectJsonLd() {
     const old = document.getElementById("jsonld-faq"); if (old) old.remove();
