@@ -95,7 +95,13 @@ Pestaña **Reservas** → **Nueva reserva** (o desde un cliente o una solicitud 
 - genera un **código aleatorio de 10 caracteres** (imposible de adivinar),
 - muestra el enlace **`viaje.html?code=CÓDIGO`**, el **QR** para imprimir o enviar, y un botón para enviarlo por **WhatsApp**.
 
-⚠️ **Quien tenga el código ve toda la reserva.** No escribas notas internas ni datos sensibles en la reserva (usa las notas del cliente). Para que el conserje (`viaje.html`) lea las reservas desde Firebase, ver la sección 7.
+⚠️ **El código es como una contraseña.** Quien lo tenga ve lo que muestra el conserje: nombre, hotel, itinerario y teléfonos
+de anfitrión y conductor. Montos, pagos, WhatsApp del cliente y notas internas **no** salen en el enlace (quedan en la
+reserva interna). Usa **un código por grupo**: todos los del grupo abren el mismo enlace.
+
+🔒 **Vencimiento:** el código deja de funcionar **30 días después del último día del viaje** (campo `vence`; lo aplica
+la regla de Firestore). El equipo sigue viendo la reserva en el portal. Si un viaje cambia de fecha, guarda la reserva
+otra vez y el vencimiento se recalcula. Para que el conserje (`viaje.html`) lea las reservas desde Firebase, ver la sección 7.
 
 ### Solicitudes de agencias
 Pestaña **Solicitudes DMC**: cambia el estado (*Nueva → En proceso → Confirmada / No disponible*), escribe una **respuesta** (la agencia la ve en su portal) y usa **Crear reserva desde esta solicitud** para armar la reserva con los datos ya llenos.
