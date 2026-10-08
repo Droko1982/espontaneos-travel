@@ -1,0 +1,2141 @@
+{
+ "_meta": {
+  "descripcion": "Fuente única de datos de Yenny (sitio, conserje y portal). Generado a partir de jenny-arbol-faq.json (brief de rediseño, oct. 2026) con limpieza de textos del portafolio.",
+  "version": "2026-10-08",
+  "empresa": "Espontáneos Travel SAS",
+  "fuentes": [
+   "PCCC_Portafolio_2026 (Word): horarios, duración, incluye, observaciones",
+   "RECOMENDACIONES.docx (5 tours)",
+   "TARIFARIO MERCADO NACIONAL 2026 (planes, temporadas, niños)",
+   "Política de Sostenibilidad ET",
+   "Base de Conocimiento Chatbot - Espontáneos Travel (docx)"
+  ],
+  "regla_de_oro": "Campos null o POR_VALIDAR: Yenny NO inventa; responde 'te lo confirma un asesor' y pasa a WhatsApp.",
+  "precios": "El tarifario 2026 es NETO (agencias): nunca se muestra al público. Solo se publica PVP aprobado (hoy: Tour Compartido Cocora + Salento). El resto se cotiza por WhatsApp. Las condiciones con tarifas o suplementos están fuera del repositorio (privado/) y se cargan al portal DMC.",
+  "horario": "fijo = hora(s) de recogida en el hotel; ventana = el viajero elige la hora de inicio dentro del rango; desde = a partir de esa hora; null = por confirmar con un asesor",
+  "recomendacion_fuente": "'documento ET' = texto oficial; 'propuesta (VALIDAR)' = redactada a partir del portafolio, pendiente de revisión de Carolina Toro",
+  "vigencia": 2026,
+  "nota_vigencia": "Portafolio 2026, vigente hasta marzo de 2027 (VALIDAR fecha exacta), cuando entra el portafolio 2027. Para 2027: copiar este archivo como base, actualizar tours/planes/precios y cambiar vigencia y valida_hasta.",
+  "valida_hasta": "2027-03-31"
+ },
+ "contacto": {
+  "whatsapp": "573187200023",
+  "whatsapp_display": "+57 318 720 0023",
+  "whatsapp_validar": "La web anterior enlazaba a 318 730 0023; se usa 318 720 0023 (VALIDAR)",
+  "correo": "info@espontaneostravel.com",
+  "rnt": "91795",
+  "instagram": "https://instagram.com/espontaneostravel/",
+  "facebook": "https://facebook.com/espontaneostravel",
+  "web": "https://www.espontaneostravel.com",
+  "ubicacion": "Armenia, Quindío, Colombia"
+ },
+ "general": {
+  "que_llevar": "Para disfrutar al máximo del Paisaje Cultural Cafetero lleva ropa muy cómoda, bloqueador solar, repelente, buena hidratación y tu documento de identidad a la mano. ☀️💧",
+  "no_incluye_siempre": "No incluye gastos no relacionados.",
+  "escnna": "Espontáneos Travel rechaza la explotación y el abuso sexual de niñas, niños y adolescentes (ESCNNA). Ley 679 de 2001 y Ley 1336 de 2009."
+ },
+ "arbol": [
+  {
+   "id": "saludo",
+   "jenny": "¡Hola! Soy Yenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?",
+   "opciones": [
+    "empresa",
+    "horarios",
+    "duracion",
+    "que_incluye",
+    "que_llevar",
+    "precios",
+    "reservar",
+    "pagos",
+    "cancelacion",
+    "traslados",
+    "ninos_mayores",
+    "accesibilidad",
+    "idiomas",
+    "clima",
+    "temporadas",
+    "sostenibilidad",
+    "redes",
+    "asesor"
+   ]
+  },
+  {
+   "id": "horarios",
+   "pregunta_tipo": [
+    "¿a qué hora sale?",
+    "¿a qué hora es el tour?",
+    "horario"
+   ],
+   "paso1": "¿Qué experiencia? → lista de tours por categoría",
+   "respuesta": "Usa tours[].horario. fijo → 'Te recogemos en tu hotel a las {horas}'. ventana → 'Puedes iniciar entre {desde} y {hasta}; tú eliges la hora'. desde → 'Desde las {hora}'. null → asesor. Añade la nota clave si aplica.",
+   "salida": "reservar|asesor"
+  },
+  {
+   "id": "duracion",
+   "pregunta_tipo": [
+    "¿cuánto dura?",
+    "¿cuántas horas?"
+   ],
+   "paso1": "¿Qué experiencia?",
+   "respuesta": "{nombre} dura aprox. {duracion_horas} h desde la recogida en tu hotel.",
+   "salida": "horarios|reservar"
+  },
+  {
+   "id": "que_incluye",
+   "respuesta": "Lista tours[].incluye. Siempre: 'No incluye gastos no relacionados'.",
+   "salida": "precios|reservar"
+  },
+  {
+   "id": "que_llevar",
+   "respuesta": "Si el viajero eligió tour: muestra tours[].recomendacion. Si pregunta en general: general.que_llevar.",
+   "salida": "reservar"
+  },
+  {
+   "id": "precios",
+   "respuesta": "El valor depende del número de personas y de dónde te hospedas. Dime cuántas personas y la fecha y te cotizo.",
+   "accion": "recoger personas + fecha + hotel → WhatsApp",
+   "salida": "asesor"
+  },
+  {
+   "id": "reservar",
+   "pregunta_tipo": [
+    "¿cómo reservo?",
+    "¿qué necesito para reservar?"
+   ],
+   "pasos": [
+    "experiencia",
+    "n_personas",
+    "fecha",
+    "hotel_o_zona",
+    "idioma_guia"
+   ],
+   "respuesta": "¡Es muy sencillo! Para confirmar tu reserva necesitamos los nombres completos y documentos de identidad de los pasajeros, junto con el soporte de pago del anticipo. Al recibirlo te enviamos la confirmación formal de tu viaje. 🎒",
+   "anticipo": "50% para garantizar disponibilidad; saldo y fechas límite se informan en la cotización",
+   "accion": "Arma resumen y abre wa.me"
+  },
+  {
+   "id": "pagos",
+   "pregunta_tipo": [
+    "¿debo pagar todo por adelantado?",
+    "¿qué medios de pago aceptan?"
+   ],
+   "respuesta": "Para garantizar la disponibilidad pedimos un anticipo del 50%; el saldo y las fechas límite te los informamos en la cotización. Aceptamos transferencia bancaria, Nequi, Daviplata y tarjeta débito o crédito con enlace de pago seguro. 💳"
+  },
+  {
+   "id": "traslados",
+   "respuesta": "Hacemos traslados desde el aeropuerto El Edén (Armenia) y Matecaña (Pereira) a hoteles del Quindío y Risaralda, y entre Armenia, Pereira y Manizales. Trayecto aprox. 1 h.",
+   "salida": "precios"
+  },
+  {
+   "id": "accesibilidad",
+   "respuesta": "¡Sí! Contamos con opciones adaptadas y vehículos especiales para que todos disfruten de la región sin barreras. También tenemos guía para personas invidentes. Pregúntanos y te asesoramos de forma personalizada. ♿",
+   "salida": "asesor"
+  },
+  {
+   "id": "idiomas",
+   "respuesta": "Guías en español, inglés, francés, italiano, alemán y portugués (la guianza en otro idioma tiene costo adicional). En el Tour Compartido, el guía en inglés tiene suplemento según el tamaño del grupo.",
+   "salida": "reservar"
+  },
+  {
+   "id": "clima",
+   "respuesta": "Clima templado todo el año; puede llover en cualquier temporada. En Cocora, el páramo y la palma de cera hace frío.",
+   "salida": "que_llevar"
+  },
+  {
+   "id": "temporadas",
+   "respuesta": "Temporada alta 2026: Semana Santa (28 mar–5 abr), receso escolar (3–12 oct) y fin de año (19 dic 2026–11 ene 2027). Precios y disponibilidad varían.",
+   "salida": "reservar"
+  },
+  {
+   "id": "cancelacion",
+   "pregunta_tipo": [
+    "¿qué pasa si cancelo?",
+    "políticas de cancelación"
+   ],
+   "respuesta": "Entendemos que los planes cambian. Las cancelaciones dependen de la anticipación con que nos avises. Cuéntame qué tour reservaste y revisamos tu caso con un asesor.",
+   "salida": "asesor",
+   "pendiente": "Publicar política de cancelación con plazos y % (VALIDAR)"
+  },
+  {
+   "id": "sostenibilidad",
+   "pregunta_tipo": [
+    "¿son sostenibles?",
+    "¿cómo apoyan a la comunidad?"
+   ],
+   "respuesta": "Trabajamos con familias campesinas, artesanos y guías locales, con pago justo. Te damos agua en cada recorrido y capa reutilizable para la lluvia (cero plásticos de un solo uso), separamos residuos y sembramos árboles para compensar la huella de carbono. Rechazamos la explotación sexual de niñas, niños y adolescentes (ESCNNA).",
+   "salida": "Ver sección Sostenibilidad en la web"
+  },
+  {
+   "id": "empresa",
+   "pregunta_tipo": [
+    "¿quiénes son?",
+    "¿qué es Espontáneos Travel?",
+    "háblame de la empresa"
+   ],
+   "respuesta": "¡Hola! Somos Espontáneos Travel, un operador turístico del Paisaje Cultural Cafetero con más de 15 años de experiencia. Nos especializamos en experiencias rurales, naturales, comunitarias y de bienestar. Nuestro propósito es conectarte de forma auténtica y responsable con la naturaleza y la cultura de nuestra región. 🌿☕",
+   "salida": "experiencias|sostenibilidad"
+  },
+  {
+   "id": "redes",
+   "pregunta_tipo": [
+    "¿redes sociales?",
+    "¿página web?"
+   ],
+   "respuesta": "¡Nos encantaría que nos sigas! Estamos en Instagram y Facebook como @espontaneostravel, y en nuestra web oficial espontaneostravel.com."
+  },
+  {
+   "id": "ninos_mayores",
+   "pregunta_tipo": [
+    "¿es apto para niños?",
+    "¿y para adultos mayores?"
+   ],
+   "respuesta": "¡Claro que sí! Para los niños, algunas caminatas requieren acompañamiento y condición física básica. Para adultos mayores te recomendamos las opciones que mejor se adapten a su movilidad. 👨‍👩‍👧‍👦 Tarifa niño de 3 a 10 años; menores de 3 años pagan tarifa mínima sin alimentación. En el Parque del Café la tarifa niño aplica para estaturas entre 91 y 124 cm.",
+   "salida": "accesibilidad|reservar"
+  },
+  {
+   "id": "tour_compartido",
+   "pregunta_tipo": [
+    "¿tienen tour a Cocora y Salento?",
+    "¿cuánto cuesta?",
+    "¿dónde me recogen?",
+    "¿se puede reservar para mañana?",
+    "¿guía en inglés?"
+   ],
+   "codigo": "ETHD011",
+   "tour": "compartidocs",
+   "itinerario": "Sale de Armenia a las 8:15 a.m. En el Valle de Cocora hacemos interpretación del bosque de niebla y la palma de cera 🌴 (2 a 3 h). Luego vamos a Salento: recorrido histórico, tiempo libre para almorzar y caminar por la Calle Real 🛍️. Regreso a Armenia.",
+   "precio_publico": "$307.000 COP por persona (2026)",
+   "incluye": [
+    "Transporte",
+    "Guía en español",
+    "Entrada al Bosque de Palmas / mirador",
+    "Visita a Salento",
+    "Hidratación o café",
+    "Tarjeta de asistencia médica"
+   ],
+   "no_incluye": [
+    "Almuerzo",
+    "Gastos no especificados"
+   ],
+   "puntos_encuentro": [
+    {
+     "lugar": "Plaza de Bolívar, Armenia",
+     "hora": "08:00"
+    },
+    {
+     "lugar": "Parque de la Vida, Armenia",
+     "hora": "08:10"
+    }
+   ],
+   "traslado_a_punto_encuentro": {
+    "vehiculo": "Duster, valor por trayecto",
+    "Montenegro": "$115.000",
+    "Calarcá": "$125.000",
+    "Quimbaya": "$150.000",
+    "VALIDAR": "Montenegro: portafolio $100.000 vs base de conocimiento $115.000"
+   },
+   "operacion": "Todos los días desde 2 pasajeros. Confirmar a más tardar a las 8:00 p.m. del día anterior.",
+   "no_opera": [
+    "Puente festivo de la semana de receso de octubre",
+    "25 de diciembre",
+    "1 al 6 de enero"
+   ],
+   "guia_ingles_suplemento_pp": {
+    "2 pax": "$100.000",
+    "3 pax": "$66.000",
+    "4 pax": "$50.000"
+   },
+   "salida": "reservar"
+  },
+  {
+   "id": "asesor",
+   "respuesta": "Te paso con un asesor por WhatsApp 💬 (respuesta en menos de 24 h).",
+   "accion": "wa.me/573187200023 con resumen"
+  }
+ ],
+ "planes": [
+  {
+   "id": "basico2n",
+   "nombre": "Quindío Básico 2N",
+   "noches": 2,
+   "tours": [
+    "parquecafe"
+   ],
+   "incluye": "2 noches con desayuno y cena, Parque del Café pasaporte múltiple con transporte, traslados aeropuerto/terminal Armenia ida y regreso, asistencia médica"
+  },
+  {
+   "id": "tradicional3n",
+   "nombre": "Quindío Tradicional 3N",
+   "noches": 3,
+   "tours": [
+    "parquecafe",
+    "compartidocs"
+   ],
+   "incluye": "3 noches con desayuno y cena (según hotel), Parque del Café pasaporte múltiple con transporte, tour compartido Cocora y Salento (guía, transporte, entrada al mirador), traslados, asistencia médica"
+  },
+  {
+   "id": "encantador3n",
+   "nombre": "Quindío Encantador 3N",
+   "noches": 3,
+   "tours": [
+    "fulldayfcs",
+    "cordillera"
+   ],
+   "incluye": "3 noches con desayuno, Full Day Cocora-Salento-Filandia (guía, transporte, entradas, degustación de café, almuerzo), tour pueblos cordilleranos con finca cafetera y almuerzo montañero, traslados, asistencia médica"
+  }
+ ],
+ "planes_no_incluye": "Tiquetes aéreos, servicios y alimentación no especificados, impuestos de Parques Nacionales, propinas",
+ "sostenibilidad": {
+  "eyebrow": "Sostenibilidad",
+  "titulo": "Turismo que deja huella buena",
+  "intro": "Sabemos que el turismo transforma los destinos. Por eso trabajamos de la mano con las comunidades y el territorio: las familias campesinas, artesanos y guías locales son parte de nuestra oferta, y los acompañamos con asesoría para que sus experiencias conserven su autenticidad y su calidad.",
+  "pilares": [
+   {
+    "id": "ambiental",
+    "icono": "🌿",
+    "nombre": "Ambiental",
+    "titulo": "Cuidamos el entorno",
+    "acciones": [
+     "Agua para cada viajero en todos los recorridos, sin plásticos de un solo uso",
+     "Capas reutilizables para la lluvia",
+     "Separación de residuos y ahorro de energía",
+     "Siembra de árboles para compensar la huella de carbono, con certificado para agencias"
+    ]
+   },
+   {
+    "id": "sociocultural",
+    "icono": "🤝",
+    "nombre": "Sociocultural",
+    "titulo": "Protegemos lo que somos",
+    "acciones": [
+     "Compramos artesanía y alimentos locales",
+     "Asesoramos a pequeños productores en el diseño de sus experiencias",
+     "Capacitamos a guías y proveedores",
+     "Promovemos el cuidado del patrimonio cultural"
+    ]
+   },
+   {
+    "id": "economico",
+    "icono": "💚",
+    "nombre": "Económico",
+    "titulo": "El valor se queda en la región",
+    "acciones": [
+     "Contratamos personas, productos y servicios locales",
+     "Pago justo a colaboradores y proveedores",
+     "Catálogo de productos locales para comprar directo al productor"
+    ]
+   }
+  ],
+  "historias_validar": "VALIDAR permiso y foto de cada persona antes de publicar",
+  "historias": [
+   {
+    "nombre": "David",
+    "rol": "Caficultor de cafés especiales",
+    "texto": "Lo conectamos con ingenieros que donaron un sistema que automatizó el secado de su café."
+   },
+   {
+    "nombre": "Juan",
+    "rol": "Tienda de café 100 % local",
+    "texto": "Certificación Mayacert y precio justo al caficultor: allí hacemos catas con nuestros viajeros."
+   },
+   {
+    "nombre": "Doralba",
+    "rol": "Emprendedora del cacao",
+    "texto": "La acompañamos en el diseño de su ruta cacaotera."
+   },
+   {
+    "nombre": "Mauricio",
+    "rol": "Alojamiento rural",
+    "texto": "Con nuestra consultoría entró al portal de rutas del Paisaje Cultural Cafetero."
+   }
+  ]
+ },
+ "tours": [
+  {
+   "id_web": "finca",
+   "codigo": "ETHD001",
+   "nombre": "Visita finca cafetera",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Anfitriones en la finca",
+    "Catación y métodos de preparación",
+    "Degustación de café",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Recorrido por fincas tradicionales con producción artesanal, rescatando labores ancestrales."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "☕ ¡Del grano a la taza!",
+    "items": [
+     "👟 Zapatos cerrados y cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "☕ Prueba el café sin azúcar en la cata: así se sienten mejor sus notas",
+     "🚯 No dejes basura: deja el lugar como lo encontraste"
+    ]
+   }
+  },
+  {
+   "id_web": "cocorasalento",
+   "codigo": "ETHD018",
+   "nombre": "Tour Valle del Cocora y Salento",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Caminata",
+    "Degustación de café",
+    "Almuerzo",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, bloqueador solar, gorra, ropa y zapatos cómodos.",
+    "Se sugiere programar de lunes a viernes por la capacidad de carga del destino."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌴 ¡Cocora y Salento!",
+    "items": [
+     "👟 Zapatos cómodos con buen agarre (botas si hay lluvia)",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "🧥 Ropa en capas: en Cocora hace frío",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "💵 Efectivo para Salento",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🗓️ Mejor de lunes a viernes: hay menos gente"
+    ]
+   }
+  },
+  {
+   "id_web": "fulldayfcs",
+   "codigo": "ETFD005",
+   "nombre": "Full Day Filandia, Valle del Cocora y Salento",
+   "duracion_horas": 8,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Cultura de la cestería",
+    "Ingreso a mirador en Cocora",
+    "Degustación de café",
+    "Souvenir",
+    "Almuerzo",
+    "Hidratación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Se sugiere programar de lunes a viernes por la capacidad de carga del destino."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌴 ¡Filandia, Cocora y Salento en un día!",
+    "items": [
+     "👟 Zapatos cómodos con buen agarre",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "🧥 Ropa en capas y abrigo",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "💵 Efectivo para compras",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🗓️ Mejor de lunes a viernes: hay menos gente"
+    ]
+   }
+  },
+  {
+   "id_web": "filandia",
+   "codigo": "ETHD035",
+   "nombre": "Tour Filandia",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Visita al centro de cestería",
+    "Degustación de café",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda ropa cómoda y abrigo para la lluvia.",
+    "Opcional: taller de cestería de 1 hora aprox. (costo adicional)."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🏘️ ¡Filandia, colores y cestería!",
+    "items": [
+     "👟 Zapatos cómodos para caminar",
+     "🧥 Abrigo para lluvia (Filandia es fresca)",
+     "💵 Efectivo para artesanías locales",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🧺 Puedes sumar el taller de cestería (1 h, costo adicional)",
+     "🛍️ Compra artesanía local: apoyas a las familias del pueblo"
+    ]
+   }
+  },
+  {
+   "id_web": "cordillera",
+   "codigo": "ETFD004",
+   "nombre": "Full Day pueblos de la Cordillera: Córdoba, Pijao y Buenavista",
+   "duracion_horas": 8,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Trayecto en Jeep Willys (según condiciones)",
+    "Guía",
+    "Degustación de café",
+    "Souvenir",
+    "Almuerzo",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Puedes agregar la visita a una finca cafetera (suplemento)."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "⛰️ ¡Pueblos de cordillera!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "🧥 Abrigo ligero: la cordillera es fresca",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "💵 Efectivo para compras locales",
+     "🚙 Parte del trayecto puede ser en Jeep Willys por vías rurales",
+     "💊 Si te mareas en carretera, lleva tu medicamento"
+    ]
+   }
+  },
+  {
+   "id_web": "compartidocs",
+   "codigo": "ETHD011",
+   "nombre": "Tour Compartido Valle del Cocora y Salento",
+   "duracion_horas": 8,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "08:00",
+     "08:10"
+    ],
+    "nota": "Puntos de encuentro: Plaza de Bolívar 8:00 a.m. / Parque de la Vida 8:10 a.m.; salida 8:15 a.m."
+   },
+   "incluye": [
+    "Transporte",
+    "Guía en español",
+    "Entrada al Bosque de Palmas / mirador",
+    "Visita a Salento",
+    "Hidratación o café",
+    "Tarjeta de asistencia médica"
+   ],
+   "no_incluye": [
+    "Almuerzo",
+    "Gastos no especificados"
+   ],
+   "notas": [
+    "Desde 2 pasajeros, previa reserva.",
+    "Confirmaciones hasta las 8:00 p.m. del día anterior.",
+    "No opera: puente festivo de la semana de receso de octubre, 25 de diciembre y del 1 al 6 de enero."
+   ],
+   "precio_publico": "$307.000 COP por persona (2026)",
+   "VALIDAR": "Duración: Carolina confirmó 8 h (regreso 4:00 p.m.); la base de conocimiento dice 7 h (regreso 3:30 p.m.). Traslado Montenegro: portafolio $100.000 vs base $115.000.",
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🚐 ¡Tour compartido a Cocora y Salento!",
+    "items": [
+     "⏰ Confirma tu cupo antes de las 8:00 p.m. del día anterior",
+     "👟 Zapatos cómodos con buen agarre",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "🧥 Ropa en capas",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "💵 Efectivo: el almuerzo y los miradores adicionales se pagan aparte",
+     "💧 Botella reutilizable (te damos agua en el recorrido)"
+    ]
+   }
+  },
+  {
+   "id_web": "cocoraacaime",
+   "codigo": "ETFD003",
+   "nombre": "Trek Valle de Cocora - Acaime, casa de los colibríes",
+   "duracion_horas": 5,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "08:00",
+    "hasta": "09:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Hidratación",
+    "Refrigerio",
+    "Souvenir",
+    "Entrada a la reserva",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, impermeable, manga larga y ropa color tierra.",
+    "Nivel de dificultad: media."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐦 ¡Cocora y la casa de los colibríes!",
+    "items": [
+     "🥾 Zapatos de senderismo o botas (barro y quebradas)",
+     "🧥 Manga larga, ropa en capas, colores tierra",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🧴 Repelente y bloqueador",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "⚠️ Dificultad media: 5 km con puentes colgantes",
+     "🚯 No dejes basura: deja el lugar como lo encontraste"
+    ]
+   }
+  },
+  {
+   "id_web": "aves",
+   "codigo": "ETHD015",
+   "nombre": "Avistamiento o fotografía de aves para aficionados",
+   "duracion_horas": 7,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "05:00",
+    "hasta": "06:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Desayuno",
+    "Guía de aves",
+    "Binoculares",
+    "Checklist de aves",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda de colores tierra y manga larga.",
+    "Recorridos en las reservas naturales Barbas Bremen, PNN Los Nevados, Reserva Otún o reservas privadas, según la ubicación del hotel."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐦 ¡Madruga con las aves!",
+    "items": [
+     "⏰ Salida muy temprano (5:00–6:00 a.m.): el desayuno está incluido",
+     "👕 Ropa de colores tierra (evita blanco y colores vivos) y manga larga",
+     "🧥 Abrigo: las mañanas son frías",
+     "🔇 Silencio y movimientos suaves durante la observación",
+     "📷 Trae tu cámara; te prestamos binoculares",
+     "🧴 Repelente",
+     "🌧️ Puede llover: te prestamos capa reutilizable"
+    ]
+   }
+  },
+  {
+   "id_web": "palmacera",
+   "codigo": "ETFD007",
+   "nombre": "Palma de cera en bosque Alto Andino",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "07:00",
+    "hasta": "09:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Trayecto en Jeep Willys",
+    "Hidratación",
+    "Guía",
+    "Contribución a la comunidad local",
+    "Almuerzo viajero campesino",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda ropa cómoda, impermeable y manga larga.",
+    "Dificultad media: ascenso entre 2.200 y 2.600 msnm.",
+    "Recorrido en las inmediaciones de la Reserva Páramo del Chilí, en Pijao (Quindío)."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌴 ¡Bosque de niebla y palma de cera!",
+    "items": [
+     "🥾 Zapatos de senderismo con buen agarre",
+     "🧥 Ropa en capas, manga larga y abrigo: subes de 2.200 a 2.600 msnm",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🎒 Mochila pequeña con snack",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "📷 Cámara o binoculares: hay más de 100 especies de aves",
+     "⚠️ Dificultad media: caminata de subida de 1 h 30 min"
+    ]
+   }
+  },
+  {
+   "id_web": "orquideas",
+   "codigo": "ETHD024",
+   "nombre": "Un Mundo de Orquídeas",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Orquideólogo",
+    "Actividad de siembra",
+    "Souvenir",
+    "Entrada a la reserva",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "La actividad se realiza en el Quindío."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌸 ¡Descubre el mundo de las orquídeas!",
+    "items": [
+     "👟 Zapatos cerrados y cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🌱 Vas a sembrar una orquídea: ropa que se pueda ensuciar",
+     "🚫 No arranques ni toques las flores sin indicación del orquideólogo"
+    ]
+   }
+  },
+  {
+   "id_web": "ranas",
+   "codigo": "ETHD023",
+   "nombre": "Experiencia nocturna de ranas y anfibios",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "18:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía herpetólogo",
+    "Equipos",
+    "Souvenir",
+    "Cena ligera",
+    "Entrada a la reserva",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, ropa de cambio, impermeable y manga larga.",
+    "Dificultad media: se camina por montaña, quebradas o ríos.",
+    "Se visitan hábitats de ranas de cristal, chocolate o venenosas según el interés (Pijao, Córdoba, Caicedonia o Filandia)."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐸 ¡Una noche entre ranas y quebradas!",
+    "items": [
+     "🔦 Linterna o frontal (si tienes; preferible luz roja)",
+     "🥾 Botas o zapatos que se puedan mojar, con buen agarre",
+     "👕 Ropa de cambio y manga larga",
+     "🌧️ Impermeable",
+     "🧴 Repelente",
+     "🤫 Habla bajo y no toques los animales",
+     "⚠️ Dificultad media: caminas por montaña, quebradas o ríos"
+    ]
+   }
+  },
+  {
+   "id_web": "trekreservas",
+   "codigo": "ETHD014",
+   "nombre": "Trek o senderismo en reservas naturales",
+   "duracion_horas": 7,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "07:00",
+    "hasta": "09:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada a la reserva",
+    "Hidratación y snack",
+    "Guía",
+    "Souvenir",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, impermeable y manga larga.",
+    "Dificultad baja, media o media-alta según las condiciones de los pasajeros.",
+    "Recorridos en Barbas Bremen, PNN Los Nevados, Reserva Otún, Páramo del Chilí o Reserva Acaime, según la ubicación del hotel. Senderos de 8 a 15 km según el estado físico."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌿 ¡Conecta con el bosque andino!",
+    "items": [
+     "🥾 Zapatos de senderismo con buen agarre",
+     "🧥 Ropa en capas, manga larga, colores tierra",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🧴 Repelente y bloqueador",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🎒 Mochila pequeña",
+     "⚠️ Senderos de 8 a 15 km: cuéntanos tu condición física para elegir la ruta"
+    ]
+   }
+  },
+  {
+   "id_web": "cocoraacaime2",
+   "codigo": "ETFD009",
+   "nombre": "La Carbonera, Santuario de Palma de Cera",
+   "duracion_horas": 7,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "06:00",
+    "hasta": "07:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Hidratación",
+    "Brunch",
+    "Seguro médico",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda zapato de buen agarre, ropa cómoda, impermeable y abrigo.",
+    "Dificultad media-alta. Altura máxima: 3.370 msnm."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌴 ¡Al santuario de la palma de cera!",
+    "items": [
+     "🥾 Zapatos de senderismo con buen agarre",
+     "🧥 Abrigo y ropa en capas: llegas a 3.370 msnm",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🎒 Mochila pequeña con snack",
+     "⏰ Salida muy temprano (6:00–7:00 a.m.)",
+     "⚠️ Dificultad media-alta: 2 h de subida y 1 h 30 min de bajada"
+    ]
+   }
+  },
+  {
+   "id_web": "paramo",
+   "codigo": "ETFD010",
+   "nombre": "Senderismo en el Páramo: ecosistema único",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "06:00",
+    "hasta": "08:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Hidratación",
+    "Almuerzo viajero",
+    "Material fotográfico en digital"
+   ],
+   "notas": [],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🏔️ ¡El páramo, fábrica de agua!",
+    "items": [
+     "🥾 Botas impermeables con buen agarre (humedales)",
+     "🧥 Ropa térmica, abrigo, gorro y guantes: hace frío",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🧴 Bloqueador solar (el sol de alta montaña quema)",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🌿 No pises ni arranques frailejones",
+     "⏰ Salida temprano (6:00–8:00 a.m.)"
+    ]
+   }
+  },
+  {
+   "id_web": "campesino",
+   "codigo": "ETFD001",
+   "nombre": "Tour experiencial Campesino por un día",
+   "duracion_horas": 8,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Refrigerio",
+    "Almuerzo",
+    "Anfitriones locales",
+    "Participación en los quehaceres de la finca",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "documento ET",
+    "titulo": "🐓🌱 ¡Conecta con la vida rural y la naturaleza!",
+    "items": [
+     "👟 Zapatos cerrados y cómodos (caminarás por terrenos naturales)",
+     "🧢 Sombrero o gorra para el sol",
+     "🧴 Bloqueador solar y repelente ecológico",
+     "💧 Botella de agua",
+     "👖 Ropa cómoda y que se pueda ensuciar",
+     "🌧️ Probabilidad de lluvia: lleva un impermeable ligero o capa",
+     "🚯 Cuida el espacio: deja todo como lo encontraste"
+    ]
+   }
+  },
+  {
+   "id_web": "cacao",
+   "codigo": "ETHD002",
+   "nombre": "Tour de Cacao",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Refrigerio",
+    "Anfitriones en la finca",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Recorridos en fincas cercanas según la ubicación del hotel; el trayecto puede ser en vehículo de turismo o en Jeep Willys según el estado de las vías."
+   ],
+   "recomendacion": {
+    "fuente": "documento ET",
+    "titulo": "🌱 ¡Prepárate para vivir una experiencia de cacao inolvidable!",
+    "items": [
+     "🎒 Mochila ligera y cómoda",
+     "🧢 Sombrero o gorra (protégete del sol)",
+     "🧴 Bloqueador solar y repelente",
+     "💧 Botella de agua reutilizable",
+     "👟 Zapatos cómodos para caminar",
+     "🌦️ Puede llover, ¡lleva un impermeable o paraguas plegable!",
+     "🚯 No dejes basura",
+     "🚫 Evita perfumes fuertes: pueden alterar el entorno natural del cultivo"
+    ]
+   }
+  },
+  {
+   "id_web": "cana",
+   "codigo": "ETHD004",
+   "nombre": "Tour de Caña y trapiche",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Degustación",
+    "Anfitriones en la finca",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Recorridos en fincas cercanas según la ubicación del hotel; el trayecto se realiza en vehículo de turismo o en Jeep Willys según el estado de las vías."
+   ],
+   "recomendacion": {
+    "fuente": "documento ET",
+    "titulo": "🌾 ¡Dulzura campesina en cada paso!",
+    "items": [
+     "👟 Zapatos cerrados y cómodos (posible barro y tierra)",
+     "🧢 Gorra o sombrero para el sol",
+     "🧴 Bloqueador solar y repelente",
+     "💧 Botella de agua reutilizable",
+     "👕 Ropa fresca y ligera, que se pueda ensuciar un poco",
+     "🌦️ Posibles lluvias breves: lleva impermeable por si acaso",
+     "🚯 No arrojes basura durante el recorrido",
+     "ℹ️ Fines de semana a las 9:00 a.m. ves el proceso completo de la panela; entre semana, el proceso es parcial"
+    ]
+   }
+  },
+  {
+   "id_web": "abejas",
+   "codigo": "ETHD013",
+   "nombre": "Tour de las Abejas",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Degustaciones",
+    "Equipos de apicultura",
+    "Anfitriones apicultores locales",
+    "Souvenir",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐝 ¡Entra al mundo dulce de las abejas!",
+    "items": [
+     "📏 Al reservar, dinos la talla de ropa de cada persona: te damos overol de apicultor",
+     "👖 Pantalón largo y 👟 zapatos cerrados (botas si tienes)",
+     "🚫 Sin perfumes, cremas aromáticas ni colores muy brillantes: atraen a las abejas",
+     "⚠️ Avísanos si tienes alergia a picaduras de abeja",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🚯 No dejes basura: deja el lugar como lo encontraste"
+    ]
+   }
+  },
+  {
+   "id_web": "frutas",
+   "codigo": "ETHD003",
+   "nombre": "Tour de las Frutas: experiencia de la guayaba",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Degustación",
+    "Anfitriones en la finca",
+    "Taller de preparación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Recorrido por haciendas productoras de piña, guayaba o cítricos cercanas al hotel; el trayecto puede ser en vehículo de turismo o en Jeep Willys según el estado de las vías."
+   ],
+   "recomendacion": {
+    "fuente": "documento ET",
+    "titulo": "🍈 ¡Dulce experiencia entre guayabos!",
+    "items": [
+     "👟 Zapatos cómodos y cerrados (puedes caminar entre tierra y plantas)",
+     "🧢 Sombrero o gorra para el sol",
+     "🧴 Bloqueador solar y repelente de insectos",
+     "🧤 Guantes de jardinería si tienes (opcional, pero útiles)",
+     "💧 Botella de agua",
+     "🌧️ Puede llover: lleva un impermeable ligero",
+     "👃 Deja que los aromas dulces te guíen... ¡es parte del viaje sensorial!",
+     "🚯 No dejes residuos en el cultivo",
+     "🚫 Evita perfumes fuertes: pueden alterar el entorno natural del cultivo"
+    ]
+   }
+  },
+  {
+   "id_web": "platano",
+   "codigo": "ETFD0012",
+   "nombre": "Tour del Plátano: manjares locales",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Degustaciones",
+    "Anfitriones locales",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🍌 ¡Sabores del mejor plátano de Colombia!",
+    "items": [
+     "👟 Zapatos cerrados y cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "😋 Ven con apetito: hay varias degustaciones",
+     "🥗 Avísanos si tienes alguna restricción alimentaria",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🚯 No dejes basura: deja el lugar como lo encontraste"
+    ]
+   }
+  },
+  {
+   "id_web": "termales",
+   "codigo": "ETHD017",
+   "nombre": "Aguas termales: Santa Rosa, San Vicente, El Otoño o Tierra Viva",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "08:00",
+    "hasta": "17:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Hidratación",
+    "Entrada a la reserva termal seleccionada",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, vestido de baño y ropa cómoda.",
+    "Fines de semana y temporada alta: consultar horarios."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "♨️ ¡Relájate en aguas termales!",
+    "items": [
+     "🩱 Vestido de baño, toalla y sandalias",
+     "👕 Ropa de cambio y abrigo (el clima es frío)",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🔒 Lleva lo justo: deja objetos de valor en el hotel",
+     "⚠️ No recomendado para embarazadas o personas con hipertensión sin consulta médica",
+     "🗓️ Fines de semana y temporada alta hay turnos: consulta horarios"
+    ]
+   }
+  },
+  {
+   "id_web": "conexion",
+   "codigo": "ETFD006",
+   "nombre": "Conexión Total: bienestar y energía renovada",
+   "duracion_horas": 8,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Chequeo de cuerpo físico, psíquico y energético",
+    "Sendero de la vida: 5 elementos",
+    "Almuerzo saludable",
+    "Hidratación",
+    "Souvenir",
+    "Masaje de liberación de bloqueos de energía",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, abrigo, vestido de baño y sandalias."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "✨ ¡Un día para renovar cuerpo y mente!",
+    "items": [
+     "👕 Ropa cómoda y abrigo",
+     "🩱 Vestido de baño y sandalias",
+     "🧴 Repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🥗 Avísanos si tienes restricciones alimentarias (incluye almuerzo saludable)",
+     "📵 Te invitamos a desconectarte del celular"
+    ]
+   }
+  },
+  {
+   "id_web": "yoga",
+   "codigo": "ETHD021",
+   "nombre": "Sesión de yoga en reserva natural",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Yogui profesional",
+    "Hidratación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten. Sesión de 60 a 90 minutos aprox."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🧘 ¡Respira y equilibra en la naturaleza!",
+    "items": [
+     "👕 Ropa cómoda y elástica",
+     "🧥 Abrigo ligero",
+     "🧴 Repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🍽️ Mejor llegar con el estómago liviano",
+     "🧘 Si tienes tapete propio, tráelo (opcional)"
+    ]
+   }
+  },
+  {
+   "id_web": "senderovida",
+   "codigo": "ETHD019",
+   "nombre": "Sendero de la Vida: conexión interior",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Sendero de la vida: 5 elementos",
+    "Guía coach de bienestar",
+    "Hidratación",
+    "Masaje de liberación, renovación o relajación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Puedes elegir tu masaje: Liberación y armonía (muscular), Renovación marina (exfoliación corporal completa) o Especial lavanda (relajación profunda de cabeza, cara y cuello)."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌀 ¡Conecta con los cinco elementos!",
+    "items": [
+     "👕 Ropa cómoda",
+     "🧴 Repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "💆 Elige tu masaje: liberación (muscular), renovación marina (exfoliación) o lavanda (relajación)",
+     "📵 Te invitamos a desconectarte del celular"
+    ]
+   }
+  },
+  {
+   "id_web": "equino",
+   "codigo": "ETHD020",
+   "nombre": "Equinoterapia: coach asistido",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "15:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Sesión telefónica de diagnóstico",
+    "Sesión asistida con equino",
+    "Guía coach",
+    "Hidratación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Los temas de la sesión se definen según el diagnóstico inicial: comunicación asertiva, empatía, coherencia, presencia, autoconocimiento, confianza, gestión emocional, gestión del estrés y resolución de conflictos.",
+    "Para menores de 13 años la actividad se realiza en familia."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐴 ¡Los caballos como espejo!",
+    "items": [
+     "👖 Ropa cómoda y pantalón largo",
+     "👟 Zapatos cerrados",
+     "🧴 Repelente y bloqueador",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "📞 Antes de la sesión hacemos una llamada corta de diagnóstico",
+     "👨‍👩‍👧 Menores de 13 años participan en familia"
+    ]
+   }
+  },
+  {
+   "id_web": "rituales",
+   "codigo": "ETHD026",
+   "nombre": "Rituales de bienestar holístico",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Coach espiritual",
+    "Souvenir",
+    "Hidratación",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda.",
+    "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌿 ¡Rituales para renovar tu energía!",
+    "items": [
+     "👕 Ropa cómoda (ojalá clara)",
+     "🧴 Repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "💭 Cuéntanos el motivo del ritual al reservar (pareja, cumpleaños, nuevos comienzos…)",
+     "📵 Te invitamos a desconectarte del celular"
+    ]
+   }
+  },
+  {
+   "id_web": "respiracion",
+   "codigo": "ETHD030",
+   "nombre": "Respiración consciente e inmersión en hielo",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "15:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Asistencia profesional",
+    "Bebida caliente",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda traje de baño y toalla para la inmersión.",
+    "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten. Duración de 60 a 90 minutos aprox."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🧊 ¡Respira, siente el frío y renueva tu energía!",
+    "items": [
+     "🩱 Traje de baño y toalla",
+     "👕 Ropa de cambio y abrigo",
+     "🍽️ Llega con el estómago liviano",
+     "⚠️ Avísanos si tienes problemas cardiacos, hipertensión o estás en embarazo",
+     "💧 Te damos bebida caliente al final"
+    ]
+   }
+  },
+  {
+   "id_web": "parapente",
+   "codigo": "ETHD025",
+   "nombre": "Parapente",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "07:00",
+     "10:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Actividad con pilotos certificados",
+    "Video de 3 min y 25 fotografías"
+   ],
+   "notas": [
+    "Se recomienda ropa y zapatos cómodos, gafas de sol y abrigo.",
+    "No apto para personas con cirugías recientes, mujeres en embarazo ni personas bajo efecto de sustancias psicoactivas o licor."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🪂 ¡Vuela sobre el Paisaje Cafetero!",
+    "items": [
+     "👟 Zapatos cerrados y ropa cómoda",
+     "🕶️ Gafas de sol y abrigo",
+     "📸 Incluye video de 3 min y 25 fotos",
+     "⛅ El vuelo depende del clima: puede reprogramarse",
+     "⚠️ No apto para embarazadas, cirugías recientes ni bajo efecto de alcohol o sustancias"
+    ]
+   }
+  },
+  {
+   "id_web": "cabalgatamaria",
+   "codigo": "ETHD016",
+   "nombre": "Experiencia de cabalgata río y montaña",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Inducción en el manejo del caballo",
+    "Acompañamiento de vaqueros",
+    "Refrigerio fuerte",
+    "Elementos de protección (casco)",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda y sombrero."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐎 ¡Cabalgata entre río y montaña!",
+    "items": [
+     "👖 Pantalón largo (jean o similar)",
+     "👟 Zapatos cerrados o botas (no sandalias)",
+     "🤠 Sombrero o gorra y bloqueador",
+     "🧴 Repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "⚠️ Avísanos tu peso aproximado y experiencia con caballos",
+     "🪖 Te damos casco: úsalo todo el recorrido"
+    ]
+   }
+  },
+  {
+   "id_web": "cabalgatadeluxe",
+   "codigo": "ETFD002",
+   "nombre": "Cabalgata Deluxe en la cordillera",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Inducción en el manejo del caballo",
+    "Acompañamiento de vaqueros",
+    "Elementos de protección (casco)",
+    "Picnic de lujo y almuerzo campesino",
+    "Degustación de frutas e hidratación",
+    "Actividad de siembra",
+    "Experiencia en Jeep Willys",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda y sombrero o gorra.",
+    "Producto certificado en la NTS AV 014 (requisitos para la operación de actividades de cabalgata en turismo de aventura) y en buenas prácticas equinas."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐎 ¡Cabalgata deluxe en la cordillera!",
+    "items": [
+     "👖 Pantalón largo",
+     "👟 Botas o zapatos cerrados",
+     "🤠 Sombrero o gorra y bloqueador",
+     "🧴 Repelente",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "⚠️ Avísanos tu peso aproximado y experiencia con caballos",
+     "🪖 Te damos casco: úsalo todo el recorrido"
+    ]
+   }
+  },
+  {
+   "id_web": "paratrike",
+   "codigo": "ETHD029",
+   "nombre": "Paratrike",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "07:00",
+     "10:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Actividad con pilotos certificados",
+    "Video de 3 min y 25 fotografías"
+   ],
+   "notas": [
+    "Se recomienda ropa y zapatos cómodos, gafas de sol y abrigo.",
+    "No apto para personas con cirugías recientes, mujeres en embarazo ni personas bajo efecto de sustancias psicoactivas o licor."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🛺 ¡Vuela en paratrike!",
+    "items": [
+     "👟 Zapatos cerrados y ropa cómoda",
+     "🕶️ Gafas de sol y abrigo",
+     "📸 Incluye video de 3 min y 25 fotos",
+     "⛅ El vuelo depende del clima: puede reprogramarse",
+     "⚠️ No apto para embarazadas, cirugías recientes ni bajo efecto de alcohol o sustancias"
+    ]
+   }
+  },
+  {
+   "id_web": "parquecafe",
+   "codigo": "ETPT001",
+   "nombre": "Parque del Café",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Pasaporte Múltiple"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "La tarifa niño aplica para estaturas entre 91 y 124 cm."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🎢 ¡Día de parque!",
+    "items": [
+     "👟 Zapatos cómodos (caminarás bastante)",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "🩱 Ropa de cambio si subes a atracciones de agua",
+     "💵 Efectivo o tarjeta para comida dentro del parque",
+     "📏 La tarifa niño depende de la estatura (91–124 cm)"
+    ]
+   }
+  },
+  {
+   "id_web": "panaca",
+   "codigo": "ETPT002",
+   "nombre": "PANACA",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Pasaporte Terra"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Niños que miden menos de 90 cm no pagan.",
+    "Pasaporte Travesía Noche: martes, viernes y sábados desde las 6:30 p.m.; el ingreso al parque para el show es desde las 5:30 p.m."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐄 ¡Día en PANACA!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💵 Efectivo o tarjeta para comida dentro del parque",
+     "⏰ Llega temprano para alcanzar todos los shows",
+     "💧 Botella reutilizable (te damos agua en el recorrido)"
+    ]
+   }
+  },
+  {
+   "id_web": "recuca",
+   "codigo": "ETPT003",
+   "nombre": "Recorrido de la Cultura Cafetera RECUCA",
+   "duracion_horas": 3,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Ingreso desde las 9:00 a.m.; recorridos y cataciones cada media hora aprox., el primero a las 9:00 a.m. y el último a las 3:00 p.m.",
+    "Niños que miden menos de 90 cm no pagan."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "☕ ¡Cultura cafetera en RECUCA!",
+    "items": [
+     "👟 Zapatos cómodos (vas a caminar entre cafetales)",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "⏰ Los recorridos salen cada media hora; el primero a las 9:00 a.m. y el último a las 3:00 p.m.",
+     "👶 Niños de menos de 90 cm no pagan"
+    ]
+   }
+  },
+  {
+   "id_web": "ukumari",
+   "codigo": "ETPT005",
+   "nombre": "Bioparque Ukumarí",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Horario del parque: lunes a viernes de 8:00 a.m. a 5:00 p.m.; sábados de 8:00 a.m. a 2:00 p.m.",
+    "Recorridos guiados de lunes a sábado: 10:00, 10:30 y 11:00 a.m. y 1:00 p.m."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐻 ¡Bioparque Ukumarí!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "⏰ Recorridos guiados de lunes a sábado (10:00, 10:30, 11:00 a.m. y 1:00 p.m.)",
+     "🗓️ Sábados cierra a las 2:00 p.m.",
+     "🚫 No alimentes a los animales"
+    ]
+   }
+  },
+  {
+   "id_web": "arrieros",
+   "codigo": "ETPT004",
+   "nombre": "Parque de los Arrieros",
+   "duracion_horas": 6,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Horario: 9:00 a.m. a 5:00 p.m.; primera presentación a las 10:00 a.m. y última a las 5:00 p.m. Se sugiere llegar antes de las 10:00 a.m.",
+    "Niños que miden menos de 90 cm no pagan."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🐴 ¡Parque de los Arrieros!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "⏰ Llega antes de las 10:00 a.m. para no perderte las presentaciones",
+     "💵 Efectivo o tarjeta para comida",
+     "💧 Botella reutilizable (te damos agua en el recorrido)"
+    ]
+   }
+  },
+  {
+   "id_web": "botanico",
+   "codigo": "ETPT006",
+   "nombre": "Jardín Botánico y Mariposario del Quindío",
+   "duracion_horas": 3,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "15:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Ingreso de lunes a domingo y festivos desde las 8:40 a.m.; último ingreso a las 3:30 p.m.",
+    "Guía en inglés con suplemento."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🦋 ¡Mariposario y jardín botánico!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "⏰ Último ingreso 3:30 p.m.",
+     "🦋 No toques las mariposas"
+    ]
+   }
+  },
+  {
+   "id_web": "laberinto",
+   "codigo": "ETPT007",
+   "nombre": "Laberinto Mil Caminos",
+   "duracion_horas": 3,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "15:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Entrada"
+   ],
+   "notas": [
+    "Se recomienda repelente, ropa cómoda, sombrero o gorra y bloqueador solar.",
+    "Abre de martes a domingo y festivos desde las 9:00 a.m.; último ingreso a las 5:00 p.m."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌀 ¡Piérdete en el laberinto!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🗓️ Abre de martes a domingo y festivos (cerrado los lunes)"
+    ]
+   }
+  },
+  {
+   "id_web": "armenia",
+   "codigo": "ETHD009",
+   "nombre": "City tour tradicional en Armenia",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Entrada al Parque de la Vida",
+    "Visita al Museo del Oro Quimbaya",
+    "Degustación de café especial",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🏙️ ¡Armenia, ciudad milagro!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🏛️ Incluye Museo del Oro Quimbaya y Parque de la Vida",
+     "☕ Degustación de café especial"
+    ]
+   }
+  },
+  {
+   "id_web": "cuyabro",
+   "codigo": "ETHD010",
+   "nombre": "Arte cuyabro y café de origen",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía de interpretación",
+    "Cata de café de origen",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🎨 ¡Arte cuyabro y café de origen!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "☕ Prueba el café sin azúcar en la cata",
+     "💵 Efectivo para comprar arte o café local"
+    ]
+   }
+  },
+  {
+   "id_web": "cartago",
+   "codigo": "ETFD008",
+   "nombre": "Tour comunitario en Cartago",
+   "duracion_horas": 7,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Refrigerio",
+    "Guía",
+    "Taller artesanal",
+    "Almuerzo",
+    "Artesanía elaborada",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🧵 ¡Los bordados de Cartago!",
+    "items": [
+     "👕 Ropa cómoda y fresca (Cartago es caliente)",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🧵 Vas a hacer tu propio bordado y te lo llevas",
+     "💵 Efectivo para comprar bordados a las artesanas"
+    ]
+   }
+  },
+  {
+   "id_web": "pereira",
+   "codigo": "ETHD007",
+   "nombre": "City tour en Pereira",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Degustación de café especial",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🏙️ ¡City tour en Pereira!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "☕ Incluye degustación de café especial"
+    ]
+   }
+  },
+  {
+   "id_web": "manizales",
+   "codigo": "ETHD008",
+   "nombre": "City tour en Manizales",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Guía",
+    "Entrada al corredor polaco de la Catedral",
+    "Visita a mirador",
+    "Degustación de café especial",
+    "Tiquete de cable aéreo",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🚡 ¡Manizales desde las alturas!",
+    "items": [
+     "👟 Zapatos cómodos",
+     "🧥 Abrigo: Manizales es fresca",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "🚡 Incluye cable aéreo y Catedral",
+     "☕ Degustación de café especial"
+    ]
+   }
+  },
+  {
+   "id_web": "catacafe",
+   "codigo": "ETHD034",
+   "nombre": "Cata de café especial",
+   "duracion_horas": 1.5,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Actividad de catación",
+    "Degustaciones de café",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se realiza en Armenia, Pereira o municipios ubicados máximo a 20 minutos de la ciudad.",
+    "Puede realizarse en el hotel o locación donde estés alojado."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "☕ ¡Cata de café especial!",
+    "items": [
+     "🚫 Evita perfumes fuertes: afectan los aromas",
+     "🦷 No te cepilles los dientes justo antes",
+     "☕ Prueba sin azúcar",
+     "🏨 Puede hacerse en tu hotel"
+    ]
+   }
+  },
+  {
+   "id_web": "gastronomica",
+   "codigo": "ETHD028",
+   "nombre": "Experiencia gastronómica: Colombia en un plato",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "19:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Chef",
+    "Menú de 7 tiempos",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Informa tus restricciones o alergias alimentarias."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🍽️ ¡Colombia en un plato!",
+    "items": [
+     "🥗 Avísanos alergias o restricciones al reservar",
+     "😋 Ven con apetito: es un menú de 7 tiempos",
+     "👥 Mínimo 6 personas"
+    ]
+   }
+  },
+  {
+   "id_web": "cajaviajera",
+   "codigo": "ETHD031",
+   "nombre": "Experiencia: La Caja Viajera del Café",
+   "duracion_horas": 1.5,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Puesta en escena",
+    "Degustación de café",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Actividad móvil: se realiza en el hotel o locación donde estés alojado.",
+    "Opera únicamente en español o con traductor."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "📦 ¡La Caja Viajera del Café!",
+    "items": [
+     "🏨 Se hace en tu hotel o alojamiento",
+     "🗣️ Se presenta en español (o con traductor)",
+     "☕ Incluye degustación de café"
+    ]
+   }
+  },
+  {
+   "id_web": "cataquesos",
+   "codigo": "ETHD022",
+   "nombre": "Cata de quesos madurados de origen",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Maestro quesero",
+    "Degustación de quesos y maridaje",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "La cata puede incluir quesos gouda, con achiote, azul, camembert, madurados y semimadurados.",
+    "No recomendada para personas con alergias alimentarias.",
+    "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🧀 ¡Cata de quesos madurados!",
+    "items": [
+     "⚠️ No recomendada si tienes alergia a lácteos u otros alimentos",
+     "🏨 Puede hacerse en tu hotel",
+     "😋 Ven con apetito"
+    ]
+   }
+  },
+  {
+   "id_web": "catacocteles",
+   "codigo": "ETHD033",
+   "nombre": "Cata de cócteles",
+   "duracion_horas": 1.5,
+   "horario": {
+    "tipo": "desde",
+    "hora": "16:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Bartender",
+    "Degustación de cócteles de autor",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se realiza en la zona urbana de la ciudad.",
+    "Grupos de mínimo 5 y máximo 14 personas."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🍸 ¡Cata de cócteles de autor!",
+    "items": [
+     "🔞 Solo mayores de edad",
+     "🚗 No conduzcas después de la cata",
+     "👥 Grupos de 5 a 14 personas",
+     "🥗 Avísanos alergias al reservar"
+    ]
+   }
+  },
+  {
+   "id_web": "greenteam",
+   "codigo": "ETHD005",
+   "nombre": "Green Team Retreat Quindío",
+   "duracion_horas": 4,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Transporte",
+    "Refrigerio",
+    "Anfitriones en la finca",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda repelente y ropa cómoda."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌱 ¡Retiro verde en equipo!",
+    "items": [
+     "👟 Zapatos cerrados",
+     "🧢 Sombrero o gorra, bloqueador solar y repelente",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "🌧️ Puede llover: te prestamos capa reutilizable",
+     "👕 Ropa que se pueda ensuciar"
+    ]
+   }
+  },
+  {
+   "id_web": "artesanos",
+   "codigo": "ETHD006",
+   "nombre": "Experiencia con artesanos locales",
+   "duracion_horas": 2,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "14:00"
+   },
+   "incluye": [
+    "Artesano instructor",
+    "Taller artesanal",
+    "Artesanía elaborada",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda ropa cómoda.",
+    "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
+   ],
+   "recomendacion": {
+    "fuente": "documento ET",
+    "titulo": "🎨🧶 ¡Crea con tus manos y tu corazón!",
+    "items": [
+     "👕 Ropa cómoda y que se pueda ensuciar (¡vas a crear arte!)",
+     "🧴 Bloqueador solar si la actividad es al aire libre",
+     "💧 Botella de agua reutilizable",
+     "🌧️ En caso de lluvia, hay opciones bajo techo (según lugar)",
+     "🎁 Crea tu propia artesanía para llevar como recuerdo",
+     "🚯 No dejes basura ni dañes los materiales",
+     "🏨 La actividad se hace en tu hotel o donde estés alojado"
+    ]
+   }
+  },
+  {
+   "id_web": "siembra",
+   "codigo": "ETHD027",
+   "nombre": "Dejando Huella: siembra de árboles en reserva natural",
+   "duracion_horas": 3,
+   "horario": {
+    "tipo": "fijo",
+    "horas": [
+     "09:00",
+     "14:00"
+    ]
+   },
+   "incluye": [
+    "Transporte",
+    "Refrigerio",
+    "Guía",
+    "Especie de árbol endémica",
+    "Certificado de siembra",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Se recomienda ropa cómoda, impermeable, abrigo y zapatos de buen agarre.",
+    "Se realiza en una reserva natural privada en las inmediaciones de Barbas Bremen, la Reserva Otún y la Reserva La Patasola (Salento).",
+    "El árbol sembrado tiene garantía de cuidado por 5 años."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌳 ¡Siembra un árbol y deja huella!",
+    "items": [
+     "🥾 Zapatos con buen agarre",
+     "🧥 Abrigo e impermeable",
+     "👕 Ropa que se pueda ensuciar",
+     "💧 Botella reutilizable (te damos agua en el recorrido)",
+     "📜 Recibes certificado de siembra; el árbol tiene cuidado garantizado por 5 años"
+    ]
+   }
+  },
+  {
+   "id_web": "tallerrespiracion",
+   "codigo": "ETHD032",
+   "nombre": "Taller de respiración consciente",
+   "duracion_horas": 1,
+   "horario": {
+    "tipo": "ventana",
+    "desde": "09:00",
+    "hasta": "16:00"
+   },
+   "incluye": [
+    "Actividad dirigida",
+    "Asistencia profesional",
+    "Material fotográfico en digital"
+   ],
+   "notas": [
+    "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
+   ],
+   "recomendacion": {
+    "fuente": "propuesta (VALIDAR)",
+    "titulo": "🌬️ ¡Taller de respiración consciente!",
+    "items": [
+     "👕 Ropa cómoda",
+     "🍽️ Llega con el estómago liviano",
+     "🏨 Se hace en tu hotel o alojamiento",
+     "⚠️ Avísanos si tienes alguna condición respiratoria o cardiaca"
+    ]
+   }
+  }
+ ]
+}

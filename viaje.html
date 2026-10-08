@@ -7,11 +7,15 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#3f5a2b" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f140c" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link rel="icon" href="assets/img/icon-32.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="viaje.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;550;650;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/maps.css">
 <script>(function(){try{var t=localStorage.getItem("esp_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body class="c-body">
@@ -34,6 +38,7 @@
 <main class="c-app" id="c-app" style="display:none">
   <section class="c-welcome" id="c-welcome"></section>
   <section class="c-next" id="c-next"></section>
+  <section class="c-card c-review" id="c-review" style="display:none"></section>
 
   <section class="c-card">
     <div class="c-itin-head">
@@ -42,6 +47,10 @@
     </div>
     <ul class="c-itin" id="c-itin"></ul>
   </section>
+
+  <section class="c-card c-pack" id="c-pack" style="display:none"></section>
+
+  <section class="c-card c-route" id="c-route" style="display:none"><h2 class="c-card__title" id="c-route-title">Tu ruta y distancias</h2><div class="c-route__map" id="c-route-map"></div></section>
 
   <section class="c-card c-assistant">
     <div class="c-assistant__head">
@@ -63,6 +72,15 @@
 <div class="c-actions" id="c-actions"></div>
 
 <script src="js/kb.js"></script>
+<script src="js/yenny-data.js"></script>
+<script src="js/plans.js"></script>
+<script src="js/qrscan.js"></script>
 <script src="js/concierge.js"></script>
+<script src="js/maps.js" defer></script>
+<script type="module" src="js/backend.js"></script>
+<script>
+  // Sin señal en Cocora o el páramo: el conserje sigue funcionando con la última copia guardada.
+  if ("serviceWorker" in navigator) addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+</script>
 </body>
 </html>

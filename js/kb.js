@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Espontáneos Travel — Conserje "Espo": base de conocimiento (ES/EN/FR/DE/PT)
+   Espontáneos Travel — Conserje con Yenny: base de conocimiento (ES/EN/FR/DE/PT)
    + strings de interfaz. Zero-cost, estático. Editable y expandible (IA luego).
    Placeholders que rellena concierge.js: {name} {region} {guide} {guideLangs}
    {host} {hotel} {hotelArea}

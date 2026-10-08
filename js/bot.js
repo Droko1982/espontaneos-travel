@@ -1,194 +1,173 @@
 /* ==========================================================================
-   Espontáneos Travel — "Espo" web assistant → WhatsApp handoff
-   Guided, multilingual quick-reply bot. No backend: funnels to wa.me with a
-   fully composed message. Payments & 50% deposit reflect the agency's setup.
+   Espontáneos Travel — Yenny, asistente de pre-venta del sitio
+   Lee la MISMA fuente que el sitio y el conserje: data/yenny.json (+ i18n).
+   Reglas: no inventa datos (null/POR_VALIDAR → asesor), nunca muestra tarifas
+   netas, cada respuesta termina con una siguiente acción, 5 idiomas, y el
+   mensaje a WhatsApp lleva tour + código, personas, fecha, hotel e idioma.
    ========================================================================== */
 (function () {
   "use strict";
-  if (!window.EspoApp) { console.warn("EspoApp not ready"); }
 
-  const LANGNAME = { es:"Español", en:"English", fr:"Français", de:"Deutsch", pt:"Português" };
-
-  const BOT = {
+  const LANGNAME = { es: "Español", en: "English", fr: "Français", de: "Deutsch", pt: "Português", it: "Italiano" };
+  const UI = {
     es: {
-      launch:"¿Te ayudo?", title:"Yenny", subtitle:"Tu anfitriona",
-      greet:"¡Hola! 👋 Soy *Yenny*, tu anfitriona de Espontáneos Travel. Encantada de recibirte 💚",
-      menu_prompt:"¿Con qué te ayudo hoy? Elige una opción 👇",
-      m_exp:"🌿 Ver experiencias", m_prices:"💲 Precios", m_book:"📅 Cómo reservar",
-      m_access:"♿ Turismo sin barreras", m_howget:"📍 Cómo llego", m_pay:"💳 Formas de pago",
-      m_lang:"🗣️ Idiomas", m_advisor:"💬 Hablar con un asesor",
-      back:"↩ Menú", all_web:"Ver todas en la web", see_web:"Verlas en la web",
-      details_web:"Ver detalles", open_wa:"Abrir WhatsApp",
-      exp_q:"¡Genial! ¿Qué tipo de experiencia te late?",
-      list_intro:"Estas son nuestras experiencias de {cat}:",
-      from:"desde", pp:"/persona",
-      tour_q:"Buena elección 👌 ¿Reservamos «{tour}» o ves primero los detalles?",
-      book_this:"Reservar esta",
-      people_q:"¿Para cuántas personas?", p1:"1–2", p2:"3–4", p3:"5 o más",
-      when_q:"¿Para cuándo lo planeas?", w1:"Esta semana", w2:"Este mes", w3:"Más adelante", w4:"Fechas flexibles",
-      handoff:"¡Perfecto! Aquí está tu resumen 👇 Toca el botón y te atiende un asesor por WhatsApp (respondemos en menos de 24 h).",
-      s_exp:"Experiencia", s_people:"Personas", s_when:"Fecha", s_access:"Accesibilidad: sí",
-      prices_text:"Cada experiencia se cotiza *a tu medida* 💚 El valor depende del plan, el número de personas, el transporte y lo que incluya.\n\nCuéntanos qué te interesa y te damos una *cotización personalizada sin compromiso*. Para separar tu cupo se paga un *anticipo del 50%* y el resto el día de la experiencia.",
-      book_text:"Reservar es muy fácil:\n1️⃣ Eliges tu experiencia\n2️⃣ Nos escribes por WhatsApp con fecha y n.º de personas\n3️⃣ Separas tu cupo con el *50% de anticipo*\n4️⃣ Pagas el resto el día del tour\n\n¿Te paso con un asesor?",
-      access_text:"En Espontáneos Travel creemos en un *turismo sin barreras* ♿\n\nAdaptamos rutas, transporte y ritmos, con acompañamiento especializado, para que todas las personas disfruten el Paisaje Cafetero con autonomía y seguridad. Cuéntanos tus necesidades y lo planeamos a tu medida.",
-      access_book:"Quiero una experiencia accesible",
-      howget_text:"Estamos en *Armenia, Quindío* — el corazón del Eje Cafetero 🇨🇴\n\nAeropuertos cercanos: *El Edén (AXM, Armenia)* y *Matecaña (PEI, Pereira)*. Coordinamos el transporte desde tu alojamiento o punto de llegada. El punto de encuentro exacto lo confirma tu asesor al reservar.",
-      pay_text:"Aceptamos:\n• *Nequi / Daviplata*\n• *Transferencia / PSE*\n• *Efectivo*\n• *Tarjeta / pago internacional*\n\nRecibimos pesos (COP), dólares (USD) y euros (EUR). Para separar tu cupo se paga el *50% de anticipo*.",
-      lang_text:"Atendemos en 5 idiomas: 🇪🇸 Español · 🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch · 🇧🇷 Português. Puedes cambiar el idioma del sitio arriba a la derecha 🌐",
-      advisor_text:"¡Con gusto! Toca el botón y te atiende un asesor por WhatsApp 👇",
-      wa_lead:"¡Hola Espontáneos Travel! Vengo del sitio web y quiero información/reservar:",
-      wa_exp:"• Experiencia:", wa_people:"• Personas:", wa_when:"• Fecha:", wa_access:"• Requiero turismo accesible", wa_lang:"• Idioma:",
-      foot:"Respuestas guiadas · un asesor confirma los detalles"
+      launch: "¿Te ayudo?", close: "Cerrar", title: "Yenny", subtitle: "Tu anfitriona · en línea",
+      menu_prompt: "Elige un tema o escríbeme tu pregunta 👇", more: "➕ Más temas", back: "↩ Menú", other: "Otra pregunta",
+      foot: "Información oficial del portafolio · un asesor confirma los detalles", ask_ph: "Escribe tu pregunta…", send: "Enviar",
+      m_reservar: "📅 Reservar", m_horarios: "🕘 Horarios", m_duracion: "⏱️ Duración", m_incluye: "✅ Qué incluye", m_llevar: "🎒 Qué llevar",
+      m_precios: "💲 Precios", m_pagos: "💳 Pagos", m_plans: "🗺️ Itinerarios", m_scan: "📷 Escanear QR", m_asesor: "💬 Hablar con un asesor",
+      m_traslados: "🚐 Traslados", m_ninos: "👨‍👩‍👧 Niños y mayores", m_access: "♿ Accesibilidad", m_idiomas: "🗣️ Idiomas", m_clima: "🌦️ Clima",
+      m_temporadas: "📆 Temporadas", m_cancel: "↩️ Cancelaciones", m_sost: "🌿 Sostenibilidad", m_empresa: "🏡 Quiénes somos", m_redes: "📱 Redes", m_compartido: "🚐 Tour compartido Cocora + Salento",
+      pick_cat: "¿Sobre qué experiencia? Elige una categoría 👇", pick_tour: "Elige la experiencia:",
+      hub: "*{tour}* · {code}\n¿Qué quieres saber?", see_card: "🔎 Ver ficha completa", book_this: "📅 Reservar esta", another_tour: "Otra experiencia",
+      a_horario: "*{tour}*: {h}.", a_dur: "*{tour}* dura aprox. *{d}* desde la recogida en tu hotel.",
+      a_incl: "*{tour}* incluye:", a_noincl: "No incluye:", a_tbd: "Ese dato te lo confirma un asesor 💬",
+      a_price_pub: "Precio de venta 2026: *{p}*.", forecast: "🌦️ Pronóstico para tu fecha:",
+      rain: "🌧️ Lluvia probable ese día: lleva ropa impermeable.", uv: "☀️ Índice UV muy alto: bloqueador, gorra y gafas.", cold: "🧥 Mañana fría: lleva abrigo.",
+      f_guide: "Idioma del guía", no_match: "No tengo esa respuesta exacta 🙈 Te paso con un asesor por WhatsApp para que te ayude.",
+      wa_q: "¡Hola Espontáneos Travel! Tengo una pregunta:", wa_default: "¡Hola Espontáneos Travel! Me gustaría más información sobre sus experiencias.",
+      open_wa: "Abrir WhatsApp", go_sust: "Ver sección Sostenibilidad", go_tours: "Ver experiencias", pay_btn: "💳 Pagar anticipo",
+      wa_tour: "🌿 Experiencia:", wa_guide: "🧭 Idioma del guía:", confirm_book: "¿Quieres reservar *{tour}*?", wa_lead_tour: "¡Hola Espontáneos Travel! Quiero reservar:", consent: "Autorizo el tratamiento de mis datos según la {link} (Ley 1581 de 2012).", consent_link: "política de privacidad", consent_req: "Para continuar, acepta la política de datos 🙂", greet_fallback: "¡Hola! Soy Yenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?"
     },
     en: {
-      launch:"Need help?", title:"Yenny", subtitle:"Your travel host",
-      greet:"Hi! 👋 I'm *Yenny*, your Espontáneos Travel host. So glad to have you 💚",
-      menu_prompt:"How can I help you today? Pick an option 👇",
-      m_exp:"🌿 See experiences", m_prices:"💲 Prices", m_book:"📅 How to book",
-      m_access:"♿ Barrier-free tourism", m_howget:"📍 How to get there", m_pay:"💳 Payment methods",
-      m_lang:"🗣️ Languages", m_advisor:"💬 Talk to an advisor",
-      back:"↩ Menu", all_web:"See all on the site", see_web:"See them on the site",
-      details_web:"View details", open_wa:"Open WhatsApp",
-      exp_q:"Great! What kind of experience do you fancy?",
-      list_intro:"Here are our {cat} experiences:",
-      from:"from", pp:"/person",
-      tour_q:"Great pick 👌 Shall we book \"{tour}\" or see the details first?",
-      book_this:"Book this one",
-      people_q:"For how many people?", p1:"1–2", p2:"3–4", p3:"5 or more",
-      when_q:"When are you planning it?", w1:"This week", w2:"This month", w3:"Later on", w4:"Flexible dates",
-      handoff:"Perfect! Here's your summary 👇 Tap the button and an advisor will help you on WhatsApp (we reply within 24 h).",
-      s_exp:"Experience", s_people:"People", s_when:"Date", s_access:"Accessibility: yes",
-      prices_text:"Every experience is *tailored and quoted for you* 💚 The price depends on the plan, number of people, transport and what's included.\n\nTell us what you're interested in and we'll send a *free personalised quote*. To hold your spot you pay a *50% deposit* and the rest on the day of the experience.",
-      book_text:"Booking is easy:\n1️⃣ Choose your experience\n2️⃣ Message us on WhatsApp with date & number of people\n3️⃣ Hold your spot with a *50% deposit*\n4️⃣ Pay the rest on the tour day\n\nShall I connect you with an advisor?",
-      access_text:"At Espontáneos Travel we believe in *barrier-free tourism* ♿\n\nWe adapt routes, transport and pacing, with specialised support, so everyone can enjoy the Coffee Landscape with autonomy and safety. Tell us your needs and we'll tailor it for you.",
-      access_book:"I'd like an accessible experience",
-      howget_text:"We're in *Armenia, Quindío* — the heart of the Coffee Region 🇨🇴\n\nNearest airports: *El Edén (AXM, Armenia)* and *Matecaña (PEI, Pereira)*. We arrange transport from your lodging or arrival point. Your advisor confirms the exact meeting point when you book.",
-      pay_text:"We accept:\n• *Nequi / Daviplata*\n• *Bank transfer / PSE*\n• *Cash*\n• *Card / international payment*\n\nWe take Colombian pesos (COP), US dollars (USD) and euros (EUR). A *50% deposit* holds your spot.",
-      lang_text:"We serve you in 5 languages: 🇪🇸 Español · 🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch · 🇧🇷 Português. You can switch the site language at the top right 🌐",
-      advisor_text:"Of course! Tap the button and an advisor will help you on WhatsApp 👇",
-      wa_lead:"Hello Espontáneos Travel! I'm coming from your website and I'd like info / to book:",
-      wa_exp:"• Experience:", wa_people:"• People:", wa_when:"• Date:", wa_access:"• I need accessible tourism", wa_lang:"• Language:",
-      foot:"Guided replies · an advisor confirms the details"
+      launch: "Need help?", close: "Close", title: "Yenny", subtitle: "Your host · online",
+      menu_prompt: "Pick a topic or type your question 👇", more: "➕ More topics", back: "↩ Menu", other: "Another question",
+      foot: "Official portfolio information · an advisor confirms the details", ask_ph: "Type your question…", send: "Send",
+      m_reservar: "📅 Book", m_horarios: "🕘 Schedules", m_duracion: "⏱️ Duration", m_incluye: "✅ What's included", m_llevar: "🎒 What to bring",
+      m_precios: "💲 Prices", m_pagos: "💳 Payments", m_plans: "🗺️ Itineraries", m_scan: "📷 Scan QR", m_asesor: "💬 Talk to an advisor",
+      m_traslados: "🚐 Transfers", m_ninos: "👨‍👩‍👧 Kids & seniors", m_access: "♿ Accessibility", m_idiomas: "🗣️ Languages", m_clima: "🌦️ Weather",
+      m_temporadas: "📆 Seasons", m_cancel: "↩️ Cancellations", m_sost: "🌿 Sustainability", m_empresa: "🏡 About us", m_redes: "📱 Social media", m_compartido: "🚐 Shared tour Cocora + Salento",
+      pick_cat: "Which experience? Pick a category 👇", pick_tour: "Pick the experience:",
+      hub: "*{tour}* · {code}\nWhat would you like to know?", see_card: "🔎 See full details", book_this: "📅 Book this", another_tour: "Another experience",
+      a_horario: "*{tour}*: {h}.", a_dur: "*{tour}* takes about *{d}* from hotel pickup.",
+      a_incl: "*{tour}* includes:", a_noincl: "Not included:", a_tbd: "An advisor will confirm that for you 💬",
+      a_price_pub: "2026 retail price: *{p}*.", forecast: "🌦️ Forecast for your date:",
+      rain: "🌧️ Rain likely that day: bring waterproof clothing.", uv: "☀️ Very high UV: sunscreen, cap and sunglasses.", cold: "🧥 Chilly morning: bring a jacket.",
+      f_guide: "Guide language", no_match: "I don't have that exact answer 🙈 Let me connect you with an advisor on WhatsApp.",
+      wa_q: "Hi Espontáneos Travel! I have a question:", wa_default: "Hi Espontáneos Travel! I'd like more information about your experiences.",
+      open_wa: "Open WhatsApp", go_sust: "See the Sustainability section", go_tours: "See experiences", pay_btn: "💳 Pay deposit",
+      wa_tour: "🌿 Experience:", wa_guide: "🧭 Guide language:", confirm_book: "Would you like to book *{tour}*?", wa_lead_tour: "Hi Espontáneos Travel! I'd like to book:", consent: "I authorise the processing of my data under the {link} (Colombian Law 1581 of 2012).", consent_link: "privacy policy", consent_req: "To continue, please accept the data policy 🙂", greet_fallback: "Hi! I'm Yenny from Espontáneos Travel 🌿 How can I help?"
     },
     fr: {
-      launch:"Besoin d'aide ?", title:"Yenny", subtitle:"Votre hôtesse",
-      greet:"Bonjour ! 👋 Je suis *Yenny*, votre hôtesse chez Espontáneos Travel. Ravie de vous accueillir 💚",
-      menu_prompt:"Comment puis-je vous aider ? Choisissez une option 👇",
-      m_exp:"🌿 Voir les expériences", m_prices:"💲 Tarifs", m_book:"📅 Comment réserver",
-      m_access:"♿ Tourisme sans barrières", m_howget:"📍 Comment venir", m_pay:"💳 Moyens de paiement",
-      m_lang:"🗣️ Langues", m_advisor:"💬 Parler à un conseiller",
-      back:"↩ Menu", all_web:"Tout voir sur le site", see_web:"Les voir sur le site",
-      details_web:"Voir les détails", open_wa:"Ouvrir WhatsApp",
-      exp_q:"Super ! Quel type d'expérience vous tente ?",
-      list_intro:"Voici nos expériences de {cat} :",
-      from:"dès", pp:"/pers.",
-      tour_q:"Excellent choix 👌 On réserve « {tour} » ou vous voyez d'abord les détails ?",
-      book_this:"Réserver celle-ci",
-      people_q:"Pour combien de personnes ?", p1:"1–2", p2:"3–4", p3:"5 et +",
-      when_q:"Pour quand le prévoyez-vous ?", w1:"Cette semaine", w2:"Ce mois-ci", w3:"Plus tard", w4:"Dates flexibles",
-      handoff:"Parfait ! Voici votre récapitulatif 👇 Touchez le bouton et un conseiller vous répond sur WhatsApp (réponse sous 24 h).",
-      s_exp:"Expérience", s_people:"Personnes", s_when:"Date", s_access:"Accessibilité : oui",
-      prices_text:"Chaque expérience est *sur mesure et sur devis* 💚 Le prix dépend de la formule, du nombre de personnes, du transport et du contenu.\n\nDites-nous ce qui vous intéresse et nous vous enverrons un *devis personnalisé gratuit*. Pour réserver, un *acompte de 50%* est demandé, le solde le jour de l'expérience.",
-      book_text:"Réserver est très simple :\n1️⃣ Choisissez votre expérience\n2️⃣ Écrivez-nous sur WhatsApp (date et nombre de personnes)\n3️⃣ Réservez avec un *acompte de 50%*\n4️⃣ Payez le solde le jour du tour\n\nJe vous mets en relation avec un conseiller ?",
-      access_text:"Chez Espontáneos Travel, nous croyons au *tourisme sans barrières* ♿\n\nNous adaptons itinéraires, transport et rythme, avec un accompagnement spécialisé, pour que chacun profite du Paysage du Café en autonomie et sécurité. Dites-nous vos besoins.",
-      access_book:"Je veux une expérience accessible",
-      howget_text:"Nous sommes à *Armenia, Quindío* — au cœur de la Région du Café 🇨🇴\n\nAéroports proches : *El Edén (AXM, Armenia)* et *Matecaña (PEI, Pereira)*. Nous organisons le transport depuis votre hébergement. Le point de rendez-vous exact est confirmé par votre conseiller.",
-      pay_text:"Nous acceptons :\n• *Nequi / Daviplata*\n• *Virement / PSE*\n• *Espèces*\n• *Carte / paiement international*\n\nNous prenons pesos (COP), dollars (USD) et euros (EUR). Un *acompte de 50%* réserve votre place.",
-      lang_text:"Nous vous accueillons en 5 langues : 🇪🇸 Español · 🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch · 🇧🇷 Português. Changez la langue du site en haut à droite 🌐",
-      advisor_text:"Avec plaisir ! Touchez le bouton et un conseiller vous répond sur WhatsApp 👇",
-      wa_lead:"Bonjour Espontáneos Travel ! Je viens de votre site et je souhaite des infos / réserver :",
-      wa_exp:"• Expérience :", wa_people:"• Personnes :", wa_when:"• Date :", wa_access:"• J'ai besoin d'un tourisme accessible", wa_lang:"• Langue :",
-      foot:"Réponses guidées · un conseiller confirme les détails"
+      launch: "Besoin d'aide ?", close: "Fermer", title: "Yenny", subtitle: "Votre hôte · en ligne",
+      menu_prompt: "Choisissez un sujet ou écrivez votre question 👇", more: "➕ Plus de sujets", back: "↩ Menu", other: "Autre question",
+      foot: "Informations officielles du portefeuille · un conseiller confirme les détails", ask_ph: "Écrivez votre question…", send: "Envoyer",
+      m_reservar: "📅 Réserver", m_horarios: "🕘 Horaires", m_duracion: "⏱️ Durée", m_incluye: "✅ Ce qui est inclus", m_llevar: "🎒 Quoi emporter",
+      m_precios: "💲 Prix", m_pagos: "💳 Paiements", m_plans: "🗺️ Itinéraires", m_scan: "📷 Scanner un QR", m_asesor: "💬 Parler à un conseiller",
+      m_traslados: "🚐 Transferts", m_ninos: "👨‍👩‍👧 Enfants et seniors", m_access: "♿ Accessibilité", m_idiomas: "🗣️ Langues", m_clima: "🌦️ Météo",
+      m_temporadas: "📆 Saisons", m_cancel: "↩️ Annulations", m_sost: "🌿 Durabilité", m_empresa: "🏡 Qui sommes-nous", m_redes: "📱 Réseaux", m_compartido: "🚐 Tour partagé Cocora + Salento",
+      pick_cat: "Quelle expérience ? Choisissez une catégorie 👇", pick_tour: "Choisissez l'expérience :",
+      hub: "*{tour}* · {code}\nQue voulez-vous savoir ?", see_card: "🔎 Voir la fiche", book_this: "📅 Réserver celle-ci", another_tour: "Autre expérience",
+      a_horario: "*{tour}* : {h}.", a_dur: "*{tour}* dure environ *{d}* depuis la prise en charge à l'hôtel.",
+      a_incl: "*{tour}* comprend :", a_noincl: "Non inclus :", a_tbd: "Un conseiller vous le confirmera 💬",
+      a_price_pub: "Prix de vente 2026 : *{p}*.", forecast: "🌦️ Prévisions pour votre date :",
+      rain: "🌧️ Pluie probable ce jour-là : prévoyez des vêtements imperméables.", uv: "☀️ UV très élevé : crème solaire, casquette et lunettes.", cold: "🧥 Matin frais : prévoyez une veste.",
+      f_guide: "Langue du guide", no_match: "Je n'ai pas cette réponse exacte 🙈 Je vous mets en contact avec un conseiller sur WhatsApp.",
+      wa_q: "Bonjour Espontáneos Travel ! J'ai une question :", wa_default: "Bonjour Espontáneos Travel ! Je souhaite plus d'informations sur vos expériences.",
+      open_wa: "Ouvrir WhatsApp", go_sust: "Voir la section Durabilité", go_tours: "Voir les expériences", pay_btn: "💳 Payer l'acompte",
+      wa_tour: "🌿 Expérience :", wa_guide: "🧭 Langue du guide :", confirm_book: "Voulez-vous réserver *{tour}* ?", wa_lead_tour: "Bonjour Espontáneos Travel ! Je souhaite réserver :", consent: "J'autorise le traitement de mes données selon la {link} (loi colombienne 1581 de 2012).", consent_link: "politique de confidentialité", consent_req: "Pour continuer, acceptez la politique de données 🙂", greet_fallback: "Bonjour ! Je suis Yenny, d'Espontáneos Travel 🌿 Comment puis-je vous aider ?"
     },
     de: {
-      launch:"Brauchen Sie Hilfe?", title:"Yenny", subtitle:"Ihre Gastgeberin",
-      greet:"Hallo! 👋 Ich bin *Yenny*, Ihre Gastgeberin bei Espontáneos Travel. Schön, dass Sie da sind 💚",
-      menu_prompt:"Wie kann ich helfen? Wählen Sie eine Option 👇",
-      m_exp:"🌿 Erlebnisse ansehen", m_prices:"💲 Preise", m_book:"📅 So buchen Sie",
-      m_access:"♿ Barrierefreier Tourismus", m_howget:"📍 Anreise", m_pay:"💳 Zahlungsarten",
-      m_lang:"🗣️ Sprachen", m_advisor:"💬 Mit Berater sprechen",
-      back:"↩ Menü", all_web:"Alle auf der Website", see_web:"Auf der Website ansehen",
-      details_web:"Details ansehen", open_wa:"WhatsApp öffnen",
-      exp_q:"Super! Welche Art von Erlebnis reizt Sie?",
-      list_intro:"Das sind unsere {cat}-Erlebnisse:",
-      from:"ab", pp:"/Person",
-      tour_q:"Gute Wahl 👌 Buchen wir «{tour}» oder möchten Sie zuerst die Details?",
-      book_this:"Dieses buchen",
-      people_q:"Für wie viele Personen?", p1:"1–2", p2:"3–4", p3:"5 oder mehr",
-      when_q:"Für wann planen Sie es?", w1:"Diese Woche", w2:"Diesen Monat", w3:"Später", w4:"Flexible Daten",
-      handoff:"Perfekt! Hier ist Ihre Zusammenfassung 👇 Tippen Sie auf den Button und ein Berater hilft Ihnen auf WhatsApp (Antwort binnen 24 Std.).",
-      s_exp:"Erlebnis", s_people:"Personen", s_when:"Datum", s_access:"Barrierefreiheit: ja",
-      prices_text:"Jedes Erlebnis wird *individuell für Sie kalkuliert* 💚 Der Preis hängt vom Programm, der Personenzahl, dem Transport und den Leistungen ab.\n\nSagen Sie uns, was Sie interessiert, und wir senden ein *kostenloses persönliches Angebot*. Zur Reservierung wird eine *Anzahlung von 50%* fällig, der Rest am Tag des Erlebnisses.",
-      book_text:"Buchen ist ganz einfach:\n1️⃣ Erlebnis wählen\n2️⃣ Per WhatsApp mit Datum & Personenzahl schreiben\n3️⃣ Platz mit *50% Anzahlung* sichern\n4️⃣ Rest am Tourtag zahlen\n\nSoll ich Sie mit einem Berater verbinden?",
-      access_text:"Bei Espontáneos Travel glauben wir an *barrierefreien Tourismus* ♿\n\nWir passen Routen, Transport und Tempo an, mit spezialisierter Begleitung, damit alle die Kaffeelandschaft selbstbestimmt und sicher genießen. Sagen Sie uns Ihre Bedürfnisse.",
-      access_book:"Ich möchte ein barrierefreies Erlebnis",
-      howget_text:"Wir sind in *Armenia, Quindío* — im Herzen der Kaffeeregion 🇨🇴\n\nNächste Flughäfen: *El Edén (AXM, Armenia)* und *Matecaña (PEI, Pereira)*. Wir organisieren den Transport von Ihrer Unterkunft. Den genauen Treffpunkt bestätigt Ihr Berater bei der Buchung.",
-      pay_text:"Wir akzeptieren:\n• *Nequi / Daviplata*\n• *Überweisung / PSE*\n• *Bargeld*\n• *Karte / internationale Zahlung*\n\nWir nehmen Pesos (COP), US-Dollar (USD) und Euro (EUR). Eine *Anzahlung von 50%* sichert Ihren Platz.",
-      lang_text:"Wir beraten Sie in 5 Sprachen: 🇪🇸 Español · 🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch · 🇧🇷 Português. Die Sprache ändern Sie oben rechts 🌐",
-      advisor_text:"Sehr gern! Tippen Sie auf den Button und ein Berater hilft Ihnen auf WhatsApp 👇",
-      wa_lead:"Hallo Espontáneos Travel! Ich komme von Ihrer Website und möchte Infos / buchen:",
-      wa_exp:"• Erlebnis:", wa_people:"• Personen:", wa_when:"• Datum:", wa_access:"• Ich benötige barrierefreien Tourismus", wa_lang:"• Sprache:",
-      foot:"Geführte Antworten · ein Berater bestätigt die Details"
+      launch: "Hilfe?", close: "Schließen", title: "Yenny", subtitle: "Ihre Gastgeberin · online",
+      menu_prompt: "Wählen Sie ein Thema oder schreiben Sie Ihre Frage 👇", more: "➕ Weitere Themen", back: "↩ Menü", other: "Andere Frage",
+      foot: "Offizielle Portfolio-Informationen · ein Berater bestätigt die Details", ask_ph: "Ihre Frage…", send: "Senden",
+      m_reservar: "📅 Buchen", m_horarios: "🕘 Uhrzeiten", m_duracion: "⏱️ Dauer", m_incluye: "✅ Inklusive", m_llevar: "🎒 Was mitnehmen",
+      m_precios: "💲 Preise", m_pagos: "💳 Zahlung", m_plans: "🗺️ Reisepläne", m_scan: "📷 QR scannen", m_asesor: "💬 Mit Berater sprechen",
+      m_traslados: "🚐 Transfers", m_ninos: "👨‍👩‍👧 Kinder & Senioren", m_access: "♿ Barrierefreiheit", m_idiomas: "🗣️ Sprachen", m_clima: "🌦️ Wetter",
+      m_temporadas: "📆 Saisons", m_cancel: "↩️ Stornierung", m_sost: "🌿 Nachhaltigkeit", m_empresa: "🏡 Über uns", m_redes: "📱 Soziale Medien", m_compartido: "🚐 Gruppentour Cocora + Salento",
+      pick_cat: "Welches Erlebnis? Wählen Sie eine Kategorie 👇", pick_tour: "Wählen Sie das Erlebnis:",
+      hub: "*{tour}* · {code}\nWas möchten Sie wissen?", see_card: "🔎 Details ansehen", book_this: "📅 Dieses buchen", another_tour: "Anderes Erlebnis",
+      a_horario: "*{tour}*: {h}.", a_dur: "*{tour}* dauert ca. *{d}* ab Abholung am Hotel.",
+      a_incl: "*{tour}* beinhaltet:", a_noincl: "Nicht inklusive:", a_tbd: "Das bestätigt Ihnen ein Berater 💬",
+      a_price_pub: "Verkaufspreis 2026: *{p}*.", forecast: "🌦️ Vorhersage für Ihr Datum:",
+      rain: "🌧️ An diesem Tag ist Regen wahrscheinlich: wasserfeste Kleidung mitnehmen.", uv: "☀️ Sehr hoher UV-Index: Sonnencreme, Kappe und Brille.", cold: "🧥 Kühler Morgen: Jacke mitnehmen.",
+      f_guide: "Sprache des Guides", no_match: "Darauf habe ich keine genaue Antwort 🙈 Ich verbinde Sie per WhatsApp mit einem Berater.",
+      wa_q: "Hallo Espontáneos Travel! Ich habe eine Frage:", wa_default: "Hallo Espontáneos Travel! Ich hätte gern mehr Informationen zu Ihren Erlebnissen.",
+      open_wa: "WhatsApp öffnen", go_sust: "Bereich Nachhaltigkeit ansehen", go_tours: "Erlebnisse ansehen", pay_btn: "💳 Anzahlung leisten",
+      wa_tour: "🌿 Erlebnis:", wa_guide: "🧭 Sprache des Guides:", confirm_book: "Möchten Sie *{tour}* buchen?", wa_lead_tour: "Hallo Espontáneos Travel! Ich möchte buchen:", consent: "Ich stimme der Verarbeitung meiner Daten gemäß der {link} zu (kolumbianisches Gesetz 1581 von 2012).", consent_link: "Datenschutzerklärung", consent_req: "Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren 🙂", greet_fallback: "Hallo! Ich bin Yenny von Espontáneos Travel 🌿 Wie kann ich helfen?"
     },
     pt: {
-      launch:"Precisa de ajuda?", title:"Yenny", subtitle:"Sua anfitriã",
-      greet:"Olá! 👋 Sou a *Yenny*, sua anfitriã da Espontáneos Travel. Que bom ter você aqui 💚",
-      menu_prompt:"Como posso ajudar hoje? Escolha uma opção 👇",
-      m_exp:"🌿 Ver experiências", m_prices:"💲 Preços", m_book:"📅 Como reservar",
-      m_access:"♿ Turismo sem barreiras", m_howget:"📍 Como chegar", m_pay:"💳 Formas de pagamento",
-      m_lang:"🗣️ Idiomas", m_advisor:"💬 Falar com um consultor",
-      back:"↩ Menu", all_web:"Ver todas no site", see_web:"Ver no site",
-      details_web:"Ver detalhes", open_wa:"Abrir WhatsApp",
-      exp_q:"Ótimo! Que tipo de experiência você curte?",
-      list_intro:"Estas são nossas experiências de {cat}:",
-      from:"a partir de", pp:"/pessoa",
-      tour_q:"Ótima escolha 👌 Reservamos «{tour}» ou você vê os detalhes primeiro?",
-      book_this:"Reservar esta",
-      people_q:"Para quantas pessoas?", p1:"1–2", p2:"3–4", p3:"5 ou mais",
-      when_q:"Para quando você planeja?", w1:"Esta semana", w2:"Este mês", w3:"Mais adiante", w4:"Datas flexíveis",
-      handoff:"Perfeito! Aqui está seu resumo 👇 Toque no botão e um consultor te atende pelo WhatsApp (respondemos em até 24 h).",
-      s_exp:"Experiência", s_people:"Pessoas", s_when:"Data", s_access:"Acessibilidade: sim",
-      prices_text:"Cada experiência é *sob medida e com orçamento próprio* 💚 O valor depende do plano, do número de pessoas, do transporte e do que inclui.\n\nConte o que te interessa e enviamos um *orçamento personalizado sem compromisso*. Para garantir sua vaga paga-se um *sinal de 50%* e o restante no dia da experiência.",
-      book_text:"Reservar é muito fácil:\n1️⃣ Escolha sua experiência\n2️⃣ Fale no WhatsApp com data e n.º de pessoas\n3️⃣ Garanta a vaga com *50% de sinal*\n4️⃣ Pague o restante no dia do tour\n\nQuer que eu te passe para um consultor?",
-      access_text:"Na Espontáneos Travel acreditamos no *turismo sem barreiras* ♿\n\nAdaptamos rotas, transporte e ritmo, com acompanhamento especializado, para que todos aproveitem a Paisagem Cafeeira com autonomia e segurança. Conte suas necessidades.",
-      access_book:"Quero uma experiência acessível",
-      howget_text:"Estamos em *Armenia, Quindío* — no coração da Região Cafeeira 🇨🇴\n\nAeroportos próximos: *El Edén (AXM, Armenia)* e *Matecaña (PEI, Pereira)*. Organizamos o transporte desde sua hospedagem. O ponto de encontro exato é confirmado pelo consultor ao reservar.",
-      pay_text:"Aceitamos:\n• *Nequi / Daviplata*\n• *Transferência / PSE*\n• *Dinheiro*\n• *Cartão / pagamento internacional*\n\nRecebemos pesos (COP), dólares (USD) e euros (EUR). Um *sinal de 50%* garante sua vaga.",
-      lang_text:"Atendemos em 5 idiomas: 🇪🇸 Español · 🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch · 🇧🇷 Português. Troque o idioma do site no canto superior direito 🌐",
-      advisor_text:"Com prazer! Toque no botão e um consultor te atende pelo WhatsApp 👇",
-      wa_lead:"Olá Espontáneos Travel! Vim do site e gostaria de informações / reservar:",
-      wa_exp:"• Experiência:", wa_people:"• Pessoas:", wa_when:"• Data:", wa_access:"• Preciso de turismo acessível", wa_lang:"• Idioma:",
-      foot:"Respostas guiadas · um consultor confirma os detalhes"
+      launch: "Posso ajudar?", close: "Fechar", title: "Yenny", subtitle: "Sua anfitriã · online",
+      menu_prompt: "Escolha um tema ou escreva sua pergunta 👇", more: "➕ Mais temas", back: "↩ Menu", other: "Outra pergunta",
+      foot: "Informação oficial do portfólio · um consultor confirma os detalhes", ask_ph: "Escreva sua pergunta…", send: "Enviar",
+      m_reservar: "📅 Reservar", m_horarios: "🕘 Horários", m_duracion: "⏱️ Duração", m_incluye: "✅ O que inclui", m_llevar: "🎒 O que levar",
+      m_precios: "💲 Preços", m_pagos: "💳 Pagamentos", m_plans: "🗺️ Roteiros", m_scan: "📷 Escanear QR", m_asesor: "💬 Falar com um consultor",
+      m_traslados: "🚐 Traslados", m_ninos: "👨‍👩‍👧 Crianças e idosos", m_access: "♿ Acessibilidade", m_idiomas: "🗣️ Idiomas", m_clima: "🌦️ Clima",
+      m_temporadas: "📆 Temporadas", m_cancel: "↩️ Cancelamentos", m_sost: "🌿 Sustentabilidade", m_empresa: "🏡 Quem somos", m_redes: "📱 Redes sociais", m_compartido: "🚐 Tour compartilhado Cocora + Salento",
+      pick_cat: "Sobre qual experiência? Escolha uma categoria 👇", pick_tour: "Escolha a experiência:",
+      hub: "*{tour}* · {code}\nO que você quer saber?", see_card: "🔎 Ver detalhes", book_this: "📅 Reservar esta", another_tour: "Outra experiência",
+      a_horario: "*{tour}*: {h}.", a_dur: "*{tour}* dura aprox. *{d}* desde a busca no hotel.",
+      a_incl: "*{tour}* inclui:", a_noincl: "Não inclui:", a_tbd: "Um consultor confirma isso para você 💬",
+      a_price_pub: "Preço de venda 2026: *{p}*.", forecast: "🌦️ Previsão para a sua data:",
+      rain: "🌧️ Chuva provável nesse dia: leve roupa impermeável.", uv: "☀️ UV muito alto: protetor, boné e óculos.", cold: "🧥 Manhã fria: leve um casaco.",
+      f_guide: "Idioma do guia", no_match: "Não tenho essa resposta exata 🙈 Vou passar você para um consultor no WhatsApp.",
+      wa_q: "Olá Espontáneos Travel! Tenho uma pergunta:", wa_default: "Olá Espontáneos Travel! Gostaria de mais informações sobre as experiências.",
+      open_wa: "Abrir WhatsApp", go_sust: "Ver seção Sustentabilidade", go_tours: "Ver experiências", pay_btn: "💳 Pagar sinal",
+      wa_tour: "🌿 Experiência:", wa_guide: "🧭 Idioma do guia:", confirm_book: "Quer reservar *{tour}*?", wa_lead_tour: "Olá Espontáneos Travel! Quero reservar:", consent: "Autorizo o tratamento dos meus dados conforme a {link} (Lei colombiana 1581 de 2012).", consent_link: "política de privacidade", consent_req: "Para continuar, aceite a política de dados 🙂", greet_fallback: "Olá! Sou a Yenny, da Espontáneos Travel 🌿 Como posso ajudar?"
     }
   };
 
-  /* ---------- State & elements ---------- */
+  // Temas del árbol (id del nodo en yenny.json → etiqueta del menú)
+  const PRIMARY = ["reservar", "horarios", "duracion", "que_incluye", "que_llevar", "precios", "pagos", "plans", "asesor"];
+  const MORE = ["compartido", "traslados", "ninos_mayores", "accesibilidad", "idiomas", "clima", "temporadas", "cancelacion", "sostenibilidad", "empresa", "redes", "scan"];
+  const LABEL = { reservar: "m_reservar", horarios: "m_horarios", duracion: "m_duracion", que_incluye: "m_incluye", que_llevar: "m_llevar", precios: "m_precios",
+    pagos: "m_pagos", plans: "m_plans", asesor: "m_asesor", traslados: "m_traslados", ninos_mayores: "m_ninos", accesibilidad: "m_access", idiomas: "m_idiomas",
+    clima: "m_clima", temporadas: "m_temporadas", cancelacion: "m_cancel", sostenibilidad: "m_sost", empresa: "m_empresa", redes: "m_redes", compartido: "m_compartido", scan: "m_scan" };
+  const TOUR_Q = ["horarios", "duracion", "que_incluye", "que_llevar"];          // preguntas que necesitan una experiencia
+  // Palabras clave para el texto libre (se suman a pregunta_tipo de yenny.json)
+  const KW = {
+    horarios: ["hora", "horario", "a que hora", "a que horas sale", "recogen", "pickup", "what time", "schedule", "heure", "uhrzeit"],
+    duracion: ["dura", "cuanto tiempo", "cuantas horas", "duracion", "how long", "duration", "duree", "dauer", "duracao"],
+    que_incluye: ["incluye", "include", "inclus", "inklusive", "inclui"],
+    que_llevar: ["llevar", "ropa", "empacar", "bring", "pack", "emporter", "mitnehmen", "levar"],
+    precios: ["precio", "cuesta", "valor", "tarifa", "cotiz", "price", "cost", "prix", "preis", "preco", "quanto"],
+    reservar: ["reserv", "book", "buchen"],
+    pagos: ["pago", "pagar", "anticipo", "nequi", "daviplata", "tarjeta", "payment", "pay", "deposit", "paiement", "zahlung", "pagamento"],
+    traslados: ["traslado", "aeropuerto", "transfer", "airport", "aeroport", "flughafen", "aeroporto"],
+    ninos_mayores: ["nino", "bebe", "adulto mayor", "abuel", "kid", "child", "senior", "enfant", "kinder", "crianca"],
+    accesibilidad: ["accesib", "silla de ruedas", "discapacidad", "movilidad", "invidente", "wheelchair", "accessib", "barriere", "acessib"],
+    idiomas: ["idioma", "ingles", "language", "english", "langue", "sprache"],
+    clima: ["clima", "lluvia", "llueve", "frio", "calor", "weather", "rain", "meteo", "wetter", "chuva"],
+    temporadas: ["temporada", "semana santa", "season", "saison", "temporada alta"],
+    cancelacion: ["cancel", "reembols", "refund", "annul", "storn"],
+    sostenibilidad: ["sostenib", "comunidad", "ambiental", "sustainab", "durabl", "nachhaltig", "sustent"],
+    empresa: ["quienes son", "empresa", "about you", "who are", "qui etes", "wer seid", "quem sao"],
+    redes: ["instagram", "facebook", "redes", "social"],
+    compartido: ["compartido", "shared", "partage", "gruppentour", "compartilhado"],
+    asesor: ["asesor", "humano", "advisor", "human", "conseiller", "berater", "consultor"]
+  };
+
+  /* ---------- Estado ---------- */
   let lang = (window.EspoApp && EspoApp.getLang()) || "es";
-  let L = BOT[lang] || BOT.es;
   let started = false, opened = false, busy = false;
   const ctx = {};
-
+  const HAS_PLANS = typeof window.EspoPlans !== "undefined";
+  const D = () => window.EspoData;
+  const U = () => UI[lang] || UI.es;
+  const P = () => (HAS_PLANS ? EspoPlans.ui(lang) : {});
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+  const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
-  const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>';
+  const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>';
+  let launch, panel, body, quick, headTitle, headSub, launchTxt, badge, askForm, askIn;
 
-  let launch, panel, body, quick, headTitle, headSub, launchTxt, badge;
-
+  /* ---------- Interfaz ---------- */
   function build() {
     launch = el("button", "espo-launch", `<span class="espo-launch__ava">Y<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
-    launch.setAttribute("aria-label", "Espo");
+    launch.setAttribute("aria-label", "Yenny");
     launchTxt = launch.querySelector(".espo-launch__txt");
     badge = launch.querySelector(".espo-badge");
-
     panel = el("div", "espo-panel");
-    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Espo");
+    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Yenny");
     panel.innerHTML =
       `<div class="espo-head">
          <span class="espo-head__ava">Y</span>
          <span class="espo-head__t"><b class="espo-h-title"></b><span class="espo-h-sub"></span></span>
-         <button class="espo-head__close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+         <button class="espo-head__close" aria-label="✕"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
        </div>
-       <div class="espo-body"></div>
+       <div class="espo-body" aria-live="polite"></div>
        <div class="espo-quick"></div>
+       <form class="espo-ask" autocomplete="off"><input type="text" maxlength="200" aria-label="Pregunta"><button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></form>
        <div class="espo-foot"></div>`;
     document.body.appendChild(launch);
     document.body.appendChild(panel);
@@ -196,30 +175,28 @@
     quick = panel.querySelector(".espo-quick");
     headTitle = panel.querySelector(".espo-h-title");
     headSub = panel.querySelector(".espo-h-sub");
-
+    askForm = panel.querySelector(".espo-ask"); askIn = askForm.querySelector("input");
     launch.addEventListener("click", openPanel);
     panel.querySelector(".espo-head__close").addEventListener("click", closePanel);
-    // Robust closing: Esc key and clicking outside the panel
+    askForm.addEventListener("submit", (e) => { e.preventDefault(); const q = askIn.value.trim(); if (!q || busy) return; askIn.value = ""; addBubble(esc(q), "user"); freeText(q); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && opened) closePanel(); });
     document.addEventListener("click", (e) => {
       if (!opened) return;
-      // Use composedPath: it is captured at click time, so re-rendered (detached) chips
-      // are still recognized as "inside the panel" and don't trigger a close.
+      // composedPath: los chips que se re-pintan siguen contando como "dentro del panel"
       const path = (typeof e.composedPath === "function") ? e.composedPath() : [];
+      if (path.some(n => n && n.hasAttribute && n.hasAttribute("data-plan-yenny"))) return;   // botones que abren a Yenny
       if (path.length) { if (path.indexOf(panel) === -1 && path.indexOf(launch) === -1) closePanel(); }
       else if (!panel.contains(e.target) && !launch.contains(e.target)) closePanel();
     });
     refreshStatic();
   }
-
   function refreshStatic() {
-    L = BOT[lang] || BOT.es;
-    launchTxt.textContent = L.launch;
-    headTitle.textContent = L.title;
-    headSub.textContent = L.subtitle;
-    panel.querySelector(".espo-foot").textContent = L.foot;
+    launchTxt.textContent = U().launch; headTitle.textContent = U().title; headSub.textContent = U().subtitle;
+    panel.querySelector(".espo-foot").textContent = U().foot;
+    askIn.placeholder = U().ask_ph; askIn.setAttribute("aria-label", U().ask_ph);
+    panel.querySelector(".espo-head__close").setAttribute("aria-label", U().close || "✕");
+    askForm.querySelector("button").setAttribute("aria-label", U().send);
   }
-
   function openPanel() {
     opened = true; panel.classList.add("open"); launch.classList.add("hide");
     if (badge) badge.style.display = "none";
@@ -227,27 +204,21 @@
   }
   function closePanel() { opened = false; panel.classList.remove("open"); launch.classList.remove("hide"); }
 
-  /* ---------- Message rendering ---------- */
-  function addBubble(text, who) {
+  function addBubble(html, who) {
     const b = el("div", "espo-msg " + who);
-    // bold with *...*
-    b.innerHTML = String(text).replace(/\*(.+?)\*/g, "<b>$1</b>");
+    b.innerHTML = String(html).replace(/\*(.+?)\*/g, "<b>$1</b>");
     body.appendChild(b); scrollDown(); return b;
   }
   function scrollDown() { body.scrollTop = body.scrollHeight; }
-  function typing() {
-    const t = el("div", "espo-typing", "<span></span><span></span><span></span>");
-    body.appendChild(t); scrollDown(); return t;
-  }
+  function typing() { const t = el("div", "espo-typing", "<span></span><span></span><span></span>"); body.appendChild(t); scrollDown(); return t; }
   function botSay(messages) {
     return new Promise((resolve) => {
       busy = true; quick.innerHTML = "";
-      const list = Array.isArray(messages) ? messages.slice() : [messages];
+      const list = (Array.isArray(messages) ? messages : [messages]).filter(Boolean);
       const next = () => {
         if (!list.length) { busy = false; resolve(); return; }
-        const t = typing();
-        const msg = list.shift();
-        setTimeout(() => { t.remove(); addBubble(msg, "bot"); setTimeout(next, 180); }, 480 + Math.min(600, msg.length * 7));
+        const t = typing(); const msg = list.shift();
+        setTimeout(() => { t.remove(); addBubble(msg, "bot"); setTimeout(next, 160); }, 380 + Math.min(520, String(msg).length * 5));
       };
       next();
     });
@@ -256,148 +227,434 @@
     quick.innerHTML = "";
     chips.forEach(c => {
       const btn = el("button", "espo-chip" + (c.kind ? " espo-chip--" + c.kind : ""));
-      btn.innerHTML = (c.kind === "wa" ? WA_ICON : "") + "<span>" + c.label + "</span>";
+      btn.type = "button";
+      btn.innerHTML = (c.kind === "wa" ? WA_ICON : "") + "<span>" + esc(c.label) + "</span>";
       btn.addEventListener("click", () => onChip(c));
       quick.appendChild(btn);
     });
   }
   function onChip(c) {
     if (busy) return;
-    addBubble(c.userLabel || c.label, "user");
-    if (c.wa) { const msg = composeWA(); EspoApp.openWhatsApp(msg); }
-    if (c.open) { EspoApp.openTour(c.open); }
-    if (c.filter !== undefined) { EspoApp.filterTo(c.filter); closePanel(); return; }
+    addBubble(esc(c.userLabel || c.label), "user");
+    if (c.scan) { scanQR(); return; }
+    if (c.wa) { EspoApp.openWhatsApp(c.waMsg || composeWA()); if (HAS_PLANS && ctx.leadId && ctx.consent) EspoPlans.sendLead(leadData("whatsapp")); }
+    if (c.open) { EspoApp.openTour(c.open); closePanel(); }
+    if (c.href) { window.open(c.href, "_blank", "noopener"); }
+    if (c.anchor) { closePanel(); const s = document.querySelector(c.anchor); if (s) s.scrollIntoView({ behavior: "smooth" }); }
+    if (c.share) { window.open("https://wa.me/?text=" + encodeURIComponent(c.share), "_blank", "noopener"); }
     if (c.set) Object.assign(ctx, c.set);
     if (c.to) go(c.to);
-    else if (c.wa || c.open) { /* stay: re-show current chips minus none → offer back */ renderChips([{ label: L.back, to: "menu" }]); }
+    else if (c.keep) renderChips(c.keep);
+    else if (c.wa || c.href) renderChips(nextChips());
   }
-  function go(id) { const node = buildNode(id); botSay(node.msgs).then(() => renderChips(node.chips)); }
-
-  /* ---------- Flow ---------- */
-  function start() { refreshStatic(); body.innerHTML = ""; const n = buildNode("menu", true); botSay(n.msgs).then(() => renderChips(n.chips)); }
-
-  function menuChips() {
-    return [
-      { label: L.m_exp, to: "exp" }, { label: L.m_prices, to: "prices" },
-      { label: L.m_book, to: "book" }, { label: L.m_access, to: "access" },
-      { label: L.m_howget, to: "howget" }, { label: L.m_pay, to: "pay" },
-      { label: L.m_lang, to: "lang" }, { label: L.m_advisor, to: "advisor" }
-    ];
+  // Un nodo puede ser asíncrono (pronóstico) y puede pedir el formulario en vez de chips
+  function go(id) {
+    busy = true;
+    Promise.resolve(buildNode(id)).then(node => botSay(node.msgs).then(() => { if (node.form) renderForm(); else renderChips(node.chips || menuChips()); }));
+  }
+  function greeting() { return (D() && D().ready() && (D().node("saludo", lang) || {}).jenny) || U().greet_fallback; }
+  function start() {
+    refreshStatic(); body.innerHTML = "";
+    const say = () => botSay([greeting(), U().menu_prompt]).then(() => renderChips(menuChips()));
+    if (D() && !D().ready()) D().load().then(say, say); else say();
   }
 
-  function buildNode(id, first) {
-    if (id === "menu") return { msgs: first ? [L.greet, L.menu_prompt] : [L.menu_prompt], chips: menuChips() };
+  /* ---------- Menús y siguientes acciones ---------- */
+  function menuChips(all) {
+    const ids = all ? PRIMARY.concat(MORE) : PRIMARY;
+    const arr = ids.filter(id => id !== "scan" || window.EspoQR).filter(id => id !== "plans" || HAS_PLANS)
+      .map(id => id === "scan" ? { label: U().m_scan, scan: true } : { label: U()[LABEL[id]], to: "n:" + id, kind: id === "reservar" ? "primary" : "" });
+    if (!all) arr.push({ label: U().more, to: "more" });
+    return arr;
+  }
+  // Regla 3: toda respuesta termina con una siguiente acción
+  function nextChips(salida) {
+    const out = [];
+    String(salida || "reservar|asesor").split("|").forEach(w => {
+      if (w === "reservar") out.push({ label: U().m_reservar, kind: "primary", to: "n:reservar" });
+      else if (w === "asesor") out.push({ label: U().m_asesor, kind: "wa", wa: true });
+      else if (w === "que_llevar") out.push({ label: U().m_llevar, to: "n:que_llevar" });
+      else if (w === "precios") out.push({ label: U().m_precios, to: "n:precios" });
+      else if (w === "horarios") out.push({ label: U().m_horarios, to: "n:horarios" });
+      else if (w === "accesibilidad") out.push({ label: U().m_access, to: "n:accesibilidad" });
+      else if (w === "experiencias") out.push({ label: U().go_tours, anchor: "#experiencias" });
+      else if (/sostenibilidad/i.test(w)) out.push({ label: U().go_sust, anchor: "#sostenibilidad" });
+    });
+    if (!out.some(c => c.wa)) out.push({ label: U().m_asesor, kind: "wa", wa: true });
+    out.push({ label: U().other, to: "menu" });
+    return out;
+  }
 
-    if (id === "exp") {
-      const cats = EspoApp.categories().filter(c => c.id !== "all").map(c => ({ label: c[lang] || c.es, to: "cat:" + c.id }));
-      cats.push({ label: L.all_web, filter: "all" });
-      cats.push({ label: L.back, to: "menu" });
-      return { msgs: [L.exp_q], chips: cats };
+  /* ---------- Árbol ---------- */
+  function buildNode(id) {
+    if (id === "menu" || id === "more") ctx.intent = null;
+    if (id === "menu") return { msgs: [U().menu_prompt], chips: menuChips() };
+    if (id === "more") return { msgs: [U().menu_prompt], chips: menuChips(true).filter(c => !PRIMARY.some(p => c.to === "n:" + p)).concat([{ label: U().back, to: "menu" }]) };
+    if (!D() || !D().ready()) return { msgs: [U().no_match], chips: nextChips("asesor") };
+
+    if (id.startsWith("n:")) {
+      const n = id.slice(2);
+      if (n === "plans") return buildNode("plans");
+      if (n === "asesor") return { msgs: [(D().node("asesor", lang) || {}).respuesta], chips: [{ label: U().open_wa, kind: "wa", wa: true }, { label: U().back, to: "menu" }] };
+      if (n === "compartido") return tourNode("compartidocs", "compartido");
+      if (n === "reservar") {
+        const node = D().node("reservar", lang);
+        if (ctx.tourId || ctx.planId) {
+          const what = ctx.planId ? EspoPlans.name(EspoPlans.planById(ctx.planId), lang) : ctx.tourName;
+          return { msgs: [node.respuesta, U().confirm_book.replace("{tour}", what)], chips: [
+            { label: U().book_this, kind: "primary", to: "form" },
+            { label: U().another_tour, to: "cats", set: { tourId: null, tourName: null, tourCode: null, planId: null, intent: "reservar" } },
+            { label: U().back, to: "menu" }] };
+        }
+        ctx.intent = "reservar";
+        return { msgs: [node.respuesta, U().pick_cat], chips: catChips() };
+      }
+      if (TOUR_Q.indexOf(n) >= 0) {
+        if (n === "que_llevar" && !ctx.tourId && !ctx.planId) {
+          ctx.intent = n;
+          return { msgs: [D().general("que_llevar", lang), U().pick_cat], chips: catChips().concat(HAS_PLANS ? [{ label: U().m_plans, to: "plans" }] : []) };
+        }
+        if (ctx.tourId) return tourAnswer(ctx.tourId, n);
+        if (ctx.planId && n === "que_llevar") return buildNode("pack:" + ctx.planId);
+        ctx.intent = n;
+        return { msgs: [U().pick_cat], chips: catChips() };
+      }
+      if (n === "precios") {
+        const msgs = [(D().node("precios", lang) || {}).respuesta];
+        const ti = ctx.tourId && D().tour(ctx.tourId, lang);
+        if (ti && ti.precio_publico) msgs.push(U().a_price_pub.replace("{p}", esc(ti.precio_publico)));
+        return { msgs, chips: [{ label: U().book_this, kind: "primary", to: ctx.tourId || ctx.planId ? "form" : "n:reservar" }].concat(nextChips("asesor")) };
+      }
+      const node = D().node(n, lang);
+      if (!node || !node.respuesta) return { msgs: [U().no_match], chips: nextChips("asesor") };
+      const chips = nextChips(node.salida);
+      if (n === "pagos" && HAS_PLANS && EspoPlans.cfg.payLink) chips.unshift({ label: U().pay_btn, href: EspoPlans.cfg.payLink });
+      if (n === "accesibilidad") ctx.access = true;
+      return { msgs: [node.respuesta], chips };
     }
 
+    if (id === "cats") return { msgs: [U().pick_cat], chips: catChips() };
     if (id.startsWith("cat:")) {
       const cid = id.slice(4);
-      const catName = EspoApp.catLabel(cid);
       const tours = EspoApp.tours().filter(x => x.cat === cid);
-      const lines = tours.map(x => "• " + EspoApp.tourText(x).name).join("\n");
-      const chips = tours.map(x => ({ label: EspoApp.tourText(x).name, to: "tour:" + x.id }));
-      chips.push({ label: L.see_web, filter: cid });
-      chips.push({ label: L.back, to: "exp" });
-      return { msgs: [L.list_intro.replace("{cat}", catName), lines], chips: chips };
+      return { msgs: [U().pick_tour], chips: tours.map(x => ({ label: EspoApp.tourText(x).name, to: "tour:" + x.id })).concat([{ label: U().back, to: "cats" }]) };
     }
+    if (id.startsWith("tour:")) return tourNode(id.slice(5));
+    if (id.startsWith("ta:")) { const parts = id.split(":"); return tourAnswer(parts[1], parts[2]); }
 
-    if (id.startsWith("tour:")) {
-      const tid = id.slice(5);
-      const tour = EspoApp.tours().find(x => x.id === tid);
-      const tx = EspoApp.tourText(tour);
-      ctx.tourName = tx.name; ctx.tourId = tid;
-      return {
-        msgs: [tx.summary, L.tour_q.replace("{tour}", tx.name)],
-        chips: [
-          { label: L.book_this, kind: "primary", to: "q_people" },
-          { label: L.details_web, open: tid },
-          { label: L.back, to: "exp" }
-        ]
-      };
+    /* ----- Itinerarios (QR) ----- */
+    if (id === "plans") {
+      const chips = EspoPlans.plans().map(p => ({ label: EspoPlans.name(p, lang) + " · " + P().days.replace("{n}", p.days), to: "plan:" + p.id }));
+      chips.push({ label: U().back, to: "menu" });
+      return { msgs: [P().plans_q], chips };
     }
-
-    if (id === "q_people") return {
-      msgs: [L.people_q],
-      chips: [
-        { label: L.p1, set: { people: L.p1 }, to: "q_when" },
-        { label: L.p2, set: { people: L.p2 }, to: "q_when" },
-        { label: L.p3, set: { people: L.p3 }, to: "q_when" }
-      ]
-    };
-
-    if (id === "q_when") return {
-      msgs: [L.when_q],
-      chips: [
-        { label: L.w1, set: { when: L.w1 }, to: "handoff" },
-        { label: L.w2, set: { when: L.w2 }, to: "handoff" },
-        { label: L.w3, set: { when: L.w3 }, to: "handoff" },
-        { label: L.w4, set: { when: L.w4 }, to: "handoff" }
-      ]
-    };
-
-    if (id === "handoff") {
-      const sum = [];
-      if (ctx.tourName) sum.push("*" + L.s_exp + ":* " + ctx.tourName);
-      if (ctx.people) sum.push("*" + L.s_people + ":* " + ctx.people);
-      if (ctx.when) sum.push("*" + L.s_when + ":* " + ctx.when);
-      if (ctx.access) sum.push("*" + L.s_access + "*");
-      return { msgs: [L.handoff, sum.join("\n")], chips: [
-        { label: L.open_wa, kind: "wa", wa: true },
-        { label: L.m_pay, to: "pay" }, { label: L.back, to: "menu" }
-      ] };
+    if (id.startsWith("plan:")) {
+      const plan = EspoPlans.planById(id.slice(5));
+      if (!plan) return { msgs: [P().scan_bad], chips: menuChips() };
+      ctx.planId = plan.id; ctx.tourId = null; ctx.tourName = null; ctx.tourCode = null;
+      if (plan.access) ctx.access = true;
+      const name = EspoPlans.name(plan, lang);
+      const msgs = [];
+      if (ctx.fromQR) { msgs.push(P().from_qr.replace("{plan}", name)); ctx.fromQR = false; }
+      msgs.push(P().plan_intro.replace("{plan}", name).replace("{days}", P().days.replace("{n}", plan.days)) + "\n" + planLines(plan) +
+        (plan.priceFrom ? "\n\n" + P().price_from.replace("{p}", plan.priceFrom) : ""));
+      return { msgs, chips: [{ label: P().choose, kind: "primary", to: "form" }, { label: P().pack_for, to: "pack:" + plan.id }, { label: P().others, to: "plans" }, { label: U().back, to: "menu" }] };
     }
-
-    if (id === "prices") return { msgs: [L.prices_text], chips: [
-      { label: L.m_exp, to: "exp" }, { label: L.m_book, to: "book" }, { label: L.m_pay, to: "pay" }, { label: L.back, to: "menu" } ] };
-
-    if (id === "book") return { msgs: [L.book_text], chips: [
-      { label: L.open_wa, kind: "wa", wa: true }, { label: L.m_pay, to: "pay" }, { label: L.m_exp, to: "exp" }, { label: L.back, to: "menu" } ] };
-
-    if (id === "access") return { msgs: [L.access_text], chips: [
-      { label: L.access_book, kind: "primary", set: { access: true }, to: "q_people" },
-      { label: L.open_wa, kind: "wa", wa: true, set: { access: true } }, { label: L.back, to: "menu" } ] };
-
-    if (id === "howget") return { msgs: [L.howget_text], chips: [
-      { label: L.m_book, to: "book" }, { label: L.open_wa, kind: "wa", wa: true }, { label: L.back, to: "menu" } ] };
-
-    if (id === "pay") return { msgs: [L.pay_text], chips: [
-      { label: L.m_book, to: "book" }, { label: L.open_wa, kind: "wa", wa: true }, { label: L.back, to: "menu" } ] };
-
-    if (id === "lang") return { msgs: [L.lang_text], chips: [ { label: L.back, to: "menu" } ] };
-
-    if (id === "advisor") return { msgs: [L.advisor_text], chips: [
-      { label: L.open_wa, kind: "wa", wa: true }, { label: L.back, to: "menu" } ] };
-
-    return { msgs: [L.menu_prompt], chips: menuChips() };
+    if (id.startsWith("pack:")) {
+      const plan = EspoPlans.planById(id.slice(5)); if (plan) { ctx.planId = plan.id; ctx.tourId = null; ctx.tourName = null; }
+      return EspoPlans.packFor(currentStops(), lang).then(pack => {
+        const list = packText(pack);
+        const chips = [{ label: U().book_this, kind: "primary", to: "form" }, { label: P().share, share: list.replace(/\*/g, "") }, { label: U().back, to: "menu" }];
+        chips[1].keep = chips;
+        return { msgs: [list, weatherText(pack)].filter(Boolean), chips };
+      });
+    }
+    if (id === "form") return { msgs: [P().form_intro], form: true };
+    if (id === "summary") return summaryNode();
+    return { msgs: [U().menu_prompt], chips: menuChips() };
+  }
+  function catChips() {
+    const vis = EspoApp.tours();
+    return EspoApp.categories().filter(c => c.id !== "all" && vis.some(t => t.cat === c.id))
+      .map(c => ({ label: c[lang] || c.es, to: "cat:" + c.id })).concat([{ label: U().back, to: "menu" }]);
+  }
+  function tourNode(tid, special) {
+    const base = EspoApp.tours().find(x => x.id === tid);
+    const info = D().tour(tid, lang);
+    if (!base || !info) return { msgs: [U().no_match], chips: nextChips("asesor") };
+    ctx.tourId = tid; ctx.tourName = info.nombre; ctx.tourCode = info.codigo; ctx.planId = null;
+    if (ctx.intent) { const q = ctx.intent; ctx.intent = null; if (q === "reservar") return { msgs: [P().form_intro], form: true }; return tourAnswer(tid, q); }
+    const msgs = [];
+    if (special === "compartido") {
+      const n = D().node("tour_compartido", lang) || {};
+      msgs.push("*" + info.nombre + "* · " + info.codigo + "\n" + (n.itinerario || ""));
+      if (n.precio_publico) msgs.push(U().a_price_pub.replace("{p}", n.precio_publico));
+      if (n.puntos_encuentro) msgs.push("📍 " + n.puntos_encuentro.map(p => p.lugar + " — " + D().hhmm(p.hora, lang)).join("\n📍 "));
+      if (n.operacion) msgs.push("🗓️ " + n.operacion + (n.no_opera ? "\n🚫 " + n.no_opera.join(" · ") : ""));
+    } else msgs.push(U().hub.replace("{tour}", info.nombre).replace("{code}", info.codigo));
+    return { msgs, chips: tourChips(tid) };
+  }
+  function tourChips(tid) {
+    return [
+      { label: U().book_this, kind: "primary", to: "form" },
+      { label: U().m_horarios, to: "ta:" + tid + ":horarios" }, { label: U().m_duracion, to: "ta:" + tid + ":duracion" },
+      { label: U().m_incluye, to: "ta:" + tid + ":que_incluye" }, { label: U().m_llevar, to: "ta:" + tid + ":que_llevar" },
+      { label: U().m_precios, to: "n:precios" }, { label: U().see_card, open: tid },
+      { label: U().another_tour, to: "cats" }, { label: U().back, to: "menu" }
+    ];
+  }
+  // Respuesta sobre una experiencia concreta (regla 1: si falta el dato → asesor)
+  function tourAnswer(tid, q) {
+    const i = D().tour(tid, lang); if (!i) return { msgs: [U().no_match], chips: nextChips("asesor") };
+    ctx.tourId = tid; ctx.tourName = i.nombre; ctx.tourCode = i.codigo; ctx.planId = null;
+    const msgs = [];
+    if (q === "horarios") {
+      if (!i.horario) msgs.push(U().a_tbd);
+      else msgs.push(U().a_horario.replace("{tour}", i.nombre).replace("{h}", D().fmtHorario(i.horario, lang)) + (i.horario_nota ? "\n" + i.horario_nota : ""));
+      const key = i.notas.find(n => /horario|ingreso|opera|schedule|open|horaire|uhr|horár/i.test(n)); if (key) msgs.push("ℹ️ " + key);
+    } else if (q === "duracion") {
+      msgs.push(i.dur == null ? U().a_tbd : U().a_dur.replace("{tour}", i.nombre).replace("{d}", D().fmtDur(i.dur, lang)));
+    } else if (q === "que_incluye") {
+      msgs.push(U().a_incl.replace("{tour}", i.nombre) + "\n" + i.incluye.map(x => "✅ " + x).join("\n"));
+      msgs.push((i.no_incluye.length ? U().a_noincl + " " + i.no_incluye.join(" · ") + ". " : "") + D().general("no_incluye_siempre", lang));
+    } else if (q === "que_llevar") {
+      if (i.rec.items.length) msgs.push("*" + i.rec.titulo + "*\n" + i.rec.items.join("\n"));
+      else msgs.push(D().general("que_llevar", lang));
+      if (ctx.date && HAS_PLANS && EspoPlans.forecastFor) {
+        return EspoPlans.forecastFor(tid, ctx.date).then(f => ({ msgs: msgs.concat(forecastLines(f)), chips: tourChips(tid) }));
+      }
+    }
+    return { msgs, chips: tourChips(tid) };
+  }
+  function forecastLines(f) {
+    if (!f) return [];
+    const out = [U().forecast + " " + EspoPlans.fcText(f)];
+    if (f.rain >= 40) out.push(U().rain);
+    if (f.uv >= 8) out.push(U().uv);
+    if (f.tmin <= 12) out.push(U().cold);
+    return [out.join("\n")];
   }
 
-  /* ---------- Compose WhatsApp message ---------- */
+  /* ---------- Texto libre ---------- */
+  // Palabras genéricas que no identifican una experiencia (evita "quiero reservar" → "yoga en reserva natural")
+  const STOP = ["tour", "experiencia", "experience", "visita", "parque", "city", "cata", "full", "day", "reserva", "reservas", "natural",
+    "naturales", "colombia", "quindio", "local", "locales", "mundo", "world", "total", "coffee", "cafe", "plato", "sesion", "tradicional",
+    "experiencial", "especial", "origen", "bienestar", "conexion", "manjares", "senderismo", "ecosistema", "unico", "aficionados", "trek"];
+  const esc_re = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const hasWord = (t, w) => new RegExp("(^|[^a-z0-9ñ])" + esc_re(w) + "([^a-z0-9ñ]|$)").test(t);   // palabra completa
+  const hasStem = (t, w) => new RegExp("(^|[^a-z0-9ñ])" + esc_re(w)).test(t);                     // inicio de palabra
+  function freeText(q) {
+    if (!D() || !D().ready()) { const no = () => noMatch(q); D() ? D().load().then(() => freeText(q), no) : no(); return; }
+    const t = norm(q);
+    // 1) ¿menciona una experiencia? (palabras completas y distintivas del nombre)
+    let best = null, bestScore = 0;
+    EspoApp.tours().forEach(x => {
+      const words = norm(x.name + " " + EspoApp.tourText(x).name).split(/[^a-z0-9ñ]+/).filter(w => w.length > 4 && STOP.indexOf(w) < 0);
+      const s = words.filter((w, i, a) => a.indexOf(w) === i).reduce((a, w) => a + (hasWord(t, w) ? w.length : 0), 0);
+      if (s > bestScore) { bestScore = s; best = x.id; }
+    });
+    // 2) ¿qué pregunta? (palabras clave + pregunta_tipo de yenny.json, salvo las frases genéricas del tour compartido)
+    let topic = null, tScore = 0;
+    Object.keys(KW).forEach(id => {
+      let kws = KW[id].slice();
+      const node = id === "compartido" ? null : D().node(id, lang);
+      if (node && node.pregunta_tipo) kws = kws.concat(node.pregunta_tipo);
+      const s = kws.reduce((a, k) => { const nk = norm(k).replace(/[¿?¡!]/g, "").trim(); return a + (nk && hasStem(t, nk) ? nk.length : 0); }, 0);
+      if (s > tScore) { tScore = s; topic = id; }
+    });
+    if (best && bestScore >= 5) {
+      if (topic && TOUR_Q.indexOf(topic) >= 0) { go("ta:" + best + ":" + topic); return; }
+      const info = D().tour(best, lang);
+      Object.assign(ctx, { tourId: best, tourName: info ? info.nombre : EspoApp.tourText(EspoApp.tours().find(x => x.id === best)).name, tourCode: info ? info.codigo : "", planId: null, intent: null });
+      if (topic === "precios" || topic === "reservar") { go("n:" + topic); return; }
+      go("tour:" + best); return;
+    }
+    if (topic) { go("n:" + topic); return; }
+    noMatch(q);
+  }
+  function noMatch(q) {
+    const waMsg = U().wa_q + " " + q;
+    botSay([U().no_match]).then(() => renderChips([{ label: U().open_wa, kind: "wa", wa: true, waMsg }, { label: U().back, to: "menu" }]));
+  }
+
+  /* ---------- Escanear QR → itinerario ---------- */
+  function scanQR() {
+    const T = P();
+    EspoQR.scan({ title: T.scan_title, hint: T.scan_hint, file: T.scan_file, nocam: T.scan_nocam, bad: T.scan_bad, close: T.scan_close }).then(text => {
+      if (!text) { renderChips(menuChips()); return; }
+      const r = EspoPlans.parseQR(text);
+      if (!r) { botSay([T.scan_bad]).then(() => renderChips(menuChips())); return; }
+      if (r.type === "plan") { ctx.planId = r.id; ctx.src = r.src || "QR"; ctx.fromQR = true; trackVisit(); go("plan:" + r.id); }
+      else if (r.type === "tour") { ctx.src = r.src || "QR"; go("tour:" + r.id); }
+      else { const q = r.type === "code" ? "code=" + encodeURIComponent(r.code) : r.query; botSay([T.scan_trip]).then(() => { location.href = "viaje.html?" + q; }); }
+    });
+  }
+
+  /* ---------- Formulario de datos (dentro del chat) ---------- */
+  function renderForm() {
+    const T = P();
+    quick.innerHTML = "";
+    const today = EspoPlans.localISO();
+    const guide = ctx.guide || lang;
+    const f = el("form", "espo-form");
+    f.setAttribute("autocomplete", "on");
+    f.innerHTML =
+      `<label>${esc(T.f_name)}<input name="name" required maxlength="60" autocomplete="name" value="${esc(ctx.name || "")}"></label>
+       <div class="espo-form__row">
+         <label>${esc(T.f_date)}<input name="date" type="date" min="${today}" value="${esc(ctx.date || "")}"></label>
+         <label>${esc(T.f_people)}<input name="people" type="number" min="1" max="60" value="${esc(ctx.party || 2)}"></label>
+       </div>
+       <label>${esc(T.f_hotel)}<input name="hotel" maxlength="80" value="${esc(ctx.hotel || "")}"></label>
+       <label>${esc(U().f_guide)}<select name="guide">${["es", "en", "fr", "de", "pt", "it"].map(c => `<option value="${c}"${c === guide ? " selected" : ""}>${LANGNAME[c]}</option>`).join("")}</select></label>
+       <label>${esc(T.f_diet)}<input name="diet" maxlength="80" value="${esc(ctx.diet || "")}"></label>
+       <label>${esc(T.f_notes)}<input name="notes" maxlength="160" value="${esc(ctx.notes || "")}"></label>
+       <label class="espo-form__chk"><input type="checkbox" name="access"${ctx.access ? " checked" : ""}> ${esc(T.f_access)}</label>
+       <label class="espo-form__chk"><input type="checkbox" name="kit"${ctx.kit ? " checked" : ""}> ${esc(T.f_kit)}</label>
+       <label class="espo-form__chk espo-form__consent"><input type="checkbox" name="consent"${ctx.consent ? " checked" : ""}> <span>${esc(U().consent).replace("{link}", `<a href="privacidad.html" target="_blank" rel="noopener">${esc(U().consent_link)}</a>`)}</span></label>
+       <p class="espo-form__err" hidden>${esc(T.f_req)}</p>
+       <button class="btn btn--primary btn--sm" type="submit">${esc(T.f_send)}</button>`;
+    f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = (n) => (f.elements[n].value || "").trim();
+      const err = f.querySelector(".espo-form__err");
+      if (!v("name")) { err.textContent = T.f_req; err.hidden = false; f.elements.name.focus(); return; }
+      if (!f.elements.consent.checked) { err.textContent = U().consent_req; err.hidden = false; f.elements.consent.focus(); return; }
+      Object.assign(ctx, { consent: true, name: v("name"), date: v("date"), party: parseInt(v("people"), 10) || 1, hotel: v("hotel"), guide: v("guide"),
+        diet: v("diet"), notes: v("notes"), access: f.elements.access.checked, kit: f.elements.kit.checked });
+      f.remove();
+      addBubble(esc(ctx.name + " · " + ctx.party + " · " + (ctx.date ? fmtDate(ctx.date) : T.flexible)), "user");
+      go("summary");
+    });
+    body.appendChild(f); scrollDown();
+    setTimeout(() => { try { f.elements.name.focus({ preventScroll: true }); } catch (e) {} }, 50);
+  }
+
+  /* ---------- Resumen + WhatsApp ---------- */
+  function fmtDate(iso) { try { return new Date(iso + "T12:00:00").toLocaleDateString(lang, { weekday: "short", day: "numeric", month: "short", year: "numeric" }); } catch (e) { return iso; } }
+  function planLines(plan) { return plan.stops.map(s => (plan.days > 1 ? P().day + " " + s.d + " · " : "") + s.t + " — " + EspoPlans.stopTitle(s, lang)).join("\n"); }
+  function currentStops() {
+    if (ctx.planId) { const plan = EspoPlans.planById(ctx.planId); return ctx.date ? EspoPlans.planToItinerary(plan, ctx.date) : plan.stops; }
+    if (ctx.tourId) return [{ tour: ctx.tourId, tourId: ctx.tourId, date: ctx.date || "", time: "09:00", title: ctx.tourName }];
+    return [];
+  }
+  function packText(pack) {
+    let s = "*" + P().pack_title + "*\n" + pack.items.map(x => (x.i ? x.i + " " : "") + x.label).join("\n");
+    if (pack.tips.length) s += "\n\n*" + P().pack_tips + "*\n" + pack.tips.map(x => "• " + x).join("\n");
+    return s;
+  }
+  function weatherText(pack) {
+    const rows = pack.days.filter(d => d.fc);
+    if (rows.length) return "*" + P().fc_title + "*\n" + rows.map(d => "• " + (d.date ? fmtDate(d.date) + " · " : "") + d.title + "\n   " + EspoPlans.fcText(d.fc)).join("\n");
+    return pack.days.length ? P().fc_na : "";
+  }
+  function provisionalLink() {
+    if (!ctx.date || !(ctx.planId || ctx.tourId)) return "";
+    const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let code = "PRE-"; for (let i = 0; i < 5; i++) code += c[Math.floor(Math.random() * c.length)];
+    const itin = ctx.planId ? EspoPlans.planToItinerary(EspoPlans.planById(ctx.planId), ctx.date)
+      : [{ date: ctx.date, time: "09:00", tourId: ctx.tourId, title: ctx.tourName, maps: "" }];
+    const booking = { code, lang, name: ctx.name, party: ctx.party, status: "pendiente", region: "Eje Cafetero · Quindío",
+      host: { name: "Espontáneos Travel", phone: "573187200023" }, guide: { name: "—", langs: [ctx.guide || lang] },
+      hotel: { name: ctx.hotel || "", area: "Quindío" }, prefs: { accessible: !!ctx.access, diet: ctx.diet || "" }, itinerary: itin };
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(booking)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    return location.origin + location.pathname.replace(/[^/]*$/, "") + "viaje.html?d=" + b64;
+  }
+  function summaryNode() {
+    const T = P();
+    return EspoPlans.packFor(currentStops(), lang).then(pack => {
+      const link = provisionalLink(); ctx.link = link;
+      if (!ctx.leadId) ctx.leadId = EspoPlans.newLeadId();
+      if (ctx.consent) EspoPlans.sendLead(leadData("resumen"));      // solo con autorización (Ley 1581)
+      const what = ctx.planId ? EspoPlans.name(EspoPlans.planById(ctx.planId), lang) : (ctx.tourName + (ctx.tourCode ? " (" + ctx.tourCode + ")" : ""));
+      const sum = [
+        "*" + (ctx.planId ? T.wa_plan : T.wa_tour) + "* " + esc(what || "—"),
+        "*" + T.wa_date + "* " + (ctx.date ? fmtDate(ctx.date) : T.flexible),
+        "*" + T.wa_people + "* " + ctx.party,
+        "*" + U().wa_guide + "* " + (LANGNAME[ctx.guide] || LANGNAME[lang])
+      ];
+      if (ctx.hotel) sum.push("*" + T.wa_hotel + "* " + esc(ctx.hotel));
+      if (ctx.access) sum.push(T.wa_access);
+      if (ctx.diet) sum.push("*" + T.wa_diet + "* " + esc(ctx.diet));
+      if (ctx.kit) sum.push(T.wa_kit);
+      const chips = [{ label: T.send_wa, kind: "wa", wa: true }];
+      if (link) chips.push({ label: T.prov, href: link });
+      chips.push({ label: T.share, share: packText(pack).replace(/\*/g, "") });
+      chips.push({ label: U().m_pagos, to: "n:pagos" }, { label: U().back, to: "menu" });
+      chips.forEach(c => { if (!c.to) c.keep = chips; });
+      return { msgs: [T.sum_ready.replace("{name}", esc(ctx.name)), sum.join("\n"), packText(pack), weatherText(pack)].filter(Boolean), chips };
+    });
+  }
+
+  /* ---------- Clientes → Google Sheets / backend (no hace nada si no está configurado) ---------- */
+  function planLabel() { const p = ctx.planId && EspoPlans.planById(ctx.planId); return p ? EspoPlans.name(p, "es") + " (" + p.id + ")" : ""; }
+  function leadData(stage) {
+    return { stage, leadId: ctx.leadId || "", plan: planLabel(), tour: ctx.tourName ? ctx.tourName + (ctx.tourCode ? " (" + ctx.tourCode + ")" : "") : "",
+      name: ctx.name || "", date: ctx.date || "", party: ctx.party || "", hotel: ctx.hotel || "", access: !!ctx.access, diet: ctx.diet || "",
+      notes: [ctx.notes, ctx.guide ? "Guía: " + (LANGNAME[ctx.guide] || ctx.guide) : ""].filter(Boolean).join(" · "), kit: !!ctx.kit,
+      src: ctx.src || "web", lang, link: ctx.link || "" };
+  }
+  function trackVisit() {
+    const key = "esp_v_" + ctx.planId + "_" + ctx.src;
+    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, "1"); } catch (e) {}
+    EspoPlans.sendLead({ stage: "qr_visita", plan: planLabel(), src: ctx.src, lang });
+  }
+  // Regla 5: tour + código, personas, fecha, hotel e idioma
   function composeWA() {
-    const parts = [L.wa_lead, ""];
-    if (ctx.tourName) parts.push(L.wa_exp + " " + ctx.tourName);
-    if (ctx.people) parts.push(L.wa_people + " " + ctx.people);
-    if (ctx.when) parts.push(L.wa_when + " " + ctx.when);
-    if (ctx.access) parts.push(L.wa_access);
-    parts.push(L.wa_lang + " " + (LANGNAME[lang] || "Español"));
+    if (!HAS_PLANS || !ctx.name) {
+      const parts = [U().wa_default];
+      if (ctx.tourName) parts.push("", U().wa_tour + " " + ctx.tourName + (ctx.tourCode ? " (" + ctx.tourCode + ")" : ""));
+      return parts.join("\n");
+    }
+    const T = P(); const parts = [ctx.planId ? T.wa_lead : U().wa_lead_tour, ""];
+    if (ctx.planId) { const plan = EspoPlans.planById(ctx.planId); parts.push(T.wa_plan + " " + EspoPlans.name(plan, lang) + " (" + plan.days + "d · " + plan.id + ")"); }
+    else if (ctx.tourName) parts.push(T.wa_tour + " " + ctx.tourName + (ctx.tourCode ? " (" + ctx.tourCode + ")" : ""));
+    parts.push(T.wa_name + " " + ctx.name);
+    parts.push(T.wa_date + " " + (ctx.date ? ctx.date + " (" + fmtDate(ctx.date) + ")" : T.flexible));
+    parts.push(T.wa_people + " " + ctx.party);
+    if (ctx.hotel) parts.push(T.wa_hotel + " " + ctx.hotel);
+    parts.push(U().wa_guide + " " + (LANGNAME[ctx.guide] || LANGNAME[lang]));
+    if (ctx.access) parts.push(T.wa_access);
+    if (ctx.diet) parts.push(T.wa_diet + " " + ctx.diet);
+    if (ctx.notes) parts.push(T.wa_notes + " " + ctx.notes);
+    if (ctx.kit) parts.push(T.wa_kit);
+    if (ctx.src) parts.push(T.wa_src + " " + ctx.src);
+    parts.push(T.wa_lang + " " + (LANGNAME[lang] || "Español"));
+    if (ctx.link) parts.push("", T.wa_link, ctx.link);
     return parts.join("\n");
   }
 
-  /* ---------- Language change ---------- */
+  /* ---------- Cambio de idioma ---------- */
   document.addEventListener("espo:lang", (e) => {
-    const newLang = e.detail;
-    if (newLang === lang) return;
-    lang = newLang; refreshStatic();
-    if (opened && started) { for (const k in ctx) delete ctx[k]; start(); }
-    else { started = false; }
+    const newLang = e.detail; if (newLang === lang) return;
+    lang = newLang; if (!launchTxt) return;      // idioma fijado antes de construir el widget
+    refreshStatic();
+    if (opened && started) { for (const k in ctx) delete ctx[k]; start(); } else started = false;
   });
 
-  /* ---------- Boot ---------- */
-  function boot() { if (window.EspoApp) lang = EspoApp.getLang(); build(); }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-  else boot();
+  /* ---------- Arranque (QR impreso: index.html?plan=ID&src=aliado) ---------- */
+  function startAt(id) {
+    opened = true; started = true; panel.classList.add("open"); launch.classList.add("hide");
+    if (badge) badge.style.display = "none";
+    refreshStatic(); body.innerHTML = "";
+    botSay([greeting()]).then(() => go(id));
+  }
+  window.EspoBot = {
+    openPlan: (id) => { if (!panel) return; ctx.planId = id; startAt("plan:" + id); },
+    openTour: (id) => { if (!panel) return; startAt("tour:" + id); }
+  };
+  function boot() {
+    if (window.EspoApp) lang = EspoApp.getLang();
+    build();
+    const qs = new URLSearchParams(location.search);
+    const src = (qs.get("src") || "").slice(0, 40);
+    const whenReady = (fn) => { if (D() && !D().ready()) D().load().then(fn, fn); else fn(); };
+    if (HAS_PLANS && EspoPlans.planById(qs.get("plan"))) {
+      const plan = EspoPlans.planById(qs.get("plan"));
+      ctx.planId = plan.id; ctx.src = src || "QR"; ctx.fromQR = true; trackVisit();
+      whenReady(() => setTimeout(() => startAt("plan:" + plan.id), 400));
+    } else if (qs.get("tour") && EspoApp.tours().some(x => x.id === qs.get("tour"))) {
+      ctx.src = src || "QR";
+      whenReady(() => setTimeout(() => startAt("tour:" + qs.get("tour")), 400));
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();

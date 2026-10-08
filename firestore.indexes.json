@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "tarifas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "vigencia", "order": "ASCENDING" },
+        { "fieldPath": "dmcId", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

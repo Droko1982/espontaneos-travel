@@ -1,0 +1,536 @@
+rules_version = '2';
+
+// ==========================================================================
+// Espontáneos Travel — Reglas de seguridad de Cloud Firestore
+// Principio: mínimo privilegio. Lo que no está permitido aquí, está prohibido.
+//
+// Roles (users/{uid}.rol): 'admin' | 'asesor' | 'dmc'
+// Estado (users/{uid}.estado): 'pendiente' | 'activo' | 'bloqueado'
+// Activo = estado 'activo' + correo verificado (token email_verified).
+// "Staff" = admin o asesor activo. "DMC" = usuario de agencia activo, con dmcId
+// asignado y cuya agencia (dmcs/{dmcId}) está activa.
+//
+// Datos internos (notas del equipo, asesor asignado…) viven en colecciones
+// *_privado que solo lee el staff. Lo público de una reserva vive en
+// reservas_publicas/{codigo} (lectura por código exacto, sin listar).
+//
+// Publicar: Consola de Firebase → Firestore Database → Reglas → pegar todo → Publicar.
+// Guía completa: docs/BACKEND.md
+// ==========================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Rutas ----------
+    function userPath(uid) { return /databases/$(database)/documents/users/$(uid); }
+    function dmcPath(id) { return /databases/$(database)/documents/dmcs/$(id); }
+    function clientePath(id) { return /databases/$(database)/documents/clientes/$(id); }
+    function reservaPath(id) { return /databases/$(database)/documents/reservas/$(id); }
+    function pagosPath() { return /databases/$(database)/documents/config/pagos; }
+
+    // ---------- ¿Quién hace la petición? ----------
+    function isSignedIn() { return request.auth != null; }
+    function hasProfile() { return isSignedIn() && exists(userPath(request.auth.uid)); }
+    function me() { return get(userPath(request.auth.uid)).data; }
+    function emailVerified() { return request.auth.token.email_verified == true; }
+    function isActive() { return hasProfile() && emailVerified() && me().get('estado', '') == 'activo'; }
+    function isAdmin() { return isActive() && me().get('rol', '') == 'admin'; }
+    function isStaff() { return isActive() && (me().get('rol', '') in ['admin', 'asesor']); }
+    function myDmc() { return me().get('dmcId', null); }
+    function dmcActiva(id) { return exists(dmcPath(id)) && get(dmcPath(id)).data.get('activo', false) == true; }
+    function isDmc() {
+      return isActive()
+        && me().get('rol', '') == 'dmc'
+        && (myDmc() is string)
+        && myDmc().size() > 0
+        && dmcActiva(myDmc());
+    }
+
+    // ---------- Ayudas de validación ----------
+    function optStr(d, k, n) { return !(k in d) || ((d.get(k, null) is string) && d.get(k, '').size() <= n); }
+    function optBool(d, k) { return !(k in d) || (d.get(k, null) is bool); }
+    function optId(d, k) { return d.get(k, null) == null || ((d.get(k, null) is string) && d.get(k, '').size() <= 128); }
+    function strMax(v, n) { return (v is string) && v.size() <= n; }
+    function unchanged(k) { return request.resource.data.get(k, null) == resource.data.get(k, null); }
+    function isDay(v) { return (v is string) && v.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}'); }
+    function optDay(d, k) { return !(k in d) || d.get(k, '') == '' || isDay(d.get(k, '')); }
+    function phoneOk(v) { return (v is string) && v.matches('[0-9]{0,20}'); }
+    // Enlace vacío o https sin espacios (máx. 500)
+    function urlOk(v) { return v == '' || ((v is string) && v.size() <= 500 && v.matches('https://[^[:space:]<>"]+')); }
+    // Toda escritura debe sellar 'actualizado' con la hora del servidor; 'creado' solo al crear.
+    function stamped(d) { return d.get('actualizado', null) == request.time; }
+    function created(d) { return d.get('creado', null) == request.time; }
+    function wasCreated(d) { return d.get('creado', null) is timestamp; }
+    // Listas: Firestore no tiene bucles, así que se revisan elemento por elemento.
+    function strAt(l, i, n) { return l.size() <= i || ((l[i] is string) && l[i].size() <= n); }
+    function strs10(l, i, n) {
+      return strAt(l, i, n) && strAt(l, i + 1, n) && strAt(l, i + 2, n) && strAt(l, i + 3, n) && strAt(l, i + 4, n)
+        && strAt(l, i + 5, n) && strAt(l, i + 6, n) && strAt(l, i + 7, n) && strAt(l, i + 8, n) && strAt(l, i + 9, n);
+    }
+    function strList10(v, n) { return (v is list) && v.size() <= 10 && strs10(v, 0, n); }
+    function strList50(v, n) {
+      return (v is list) && v.size() <= 50
+        && strs10(v, 0, n) && strs10(v, 10, n) && strs10(v, 20, n) && strs10(v, 30, n) && strs10(v, 40, n);
+    }
+
+    // ======================================================================
+    // users/{uid} — cuentas del portal
+    // Auto-registro: SOLO rol 'dmc' + estado 'pendiente' + sin dmcId.
+    // Solo un admin cambia rol, estado o dmcId. Cada quien edita su nombre/WhatsApp/idiomas.
+    // ======================================================================
+    function validSolicitudAcceso(s) {
+      return (s is map)
+        && s.keys().hasOnly(['agencia', 'nit', 'pais', 'ciudad', 'contacto', 'telefono', 'web', 'mensaje', 'aceptaDatos', 'versionPolitica', 'idioma'])
+        && (s.get('agencia', null) is string) && s.agencia.size() > 0 && s.agencia.size() <= 160
+        && optStr(s, 'nit', 40) && optStr(s, 'pais', 60) && optStr(s, 'ciudad', 80)
+        && optStr(s, 'contacto', 120) && optStr(s, 'telefono', 40) && optStr(s, 'web', 200)
+        && optStr(s, 'mensaje', 1000) && optStr(s, 'versionPolitica', 20) && optStr(s, 'idioma', 5)
+        && s.get('aceptaDatos', false) == true;
+    }
+
+    function validUser(d) {
+      return d.keys().hasOnly(['email', 'nombre', 'rol', 'dmcId', 'estado', 'whatsapp', 'idiomas', 'solicitud', 'creado', 'actualizado'])
+        && d.keys().hasAll(['email', 'nombre', 'rol', 'estado', 'creado', 'actualizado'])
+        && (d.email is string) && d.email.size() <= 200
+        && (d.nombre is string) && d.nombre.size() > 0 && d.nombre.size() <= 120
+        && (d.rol in ['admin', 'asesor', 'dmc'])
+        && (d.estado in ['pendiente', 'activo', 'bloqueado'])
+        && (d.get('dmcId', null) == null || ((d.dmcId is string) && d.dmcId.size() > 0 && d.dmcId.size() <= 60))
+        && (d.rol != 'dmc' || d.estado != 'activo' || (d.get('dmcId', null) is string))
+        && optStr(d, 'whatsapp', 30)
+        && (!('idiomas' in d) || strList10(d.idiomas, 20))
+        && (!('solicitud' in d) || validSolicitudAcceso(d.solicitud))
+        && wasCreated(d)
+        && stamped(d);
+    }
+
+    match /users/{uid} {
+      allow get: if isSignedIn() && (request.auth.uid == uid || isStaff());
+      allow list: if isStaff();
+      allow create: if validUser(request.resource.data)
+                    && created(request.resource.data)
+                    && ((isSignedIn()
+                         && request.auth.uid == uid
+                         && request.resource.data.rol == 'dmc'
+                         && request.resource.data.estado == 'pendiente'
+                         && request.resource.data.get('dmcId', null) == null
+                         && request.resource.data.email == request.auth.token.email
+                         && ('solicitud' in request.resource.data))
+                        || isAdmin());
+      allow update: if validUser(request.resource.data)
+                    && unchanged('creado')
+                    && (isAdmin()
+                        || (isSignedIn()
+                            && request.auth.uid == uid
+                            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nombre', 'whatsapp', 'idiomas', 'actualizado'])));
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // dmcs/{dmcId} — agencias aliadas (la agencia lee su propio documento)
+    // dmcs_privado/{dmcId} — notas internas del equipo sobre la agencia (solo staff)
+    // ======================================================================
+    function validDmc(d) {
+      return d.keys().hasOnly(['nombre', 'nit', 'pais', 'ciudad', 'contacto', 'email', 'telefono', 'activo', 'creado', 'actualizado'])
+        && d.keys().hasAll(['nombre', 'activo', 'creado', 'actualizado'])
+        && (d.nombre is string) && d.nombre.size() > 0 && d.nombre.size() <= 160
+        && optStr(d, 'nit', 40) && optStr(d, 'pais', 60) && optStr(d, 'ciudad', 80) && optStr(d, 'contacto', 120)
+        && optStr(d, 'email', 200) && optStr(d, 'telefono', 40)
+        && (d.activo is bool)
+        && wasCreated(d)
+        && stamped(d);
+    }
+
+    match /dmcs/{dmcId} {
+      allow get: if isStaff() || (isDmc() && myDmc() == dmcId);
+      allow list: if isStaff();
+      allow create: if isAdmin() && dmcId.matches('[a-z0-9-]{2,60}') && validDmc(request.resource.data) && created(request.resource.data);
+      allow update: if isAdmin() && validDmc(request.resource.data) && unchanged('creado');
+      allow delete: if isAdmin();
+    }
+
+    match /dmcs_privado/{dmcId} {
+      allow read: if isStaff();
+      allow create, update: if isAdmin()
+                            && request.resource.data.keys().hasOnly(['notas', 'actualizado'])
+                            && optStr(request.resource.data, 'notas', 2000)
+                            && stamped(request.resource.data)
+                            && existsAfter(dmcPath(dmcId));
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // tarifas/{id} — tarifas netas por vigencia (año)
+    // dmcId == null → tarifa general DMC · dmcId == 'x' → tarifa especial de la agencia x.
+    // 'notas' las VEN las agencias. Una agencia consulta con DOS consultas:
+    // (vigencia == año, dmcId == null) y (vigencia == año, dmcId == suDmc).
+    // ======================================================================
+    function validTarifa(d) {
+      return d.keys().hasOnly(['vigencia', 'codigo', 'tour_id', 'nombre', 'temporada', 'pax_desde', 'pax_hasta', 'moneda', 'tarifa_neta', 'dmcId', 'notas', 'actualizado'])
+        && d.keys().hasAll(['vigencia', 'codigo', 'tour_id', 'nombre', 'temporada', 'pax_desde', 'pax_hasta', 'moneda', 'tarifa_neta', 'dmcId', 'notas', 'actualizado'])
+        && (d.vigencia is int) && d.vigencia >= 2020 && d.vigencia <= 2100
+        && (d.codigo is string) && d.codigo.size() <= 20
+        && (d.tour_id is string) && d.tour_id.size() <= 40
+        && (d.codigo.size() > 0 || d.tour_id.size() > 0)
+        && (d.nombre is string) && d.nombre.size() > 0 && d.nombre.size() <= 200
+        && (d.temporada is string) && d.temporada.size() <= 40
+        && (d.pax_desde is int) && (d.pax_hasta is int)
+        && d.pax_desde >= 1 && d.pax_hasta >= d.pax_desde && d.pax_hasta <= 999
+        && (d.moneda is string) && d.moneda.matches('[A-Z]{3}')
+        && (d.tarifa_neta is number) && d.tarifa_neta >= 0
+        && (d.dmcId == null || ((d.dmcId is string) && d.dmcId.size() > 0 && d.dmcId.size() <= 60))
+        && (d.notas is string) && d.notas.size() <= 500
+        && stamped(d);
+    }
+
+    match /tarifas/{id} {
+      allow read: if isStaff()
+                  || (isDmc() && (resource.data.dmcId == null || resource.data.dmcId == myDmc()));
+      allow create, update: if isAdmin() && validTarifa(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // condiciones/{vigencia}_{tour_id} — condiciones y suplementos para agencias
+    // ======================================================================
+    function validCondicion(d) {
+      return d.keys().hasOnly(['vigencia', 'tour_id', 'codigo', 'nombre', 'notas_agencia', 'actualizado'])
+        && d.keys().hasAll(['vigencia', 'tour_id', 'notas_agencia', 'actualizado'])
+        && (d.vigencia is int) && d.vigencia >= 2020 && d.vigencia <= 2100
+        && (d.tour_id is string) && d.tour_id.matches('[A-Za-z0-9_-]{1,40}')
+        && optStr(d, 'codigo', 20) && optStr(d, 'nombre', 200)
+        && strList50(d.notas_agencia, 1000)
+        && stamped(d);
+    }
+
+    match /condiciones/{id} {
+      allow read: if isStaff() || isDmc();
+      allow create, update: if isAdmin()
+                            && validCondicion(request.resource.data)
+                            && id == string(request.resource.data.vigencia) + '_' + request.resource.data.tour_id;
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // clientes/{id} — CRM de viajeros (Ley 1581 de 2012: autorización obligatoria)
+    // Lo que hay aquí lo puede leer la agencia dueña (dmcId). Las notas internas,
+    // el asesor asignado y las etiquetas van en clientes_privado/{id} (solo staff).
+    // La autorización se sella al crear (hora del servidor + quien la registra) y no cambia;
+    // si el titular la revoca, se elimina el cliente (staff).
+    // ======================================================================
+    function validConsent(c) {
+      return (c is map)
+        && c.keys().hasOnly(['habeasData', 'fecha', 'version', 'medio', 'registradoPor'])
+        && c.keys().hasAll(['habeasData', 'fecha', 'version', 'registradoPor'])
+        && c.habeasData == true
+        && (c.fecha is timestamp)
+        && (c.version is string) && c.version.size() <= 20
+        && optStr(c, 'medio', 20)
+        && (c.registradoPor is string) && c.registradoPor.size() <= 128;
+    }
+
+    function validCliente(d) {
+      return d.keys().hasOnly(['nombre', 'email', 'telefono', 'pais', 'idioma', 'origen', 'dmcId', 'consentimiento', 'notas', 'creadoPor', 'creado', 'actualizado'])
+        && d.keys().hasAll(['nombre', 'origen', 'dmcId', 'consentimiento', 'creadoPor', 'creado', 'actualizado'])
+        && (d.nombre is string) && d.nombre.size() > 0 && d.nombre.size() <= 120
+        && optStr(d, 'email', 200) && optStr(d, 'telefono', 40) && optStr(d, 'pais', 60)
+        && optStr(d, 'idioma', 5) && optStr(d, 'notas', 3000)
+        && (d.creadoPor is string) && d.creadoPor.size() <= 128
+        && (d.origen in ['web', 'qr', 'dmc', 'referido', 'whatsapp'])
+        && (d.dmcId == null || ((d.dmcId is string) && d.dmcId.size() <= 60))
+        && validConsent(d.consentimiento)
+        && wasCreated(d)
+        && stamped(d);
+    }
+
+    match /clientes/{id} {
+      allow read: if isStaff() || (isDmc() && resource.data.dmcId == myDmc());
+      allow create: if validCliente(request.resource.data)
+                    && created(request.resource.data)
+                    && request.resource.data.creadoPor == request.auth.uid
+                    && request.resource.data.consentimiento.fecha == request.time
+                    && request.resource.data.consentimiento.registradoPor == request.auth.uid
+                    && (isStaff()
+                        || (isDmc()
+                            && request.resource.data.dmcId == myDmc()
+                            && request.resource.data.origen == 'dmc'));
+      allow update: if validCliente(request.resource.data)
+                    && unchanged('creado') && unchanged('creadoPor') && unchanged('consentimiento')
+                    && (isStaff()
+                        || (isDmc()
+                            && resource.data.dmcId == myDmc()
+                            && request.resource.data.diff(resource.data).affectedKeys()
+                                 .hasOnly(['nombre', 'email', 'telefono', 'pais', 'idioma', 'notas', 'actualizado'])));
+      allow delete: if isStaff();
+    }
+
+    match /clientes_privado/{id} {
+      allow read: if isStaff();
+      allow create, update: if isStaff()
+                            && request.resource.data.keys().hasOnly(['asesorId', 'notasInternas', 'etiquetas', 'actualizado'])
+                            && optId(request.resource.data, 'asesorId')
+                            && optStr(request.resource.data, 'notasInternas', 3000)
+                            && (!('etiquetas' in request.resource.data) || strList10(request.resource.data.etiquetas, 40))
+                            && stamped(request.resource.data)
+                            && existsAfter(clientePath(id));
+      allow delete: if isStaff();
+    }
+
+    // ======================================================================
+    // reservas/{codigo} — reserva INTERNA (staff y agencia dueña). Datos del viajero,
+    // preferencias, pago y vínculos internos. El código es aleatorio de 10+ caracteres.
+    // ======================================================================
+    function numOrNull(v) { return v == null || ((v is number) && v >= 0 && v <= 1000000000); }
+    function prefsOk(m) {
+      return (m is map) && m.keys().hasOnly(['accessible', 'babySeat', 'diet'])
+        && optBool(m, 'accessible') && optBool(m, 'babySeat') && optStr(m, 'diet', 120);
+    }
+    function pagoOk(m) {
+      return (m is map) && m.keys().hasOnly(['anticipo', 'saldo', 'moneda', 'enlace'])
+        && numOrNull(m.get('anticipo', null)) && numOrNull(m.get('saldo', null))
+        && (!('moneda' in m) || ((m.moneda is string) && m.moneda.matches('[A-Z]{3}')))
+        && urlOk(m.get('enlace', ''));
+    }
+
+    function validReserva(codigo, d) {
+      return codigo.matches('[A-Z0-9]{10,24}')
+        && d.keys().hasOnly(['code', 'name', 'nombrePublico', 'lang', 'party', 'phone', 'prefs', 'pago', 'clienteId', 'dmcId', 'asesorId', 'solicitudId', 'estado', 'fechaInicio', 'fechaFin', 'actividades', 'hotelNombre', 'creadoPor', 'creado', 'actualizado'])
+        && d.keys().hasAll(['code', 'name', 'estado', 'dmcId', 'creadoPor', 'creado', 'actualizado'])
+        && d.code == codigo
+        && (d.name is string) && d.name.size() > 0 && d.name.size() <= 120
+        && optStr(d, 'nombrePublico', 60) && optStr(d, 'lang', 5) && optStr(d, 'hotelNombre', 120)
+        && (!('phone' in d) || phoneOk(d.phone))
+        && (!('party' in d) || ((d.party is int) && d.party >= 1 && d.party <= 500))
+        && (!('prefs' in d) || prefsOk(d.prefs))
+        && (!('pago' in d) || pagoOk(d.pago))
+        && (d.dmcId == null || ((d.dmcId is string) && d.dmcId.size() <= 60))
+        && optId(d, 'clienteId') && optId(d, 'asesorId') && optId(d, 'solicitudId')
+        && (d.estado in ['borrador', 'pendiente', 'confirmada', 'en_curso', 'finalizada', 'cancelada'])
+        && optDay(d, 'fechaInicio') && optDay(d, 'fechaFin')
+        && (!('actividades' in d) || ((d.actividades is int) && d.actividades >= 0 && d.actividades <= 25))
+        && (d.creadoPor is string) && d.creadoPor.size() <= 128
+        && wasCreated(d)
+        && stamped(d);
+    }
+
+    match /reservas/{codigo} {
+      allow read: if isStaff() || (isDmc() && resource.data.dmcId == myDmc());
+      allow create: if isStaff()
+                    && validReserva(codigo, request.resource.data)
+                    && created(request.resource.data)
+                    && request.resource.data.creadoPor == request.auth.uid;
+      allow update: if isStaff()
+                    && validReserva(codigo, request.resource.data)
+                    && unchanged('creado') && unchanged('creadoPor');
+      allow delete: if isStaff();
+    }
+
+    // ======================================================================
+    // reservas_publicas/{codigo} — SOLO lo que necesita el conserje del viajero (viaje.html).
+    // Lectura pública por código exacto (get); listar está prohibido.
+    // Se escribe en el mismo lote que reservas/{codigo}. payLink solo si coincide con un
+    // prefijo oficial de config/pagos (campo 'patron').
+    // ======================================================================
+    function personOk(m) {
+      return (m is map) && m.keys().hasOnly(['name', 'phone'])
+        && optStr(m, 'name', 80) && (!('phone' in m) || phoneOk(m.phone));
+    }
+    function guideOk(m) {
+      return (m is map) && m.keys().hasOnly(['name', 'langs'])
+        && optStr(m, 'name', 80) && (!('langs' in m) || strList10(m.langs, 5));
+    }
+    function coordOk(m, k, lim) { return !(k in m) || ((m.get(k, 0) is number) && m.get(k, 0) >= -lim && m.get(k, 0) <= lim); }
+    function hotelOk(m) {
+      return (m is map) && m.keys().hasOnly(['name', 'area', 'maps', 'lat', 'lon'])
+        && optStr(m, 'name', 120) && optStr(m, 'area', 80) && urlOk(m.get('maps', ''))
+        && coordOk(m, 'lat', 90) && coordOk(m, 'lon', 180);
+    }
+    function itemOk(it) {
+      return (it is map)
+        && it.keys().hasOnly(['date', 'time', 'title', 'tourId', 'maps'])
+        && isDay(it.get('date', ''))
+        && strMax(it.get('time', ''), 5)
+        && (strMax(it.get('title', ''), 160) || (it.get('title', '') is map))
+        && strMax(it.get('tourId', ''), 40)
+        && urlOk(it.get('maps', ''));
+    }
+    function itemAt(l, i) { return l.size() <= i || itemOk(l[i]); }
+    function items5(l, i) { return itemAt(l, i) && itemAt(l, i + 1) && itemAt(l, i + 2) && itemAt(l, i + 3) && itemAt(l, i + 4); }
+    function itineraryOk(l) {
+      return (l is list) && l.size() <= 25
+        && items5(l, 0) && items5(l, 5) && items5(l, 10) && items5(l, 15) && items5(l, 20);
+    }
+    function payLinkOk(v) {
+      return urlOk(v) && v != ''
+        && exists(pagosPath())
+        && v.matches(get(pagosPath()).data.get('patron', ''));
+    }
+    function validPublica(codigo, d) {
+      return codigo.matches('[A-Z0-9]{10,24}')
+        && d.keys().hasOnly(['code', 'lang', 'name', 'party', 'status', 'region', 'host', 'driver', 'guide', 'hotel', 'itinerary', 'payLink'])
+        && d.keys().hasAll(['code', 'name', 'itinerary'])
+        && d.code == codigo
+        && (d.name is string) && d.name.size() > 0 && d.name.size() <= 60
+        && optStr(d, 'lang', 5) && optStr(d, 'status', 40) && optStr(d, 'region', 120)
+        && (!('party' in d) || ((d.party is int) && d.party >= 1 && d.party <= 500))
+        && (!('host' in d) || personOk(d.host))
+        && (!('driver' in d) || personOk(d.driver))
+        && (!('guide' in d) || guideOk(d.guide))
+        && (!('hotel' in d) || hotelOk(d.hotel))
+        && itineraryOk(d.itinerary)
+        && (!('payLink' in d) || payLinkOk(d.payLink));
+    }
+
+    match /reservas_publicas/{codigo} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if isStaff()
+                            && validPublica(codigo, request.resource.data)
+                            && existsAfter(reservaPath(codigo));
+      allow delete: if isStaff();
+    }
+
+    // ======================================================================
+    // solicitudes/{id} — solicitudes de reserva hechas por agencias
+    // La agencia crea (solo con su dmcId y sus propios clientes) y puede cancelar mientras está 'nueva'.
+    // El staff cambia estado / respuesta (la ve la agencia) / asesor / reserva vinculada.
+    // ======================================================================
+    function tourItemOk(m) {
+      return (m is map) && m.keys().hasOnly(['tour_id', 'codigo', 'nombre'])
+        && optStr(m, 'tour_id', 40) && optStr(m, 'codigo', 20) && optStr(m, 'nombre', 200);
+    }
+    function tourAt(l, i) { return l.size() <= i || tourItemOk(l[i]); }
+    function toursOk(l) {
+      return (l is list) && l.size() >= 1 && l.size() <= 10
+        && tourAt(l, 0) && tourAt(l, 1) && tourAt(l, 2) && tourAt(l, 3) && tourAt(l, 4)
+        && tourAt(l, 5) && tourAt(l, 6) && tourAt(l, 7) && tourAt(l, 8) && tourAt(l, 9);
+    }
+    function clienteDeMiAgencia(d) {
+      return d.get('clienteId', null) == null
+        || ((d.clienteId is string)
+            && exists(clientePath(d.clienteId))
+            && get(clientePath(d.clienteId)).data.get('dmcId', null) == myDmc());
+    }
+
+    function validSolicitud(d) {
+      return d.keys().hasOnly(['dmcId', 'creadoPor', 'creadoPorEmail', 'clienteId', 'viajero', 'tours', 'fecha_inicio', 'fecha_fin', 'pax', 'hotel', 'idioma', 'necesidades', 'notas', 'estado', 'respuesta', 'asesorId', 'reservaId', 'creado', 'actualizado'])
+        && d.keys().hasAll(['dmcId', 'creadoPor', 'viajero', 'tours', 'fecha_inicio', 'pax', 'estado', 'creado', 'actualizado'])
+        && (d.dmcId is string) && d.dmcId.size() > 0 && d.dmcId.size() <= 60
+        && (d.creadoPor is string) && d.creadoPor.size() <= 128
+        && optStr(d, 'creadoPorEmail', 200) && optId(d, 'clienteId')
+        && (d.viajero is string) && d.viajero.size() > 0 && d.viajero.size() <= 120
+        && toursOk(d.tours)
+        && isDay(d.fecha_inicio)
+        && optDay(d, 'fecha_fin')
+        && (d.pax is int) && d.pax >= 1 && d.pax <= 500
+        && optStr(d, 'hotel', 120) && optStr(d, 'idioma', 5)
+        && optStr(d, 'necesidades', 1000) && optStr(d, 'notas', 2000)
+        && (d.estado in ['nueva', 'en_proceso', 'confirmada', 'rechazada', 'cancelada'])
+        && optStr(d, 'respuesta', 2000) && optId(d, 'asesorId') && optStr(d, 'reservaId', 24)
+        && wasCreated(d)
+        && stamped(d);
+    }
+
+    match /solicitudes/{id} {
+      allow read: if isStaff() || (isDmc() && resource.data.dmcId == myDmc());
+      allow create: if isDmc()
+                    && validSolicitud(request.resource.data)
+                    && request.resource.data.dmcId == myDmc()
+                    && request.resource.data.creadoPor == request.auth.uid
+                    && request.resource.data.estado == 'nueva'
+                    && created(request.resource.data)
+                    && !('respuesta' in request.resource.data)
+                    && !('reservaId' in request.resource.data)
+                    && !('asesorId' in request.resource.data)
+                    && clienteDeMiAgencia(request.resource.data);
+      allow update: if validSolicitud(request.resource.data)
+                    && unchanged('creado') && unchanged('dmcId') && unchanged('creadoPor') && unchanged('clienteId')
+                    && ((isStaff()
+                         && request.resource.data.diff(resource.data).affectedKeys()
+                              .hasOnly(['estado', 'respuesta', 'asesorId', 'reservaId', 'actualizado']))
+                        || (isDmc()
+                            && resource.data.dmcId == myDmc()
+                            && resource.data.estado == 'nueva'
+                            && request.resource.data.estado == 'cancelada'
+                            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado', 'actualizado'])));
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // leads/{id} — contactos que deja el chatbot Yenny en el sitio público
+    // Público: SOLO crear, con lista cerrada de campos y tamaños. Nadie anónimo lee/edita/borra.
+    // Staff: lee y marca como contactado. Admin: puede borrar (solicitudes de supresión).
+    // ======================================================================
+    function validLead(d) {
+      return d.keys().hasOnly(['stage', 'leadId', 'plan', 'tour', 'name', 'date', 'party', 'hotel', 'access', 'diet', 'notes', 'kit', 'src', 'lang', 'link', 'page', 'creado'])
+        && d.keys().hasAll(['stage', 'creado'])
+        && (d.stage in ['qr_visita', 'resumen', 'whatsapp'])
+        && created(d)
+        && optStr(d, 'leadId', 40) && optStr(d, 'plan', 120) && optStr(d, 'tour', 120) && optStr(d, 'name', 80)
+        && optStr(d, 'date', 10) && optStr(d, 'hotel', 120) && optStr(d, 'diet', 120) && optStr(d, 'notes', 500)
+        && optStr(d, 'src', 40) && optStr(d, 'lang', 5) && optStr(d, 'link', 4000) && optStr(d, 'page', 60)
+        && optBool(d, 'access') && optBool(d, 'kit')
+        && (!('party' in d) || ((d.party is int) && d.party >= 0 && d.party <= 999));
+    }
+
+    match /leads/{id} {
+      allow create: if validLead(request.resource.data);
+      allow read: if isStaff();
+      allow update: if isStaff()
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['contactado', 'contactadoPor', 'contactadoEn', 'notaAsesor', 'clienteId'])
+                    && optBool(request.resource.data, 'contactado')
+                    && optStr(request.resource.data, 'contactadoPor', 128)
+                    && (!('contactadoEn' in request.resource.data) || (request.resource.data.contactadoEn is timestamp))
+                    && optStr(request.resource.data, 'notaAsesor', 1000)
+                    && optStr(request.resource.data, 'clienteId', 128);
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================================
+    // config/vigencias — { lista: [2026, 2027…] } años con tarifas cargadas (lo leen usuarios activos)
+    // config/pagos — prefijos OFICIALES de enlaces de pago (solo staff lee; admin edita)
+    //   { prefijos: ['https://…/mi-comercio/'], patron: '(https://…/mi-comercio/).*' }
+    // ======================================================================
+    function intAt(l, i) { return l.size() <= i || ((l[i] is int) && l[i] >= 2020 && l[i] <= 2100); }
+    function prefAt(l, i) { return l.size() <= i || ((l[i] is string) && l[i].size() <= 200 && l[i].matches('https://[^/[:space:]]+/[^[:space:]]+')); }
+
+    match /config/vigencias {
+      allow read: if isActive();
+      allow create, update: if isAdmin()
+                            && request.resource.data.keys().hasOnly(['lista', 'actualizado'])
+                            && (request.resource.data.get('lista', null) is list)
+                            && request.resource.data.lista.size() <= 20
+                            && intAt(request.resource.data.lista, 0) && intAt(request.resource.data.lista, 1)
+                            && intAt(request.resource.data.lista, 2) && intAt(request.resource.data.lista, 3)
+                            && intAt(request.resource.data.lista, 4) && intAt(request.resource.data.lista, 5)
+                            && intAt(request.resource.data.lista, 6) && intAt(request.resource.data.lista, 7)
+                            && intAt(request.resource.data.lista, 8) && intAt(request.resource.data.lista, 9)
+                            && intAt(request.resource.data.lista, 10) && intAt(request.resource.data.lista, 11)
+                            && intAt(request.resource.data.lista, 12) && intAt(request.resource.data.lista, 13)
+                            && intAt(request.resource.data.lista, 14) && intAt(request.resource.data.lista, 15)
+                            && intAt(request.resource.data.lista, 16) && intAt(request.resource.data.lista, 17)
+                            && intAt(request.resource.data.lista, 18) && intAt(request.resource.data.lista, 19)
+                            && stamped(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /config/pagos {
+      allow read: if isStaff();
+      allow create, update: if isAdmin()
+                            && request.resource.data.keys().hasOnly(['prefijos', 'patron', 'actualizado'])
+                            && (request.resource.data.get('prefijos', null) is list)
+                            && request.resource.data.prefijos.size() <= 10
+                            && prefAt(request.resource.data.prefijos, 0) && prefAt(request.resource.data.prefijos, 1)
+                            && prefAt(request.resource.data.prefijos, 2) && prefAt(request.resource.data.prefijos, 3)
+                            && prefAt(request.resource.data.prefijos, 4) && prefAt(request.resource.data.prefijos, 5)
+                            && prefAt(request.resource.data.prefijos, 6) && prefAt(request.resource.data.prefijos, 7)
+                            && prefAt(request.resource.data.prefijos, 8) && prefAt(request.resource.data.prefijos, 9)
+                            && strMax(request.resource.data.get('patron', null), 4000)
+                            && stamped(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Cualquier otra colección: acceso denegado (comportamiento por defecto).
+  }
+}

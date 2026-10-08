@@ -1,8 +1,8 @@
 # Espontáneos Travel — Sitio web oficial
 
-Sitio web de clase mundial para **Espontáneos Travel** (RNT 917395), operador de
+Sitio web de clase mundial para **Espontáneos Travel** (RNT 91795), operador de
 turismo rural comunitario, de naturaleza, cultural y **sin barreras** en el
-Paisaje Cultural Cafetero de Colombia — *Tradiciones y Orígenes*.
+Paisaje Cultural Cafetero de Colombia.
 
 **Autor:** Dr. Mauricio Rodríguez Herrera · mrodriguez@uniquindio.edu.co
 
@@ -28,6 +28,12 @@ css/styles.css        Sistema de diseño (tokens claro/oscuro, layout, motion)
 js/data.js            Tours y galería (multilingües) — EDITAR AQUÍ el portafolio
 js/i18n.js            Diccionarios de interfaz (ES/EN/FR/DE/PT)
 js/main.js            Lógica: render, i18n, tema, filtros, modal, lightbox, formulario, SEO
+js/bot.js             Yenny en el sitio: itinerarios, QR, datos del cliente → WhatsApp
+js/plans.js           EDITAR AQUÍ: configuración (BIZ), itinerarios armados, qué llevar y clima
+js/qrscan.js          Lector de QR con la cámara
+viaje.html + js/concierge.js   Conserje del viajero (funciona sin señal: sw.js)
+anfitrion.html        Panel: QR, viajes personalizados, recordatorios, clientes
+tools/leads-apps-script.gs     Google Sheets para guardar clientes (ver WHATSAPP-BOT.md)
 assets/img/logo.png   Logo oficial
 robots.txt, sitemap.xml, site.webmanifest, .nojekyll
 ```

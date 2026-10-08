@@ -2,3 +2,19 @@
 Thumbs.db
 node_modules/
 *.log
+
+# Datos privados (tarifas netas, condiciones de agencia, bases de datos): NUNCA al repo público
+privado/
+*.tarifario.*
+# Tarifarios, exportaciones del portal y secretos: tampoco van al repositorio público
+*tarifario*
+*Tarifario*
+*.xls
+*.xlsx
+respaldo-*
+clientes-*.csv
+leads-*.csv
+tarifas-*.csv
+!data/plantillas/*
+.env
+.env.*
