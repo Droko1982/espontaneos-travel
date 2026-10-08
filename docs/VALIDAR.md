@@ -25,9 +25,8 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
 ## B. Datos del negocio
 
 - [x] WhatsApp: **318 720 0023** (confirmado el 8-oct-2026; la web anterior enlazaba a 318 730 0023).
-- [ ] Correo de reservas: la web anterior decía `Consultor@espontaneostravel.com`; el sitio nuevo usa
-      `info@espontaneostravel.com`.
-- [ ] NIT de Espontáneos Travel SAS (falta en `privacidad.html`).
+- [x] Correo de reservas: **info@espontaneostravel.com** (confirmado el 8-oct-2026).
+- [x] NIT de Espontáneos Travel SAS: **902.056.513** (en privacidad, términos, pie de página y datos para Google).
 - [ ] Autor en metadatos: sigue "Dr. Mauricio Rodríguez Herrera · Espontáneos Travel". El brief
       pregunta si se deja o se cambia a "Espontáneos Travel SAS".
 - [ ] Vigencia del portafolio 2026: el sitio la marca hasta el **31 de marzo de 2027**
@@ -40,7 +39,8 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
       el portafolio ni en el tarifario 2026. **Ocultos** en el sitio hasta confirmar.
 - [ ] Tour Compartido: duración 8 h (regreso 4:00 p.m.) según Carolina vs. 7 h (3:30 p.m.) en la base
       de conocimiento; traslado Montenegro $100.000 (portafolio) vs. $115.000 (base).
-- [ ] % de anticipo (50 %), medios de pago y **política de cancelación** con plazos y porcentajes.
+- [ ] % de anticipo (50 %), medios de pago y **política de cancelación** con plazos y porcentajes
+      (**llega con el portafolio 2027**, según Mauricio, 8-oct-2026).
       La web anterior decía: "50 % para reservar y 50 % restante 48 horas antes de la fecha de viaje"
       y "reservas con mínimo 48 horas"; la base de conocimiento dice "el saldo y las fechas límite se
       informan en la cotización". El sitio nuevo usa la base de conocimiento.

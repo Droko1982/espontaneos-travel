@@ -442,7 +442,7 @@
       <h2>${esc(U().brand)}</h2>
       ${msg ? `<p class="c-err">${esc(msg)}</p>` : ""}
       <form id="c-gate-form" class="c-gate-form">
-        <input type="text" id="c-code-in" placeholder="${esc(U().enter_code)}" value="" autocomplete="off">
+        <input type="text" id="c-code-in" placeholder="${esc(U().enter_code)}" aria-label="${esc(U().enter_code)}" value="" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24">
         <button class="btn btn--primary" type="submit">${esc(U().go)}</button>
       </form>
       ${HAS_PLANS && window.EspoQR ? `<button class="btn btn--ghost" type="button" id="c-scan">${esc(P().m_scan)}</button>` : ""}
@@ -494,6 +494,14 @@
     if (SUPPORTED.includes(booking.lang)) { try { if (!localStorage.getItem("esp_lang")) lang = booking.lang; } catch (e) { lang = booking.lang; } }
   }
   // Reservas creadas en el portal (Firestore). Si el backend no está configurado, devuelve null.
+  // El viajero puede escribir el código con o sin guion, espacios o minúsculas ("esp 7q2x9", "7Q2X9").
+  function cleanCode(v) { return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); }
+  function findCode(list, code) {
+    if (!list || !code) return "";
+    if (list[code]) return code;
+    const n = cleanCode(code);
+    return Object.keys(list).find(k => { const kn = cleanCode(k); return kn === n || kn === "ESP" + n; }) || "";
+  }
   function fromBackend(code) {
     const dataReady = window.EspoData ? EspoData.load().catch(() => null) : Promise.resolve(null);
     if (!code) { dataReady.then(renderAll); return; }
@@ -530,10 +538,11 @@
     fetch("data/bookings.json", { cache: "no-store" })
       .then(r => r.json())
       .then(db => {
-        if (code && db.bookings && db.bookings[code]) { const b = db.bookings[code]; useBooking(window.EspoPlans && EspoPlans.demoShift ? EspoPlans.demoShift(b) : b); dataReady.then(renderAll); return; }
-        fromBackend(code);
+        const key = findCode(db.bookings, code);
+        if (key) { const b = db.bookings[key]; useBooking(window.EspoPlans && EspoPlans.demoShift ? EspoPlans.demoShift(b) : b); dataReady.then(renderAll); return; }
+        fromBackend(cleanCode(code));
       })
-      .catch(() => fromBackend(code));
+      .catch(() => fromBackend(cleanCode(code)));
     // El mapa carga diferido: cuando esté listo, se pinta la ruta
     addEventListener("load", () => { if (booking) renderRoute(); });
   }
