@@ -185,7 +185,7 @@ const ERRORS = {
 const S = {
   lang: "es", view: "boot", authMode: "login", tab: null, tabsApi: null,
   fb: null, user: null, profile: null, dmc: null, signingUp: false,
-  yenny: null, yennyP: null, i18n: null, tours: { list: [], byId: new Map(), byCode: new Map() },
+  jenny: null, jennyP: null, i18n: null, tours: { list: [], byId: new Map(), byCode: new Map() },
   dmcs: [], users: [], refsLoaded: false, vigencias: [], cache: {}, preset: null, pagos: null
 };
 let fs = null; // módulo firebase-firestore
@@ -417,7 +417,7 @@ export function validateTarifas(rows, ctx) {
     if (!tour_id && byCode) tour_id = byCode.id_web;
     if (!codigo && byId) codigo = byId.codigo;
     if (byId && codigo && byId.codigo && byId.codigo !== codigo) warnings.push(`El tour_id "${tour_id}" corresponde al código ${byId.codigo}, no a ${codigo}.`);
-    if ((codigo || tour_id) && !byCode && !byId) warnings.push("No está en el portafolio web (data/yenny.json); se importa igual.");
+    if ((codigo || tour_id) && !byCode && !byId) warnings.push("No está en el portafolio web (data/jenny.json); se importa igual.");
     if (codigo.length > 20) errors.push("El código tiene más de 20 caracteres.");
     if (tour_id.length > 40 || !/^[A-Za-z0-9_-]*$/.test(tour_id)) errors.push("tour_id no válido (solo letras, números, - y _; máx. 40).");
     const nombre = get("nombre") || (byId && byId.nombre) || (byCode && byCode.nombre) || "";
@@ -783,22 +783,22 @@ async function loadPagos(force) {
   return S.pagos;
 }
 
-/* ---------- Datos públicos del portafolio (data/yenny.json) ---------- */
-async function loadYenny() {
+/* ---------- Datos públicos del portafolio (data/jenny.json) ---------- */
+async function loadJenny() {
   try {
-    const r = await fetch("data/yenny.json", { cache: "no-cache" });
+    const r = await fetch("data/jenny.json", { cache: "no-cache" });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const y = await r.json();
-    S.yenny = y;
+    S.jenny = y;
     const tours = Array.isArray(y.tours) ? y.tours : [];
     S.tours.list = tours.slice().sort((a, b) => collate(a.nombre, b.nombre));
     for (const x of tours) { if (x.id_web) S.tours.byId.set(x.id_web, x); if (x.codigo) S.tours.byCode.set(x.codigo, x); }
-  } catch (e) { console.warn("No se pudo leer data/yenny.json", e); }
+  } catch (e) { console.warn("No se pudo leer data/jenny.json", e); }
 }
 async function loadI18nTours() {
   if (S.i18n !== null) return;
   S.i18n = false;
-  try { const r = await fetch("data/yenny.i18n.json", { cache: "no-cache" }); if (r.ok) S.i18n = await r.json(); } catch (e) { /* opcional */ }
+  try { const r = await fetch("data/jenny.i18n.json", { cache: "no-cache" }); if (r.ok) S.i18n = await r.json(); } catch (e) { /* opcional */ }
 }
 const tourOf = r => S.tours.byId.get(r.tour_id) || S.tours.byCode.get(r.codigo) || null;
 function tourText(tour, field) {
@@ -824,7 +824,7 @@ async function loadVigencias() {
     const s = await fs.getDoc(dref("config", "vigencias"));
     if (s.exists()) lista = (s.data().lista || []).map(Number).filter(Number.isInteger);
   } catch (e) { /* sin config aún */ }
-  const y = S.yenny && S.yenny._meta && S.yenny._meta.vigencia;
+  const y = S.jenny && S.jenny._meta && S.jenny._meta.vigencia;
   if (!lista.length && Number.isInteger(y)) lista = [y];
   S.vigencias = [...new Set(lista)].sort((a, b) => b - a);
 }
@@ -868,7 +868,7 @@ async function boot() {
   try { const th = localStorage.getItem("esp_theme"); if (th === "dark" || th === "light") document.documentElement.setAttribute("data-theme", th); } catch (e) { /* sin almacenamiento */ }
   S.lang = initialLang();
   document.documentElement.lang = S.lang;
-  S.yennyP = loadYenny();
+  S.jennyP = loadJenny();
   if (!enabled) return renderSetup();
   try { S.fb = await loadFirebase(); }
   catch (e) { return renderFatal("No se pudo cargar Firebase. Revisa tu conexión a internet y recarga la página.", () => location.reload()); }
@@ -1097,7 +1097,7 @@ function renderCompleteRequest() {
 
 function renderStatus(kind) {
   S.view = "auth"; S.authMode = "status-" + kind;
-  const wa = S.yenny && S.yenny.contacto && S.yenny.contacto.whatsapp;
+  const wa = S.jenny && S.jenny.contacto && S.jenny.contacto.whatsapp;
   const agency = S.profile && S.profile.solicitud ? S.profile.solicitud.agencia : "";
   const titles = { pending: ["pending_title", "pending_body"], blocked: ["blocked_title", "blocked_body"], noagency: ["noagency_title", "noagency_body"], verify: ["verify_title", "verify_body"] };
   const [tk, bk] = titles[kind] || titles.pending;
@@ -1182,7 +1182,7 @@ const rateKey = r => r.tour_id || r.codigo;
 
 async function dmcTarifas(view) {
   add(view, loadingBox());
-  await S.yennyP;
+  await S.jennyP;
   if (L() !== "es") await loadI18nTours();
   if (!S.vigencias.length) await loadVigencias();
   clear(view);
@@ -1280,7 +1280,7 @@ async function loadMyClients() {
 
 async function dmcSolicitar(view) {
   add(view, loadingBox());
-  await S.yennyP;
+  await S.jennyP;
   const myClients = (await loadMyClients().catch(() => [])).sort((a, b) => collate(a.nombre, b.nombre));
   clear(view);
   const chosen = [];
@@ -1773,14 +1773,14 @@ function itineraryEditor(items) {
  */
 async function reservaForm(host, existing, prefill, onDone) {
   clear(host); add(host, loadingBox());
-  await S.yennyP;
+  await S.jennyP;
   const [clientes, prefixes, pubSnap] = await Promise.all([
     loadClientesStaff(), loadPagos(true), existing ? fs.getDoc(dref("reservas_publicas", existing.id)) : Promise.resolve(null)
   ]);
   const pub = pubSnap && pubSnap.exists() ? pubSnap.data() : {};
   clear(host);
   const b = existing || {}, p = prefill || {};
-  const ct = (S.yenny && S.yenny.contacto) || {};
+  const ct = (S.jenny && S.jenny.contacto) || {};
   const hostPhone = digits(ct.whatsapp);
   const oldHotel = pub.hotel || {};
   const v0 = {
@@ -1981,7 +1981,7 @@ async function staffReservas(view) {
 
 /* ---------- Solicitudes de agencias ---------- */
 async function staffSolicitudes(view) {
-  await S.yennyP;
+  await S.jennyP;
   const est = selectEl([["", "Todas"]].concat(ESTADOS_SOLICITUD.map(e => [e, I18N.es["st_" + e]])), "nueva", { id: uid("e") });
   const q = h("input", { type: "search", id: uid("q"), autocomplete: "off" });
   const count = h("p", { class: "p-count", role: "status" });
@@ -2288,9 +2288,9 @@ function yearOptions() {
 
 async function adminTarifas(view) {
   add(view, loadingBox());
-  await S.yennyP; await loadRefs(); await loadVigencias();
+  await S.jennyP; await loadRefs(); await loadVigencias();
   clear(view);
-  const defYear = S.vigencias[0] || (S.yenny && S.yenny._meta && S.yenny._meta.vigencia) || new Date().getFullYear();
+  const defYear = S.vigencias[0] || (S.jenny && S.jenny._meta && S.jenny._meta.vigencia) || new Date().getFullYear();
   // --- Importar ---
   const ySel = selectEl(yearOptions(), defYear, { id: uid("y") });
   const file = h("input", { type: "file", id: uid("file"), accept: ".csv,.json,.txt,text/csv,application/json" });
@@ -2409,9 +2409,9 @@ async function adminTarifas(view) {
 /* ---------- Condiciones de agencia ---------- */
 async function adminCondiciones(view) {
   add(view, loadingBox());
-  await S.yennyP; await loadVigencias();
+  await S.jennyP; await loadVigencias();
   clear(view);
-  const defYear = S.vigencias[0] || (S.yenny && S.yenny._meta && S.yenny._meta.vigencia) || new Date().getFullYear();
+  const defYear = S.vigencias[0] || (S.jenny && S.jenny._meta && S.jenny._meta.vigencia) || new Date().getFullYear();
   const ySel = selectEl(yearOptions(), defYear, { id: uid("y") });
   const file = h("input", { type: "file", id: uid("file"), accept: ".json,application/json" });
   const prune = h("input", { type: "checkbox", id: uid("pr") });

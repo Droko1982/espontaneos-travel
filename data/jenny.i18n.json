@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "source": "data/yenny.json",
+  "source": "data/jenny.json",
   "source_version": "2026-10-08",
   "vigencia": 2026,
   "languages": [
@@ -1304,7 +1304,7 @@
   },
   "arbol": {
    "saludo": {
-    "jenny": "Hi! I'm Yenny from Espontáneos Travel 🌿 How can I help you?"
+    "jenny": "Hi! I'm Jenny from Espontáneos Travel 🌿 How can I help you?"
    },
    "horarios": {
     "pregunta_tipo": [
@@ -2782,7 +2782,7 @@
   },
   "arbol": {
    "saludo": {
-    "jenny": "Bonjour ! Je suis Yenny, d'Espontáneos Travel 🌿 Comment puis-je vous aider ?"
+    "jenny": "Bonjour ! Je suis Jenny, d'Espontáneos Travel 🌿 Comment puis-je vous aider ?"
    },
    "horarios": {
     "pregunta_tipo": [
@@ -4260,7 +4260,7 @@
   },
   "arbol": {
    "saludo": {
-    "jenny": "Hallo! Ich bin Yenny von Espontáneos Travel 🌿 Wie kann ich Ihnen helfen?"
+    "jenny": "Hallo! Ich bin Jenny von Espontáneos Travel 🌿 Wie kann ich Ihnen helfen?"
    },
    "horarios": {
     "pregunta_tipo": [
@@ -5738,7 +5738,7 @@
   },
   "arbol": {
    "saludo": {
-    "jenny": "Olá! Sou a Yenny, da Espontáneos Travel 🌿 Como posso ajudar você?"
+    "jenny": "Olá! Sou a Jenny, da Espontáneos Travel 🌿 Como posso ajudar você?"
    },
    "horarios": {
     "pregunta_tipo": [

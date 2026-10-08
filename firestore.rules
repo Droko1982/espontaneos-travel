@@ -457,7 +457,7 @@ service cloud.firestore {
     }
 
     // ======================================================================
-    // leads/{id} — contactos que deja el chatbot Yenny en el sitio público
+    // leads/{id} — contactos que deja el chatbot Jenny en el sitio público
     // Público: SOLO crear, con lista cerrada de campos y tamaños. Nadie anónimo lee/edita/borra.
     // Staff: lee y marca como contactado. Admin: puede borrar (solicitudes de supresión).
     // ======================================================================

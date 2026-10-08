@@ -21,7 +21,7 @@ Mapas interactivos para el sitio (vista general y ficha de cada experiencia) y p
 - **Rutas, distancias y tiempos:** OSRM (`router.project-osrm.org`, perfil *driving*). Los tiempos son **sin tráfico**; en vías de montaña y en Jeep pueden ser mayores.
 - **Laberinto Mil Caminos:** no aparece en OSM. Se ubicó en la vereda Morelia Alta (Quimbaya) según la prensa (El País) y quedó marcado como `validar`.
 
-### Clasificación de los 52 tours de `data/yenny.json`
+### Clasificación de los 52 tours de `data/jenny.json`
 
 | Tipo | Qué significa | Tours |
 |---|---|---|
@@ -35,7 +35,7 @@ Casos particulares:
 - Los *city tours* `cuyabro`, `pereira` y `manizales` (`en_ciudad: true`) no tienen ruta porque su circuito no está documentado. El de `armenia` sí tiene circuito: Plaza de Bolívar → Museo del Oro Quimbaya → Parque de la Vida.
 - `cocoraacaime` termina en coche en Cocora. El tramo hasta Acaime es a pie y se dibuja punteado, como línea recta.
 - Las áreas protegidas extensas (PNN Los Nevados y Páramo del Chilí) aparecen solo como alternativas (`extensa: true`). No entran en la matriz, porque su punto es una etiqueta y no un sendero.
-- `rodizio` y `alimentacion` existen en `js/data.js` pero no en `yenny.json`, así que no se mapean.
+- `rodizio` y `alimentacion` existen en `js/data.js` pero no en `jenny.json`, así que no se mapean.
 
 ### Pendientes `VALIDAR` (el equipo de operaciones debe confirmarlos)
 
@@ -72,11 +72,11 @@ node tools/build-geo.js --refresh   # ignora la caché y vuelve a consultar todo
 
 - El script respeta **≤ 1 petición/segundo por servicio** (pausa de 1,1 s) y se identifica con el User-Agent `EspontaneosTravel-geo/1.0 (info@espontaneostravel.com)`.
 - La caché queda en `tools/.cache/geo-cache.json`. Conviene versionarla, así cualquiera puede reconstruir el archivo con `--offline` sin volver a pedir datos a las APIs.
-- El script **falla** si un tour de `yenny.json` no tiene entrada en `LUGARES`. Así nunca se publica un tour sin ubicación definida.
+- El script **falla** si un tour de `jenny.json` no tiene entrada en `LUGARES`. Así nunca se publica un tour sin ubicación definida.
 
 ### Portafolio 2027 o tour nuevo
 
-1. Actualiza `data/yenny.json` (nuevo `id_web`).
+1. Actualiza `data/jenny.json` (nuevo `id_web`).
 2. En `tools/build-geo.js`, añade la entrada en `LUGARES`. Ejemplos:
 
 ```js

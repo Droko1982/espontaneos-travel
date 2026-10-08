@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Espontáneos Travel — Conserje con Yenny: base de conocimiento (ES/EN/FR/DE/PT)
+   Espontáneos Travel — Conserje con Jenny: base de conocimiento (ES/EN/FR/DE/PT)
    + strings de interfaz. Zero-cost, estático. Editable y expandible (IA luego).
    Placeholders que rellena concierge.js: {name} {region} {guide} {guideLangs}
    {host} {hotel} {hotelArea}
@@ -8,7 +8,7 @@
 const CUI = {
   es: {
     brand: "Conserje de viaje", sub: "Espontáneos Travel",
-    greet: "¡Hola {name}! 👋 Soy Yenny, tu anfitriona durante tu viaje por {region}. Estoy contigo 24/7. ¿En qué te ayudo hoy?",
+    greet: "¡Hola {name}! 👋 Soy Jenny, tu anfitriona durante tu viaje por {region}. Estoy contigo 24/7. ¿En qué te ayudo hoy?",
     menu_prompt: "Elige un tema o escríbenos:",
     next_stop: "Tu próxima parada", itinerary: "Tu itinerario", trip_done: "¡Tu viaje está completo! Gracias por viajar con nosotros 💚",
     status: "Reserva", party: "Viajeros", guide: "Tu guía", hotel: "Tu hotel", today: "Hoy", tomorrow: "Mañana",
@@ -29,7 +29,7 @@ const CUI = {
   },
   en: {
     brand: "Travel concierge", sub: "Espontáneos Travel",
-    greet: "Hi {name}! 👋 I'm Yenny, your host during your trip around {region}. I'm with you 24/7. How can I help today?",
+    greet: "Hi {name}! 👋 I'm Jenny, your host during your trip around {region}. I'm with you 24/7. How can I help today?",
     menu_prompt: "Pick a topic or message us:",
     next_stop: "Your next stop", itinerary: "Your itinerary", trip_done: "Your trip is complete! Thanks for travelling with us 💚",
     status: "Booking", party: "Travellers", guide: "Your guide", hotel: "Your hotel", today: "Today", tomorrow: "Tomorrow",
@@ -50,7 +50,7 @@ const CUI = {
   },
   fr: {
     brand: "Conciergerie de voyage", sub: "Espontáneos Travel",
-    greet: "Bonjour {name} ! 👋 Je suis Yenny, votre hôtesse pendant votre voyage dans {region}. Disponible 24/7. Comment puis-je aider aujourd'hui ?",
+    greet: "Bonjour {name} ! 👋 Je suis Jenny, votre hôtesse pendant votre voyage dans {region}. Disponible 24/7. Comment puis-je aider aujourd'hui ?",
     menu_prompt: "Choisissez un thème ou écrivez-nous :",
     next_stop: "Votre prochaine étape", itinerary: "Votre itinéraire", trip_done: "Votre voyage est terminé ! Merci d'avoir voyagé avec nous 💚",
     status: "Réservation", party: "Voyageurs", guide: "Votre guide", hotel: "Votre hôtel", today: "Aujourd'hui", tomorrow: "Demain",
@@ -71,7 +71,7 @@ const CUI = {
   },
   de: {
     brand: "Reise-Concierge", sub: "Espontáneos Travel",
-    greet: "Hallo {name}! 👋 Ich bin Yenny, Ihre Gastgeberin während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich heute helfen?",
+    greet: "Hallo {name}! 👋 Ich bin Jenny, Ihre Gastgeberin während Ihrer Reise durch {region}. 24/7 für Sie da. Wie kann ich heute helfen?",
     menu_prompt: "Wählen Sie ein Thema oder schreiben Sie uns:",
     next_stop: "Ihr nächster Halt", itinerary: "Ihr Programm", trip_done: "Ihre Reise ist abgeschlossen! Danke, dass Sie mit uns gereist sind 💚",
     status: "Buchung", party: "Reisende", guide: "Ihr Guide", hotel: "Ihr Hotel", today: "Heute", tomorrow: "Morgen",
@@ -92,7 +92,7 @@ const CUI = {
   },
   pt: {
     brand: "Concierge de viagem", sub: "Espontáneos Travel",
-    greet: "Olá {name}! 👋 Sou a Yenny, sua anfitriã durante sua viagem por {region}. Estou com você 24/7. Como posso ajudar hoje?",
+    greet: "Olá {name}! 👋 Sou a Jenny, sua anfitriã durante sua viagem por {region}. Estou com você 24/7. Como posso ajudar hoje?",
     menu_prompt: "Escolha um tema ou escreva:",
     next_stop: "Sua próxima parada", itinerary: "Seu itinerário", trip_done: "Sua viagem está completa! Obrigado por viajar conosco 💚",
     status: "Reserva", party: "Viajantes", guide: "Seu guia", hotel: "Seu hotel", today: "Hoje", tomorrow: "Amanhã",

@@ -24,16 +24,16 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
 
 ## B. Datos del negocio
 
-- [ ] WhatsApp: el sitio usa **318 720 0023**; la web anterior enlazaba a 318 **730** 0023.
+- [x] WhatsApp: **318 720 0023** (confirmado el 8-oct-2026; la web anterior enlazaba a 318 730 0023).
 - [ ] Correo de reservas: la web anterior decía `Consultor@espontaneostravel.com`; el sitio nuevo usa
       `info@espontaneostravel.com`.
 - [ ] NIT de Espontáneos Travel SAS (falta en `privacidad.html`).
 - [ ] Autor en metadatos: sigue "Dr. Mauricio Rodríguez Herrera · Espontáneos Travel". El brief
       pregunta si se deja o se cambia a "Espontáneos Travel SAS".
 - [ ] Vigencia del portafolio 2026: el sitio la marca hasta el **31 de marzo de 2027**
-      (`data/yenny.json` → `_meta.valida_hasta`).
+      (`data/jenny.json` → `_meta.valida_hasta`).
 
-## C. Portafolio y Yenny (`data/yenny.json`)
+## C. Portafolio y Jenny (`data/jenny.json`)
 
 - [ ] **47 recomendaciones** marcadas "propuesta (VALIDAR)" (5 vienen del documento oficial de ET).
 - [ ] Tours `rodizio` (Rodizio Gaucho Brasil) y `alimentacion` (Alimentación Consciente): no están en
@@ -59,10 +59,10 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
 
 ## E. Traducciones (EN · FR · DE · PT)
 
-- [ ] Revisar `data/yenny.i18n.json` (52 tours, árbol, planes, sostenibilidad) y `js/i18n-2026.js`.
+- [ ] Revisar `data/jenny.i18n.json` (52 tours, árbol, planes, sostenibilidad) y `js/i18n-2026.js`.
       Puntos dudosos anotados por el traductor: "Valle de Cocora" vs. "Cocora Valley"; "almuerzo
       viajero"; "ranas chocolate"; panela; nombres que podrían ser marca ("La Caja Viajera del Café").
-- [x] Alemán unificado en "Sie" (formal) en el sitio, Yenny, itinerarios y "qué llevar". Revisar estilo.
+- [x] Alemán unificado en "Sie" (formal) en el sitio, Jenny, itinerarios y "qué llevar". Revisar estilo.
 
 ## F. Fotos de reemplazo (Wikimedia Commons)
 
@@ -76,10 +76,11 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
 - [ ] **Tarifa especial:** si una agencia tiene tarifa especial para el mismo tour, temporada, rango de
       pasajeros y moneda, ve solo la especial (no la general). ¿Es la regla deseada?
 - [ ] El registro de agencias pide **NIT** (las extranjeras ponen su identificación tributaria).
-- [ ] **Privacidad de reservas:** quien tenga el código de una reserva puede ver toda la reserva,
-      incluidos montos de pago (así funciona el enlace del viajero). No escribir notas internas ahí.
-- [ ] El QR se genera con `api.qrserver.com` (recibe el enlace del viajero). Alternativa: generar el QR
-      en el navegador.
+- [ ] **Privacidad de reservas:** quien tenga el código ve el nombre del viajero, el hotel, el itinerario
+      y los teléfonos de anfitrión y conductor (`reservas_publicas`). Montos, pagos y notas internas
+      quedan en `reservas` (solo equipo y agencia). Propuesta: que el código **deje de funcionar 30 días
+      después del viaje** (campo de vencimiento + regla de Firestore).
+- [x] El QR se genera en el navegador (sin servicios externos).
 - [ ] Las reservas de ejemplo de `data/bookings.json` no se importan solas a Firestore.
 - [ ] Antispam del chat: activar **Firebase App Check** cuando el portal esté en producción.
 - [ ] Probar las reglas en Firebase real (importación de muchas tarifas a la vez: si falla, bajar

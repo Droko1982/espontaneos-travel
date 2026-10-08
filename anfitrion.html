@@ -62,7 +62,7 @@
 
   <div class="a-card">
     <h2>QR de itinerario (para que el cliente elija y reserve)</h2>
-    <p class="a-muted" style="margin-bottom:1rem">Imprímelo en hoteles, aliados, flyers o redes. Al escanearlo se abre el sitio y <b>Yenny</b> muestra el itinerario, recoge los datos del cliente y te los envía en resumen por WhatsApp, junto con la lista de qué llevar según el clima.</p>
+    <p class="a-muted" style="margin-bottom:1rem">Imprímelo en hoteles, aliados, flyers o redes. Al escanearlo se abre el sitio y <b>Jenny</b> muestra el itinerario, recoge los datos del cliente y te los envía en resumen por WhatsApp, junto con la lista de qué llevar según el clima.</p>
     <div class="a-grid">
       <select id="p-plan"></select>
       <input id="p-src" placeholder="Origen / aliado (ej. HOTEL-SAZAGUA)" maxlength="40">
@@ -108,7 +108,7 @@
   </div>
 
   <div class="a-card">
-    <h2>Clientes de Yenny (Google Sheets)</h2>
+    <h2>Clientes de Jenny (Google Sheets)</h2>
     <p class="a-muted" id="l-info" style="margin-bottom:1rem"></p>
     <div class="a-row">
       <input type="password" id="l-key" placeholder="Clave del panel (la de tu Apps Script)" style="text-transform:none" autocomplete="off">
@@ -122,12 +122,12 @@
     <div class="a-samples" id="samples"><p class="a-muted">Cargando…</p></div>
   </div>
 
-  <p class="a-muted">Flujo de venta: el cliente <b>escanea el QR de un itinerario</b> → Yenny se lo muestra, puede elegir otro, deja sus datos y te llega el resumen por WhatsApp (con enlace a su itinerario provisional). <br>Flujo de viaje: el viajero <b>escanea el QR</b> al llegar → se abre su itinerario y Yenny responde sus preguntas 24/7 (web) y lo conecta contigo por WhatsApp. Las reservas se editan en <code>data/bookings.json</code> (o luego desde Google Sheets).</p>
+  <p class="a-muted">Flujo de venta: el cliente <b>escanea el QR de un itinerario</b> → Jenny se lo muestra, puede elegir otro, deja sus datos y te llega el resumen por WhatsApp (con enlace a su itinerario provisional). <br>Flujo de viaje: el viajero <b>escanea el QR</b> al llegar → se abre su itinerario y Jenny responde sus preguntas 24/7 (web) y lo conecta contigo por WhatsApp. Las reservas se editan en <code>data/bookings.json</code> (o luego desde Google Sheets).</p>
 </div>
 
 <script src="js/vendor/qrcode.min.js"></script>
 <script src="js/data.js"></script>
-<script src="js/yenny-data.js"></script>
+<script src="js/jenny-data.js"></script>
 <script src="js/plans.js"></script>
 <script>
   var base = location.href.replace(/[\?#].*$/, "").replace(/[^/]*$/, ""); // carpeta actual
@@ -202,7 +202,7 @@
         if (!items.length) { out.value = "Esa reserva no tiene paradas desde esa fecha."; return; }
         if (!v("r-phone") && b.phone) document.getElementById("r-phone").value = b.phone;
         function title(it){ return typeof it.title === "string" ? it.title : (it.title && (it.title[lang] || it.title.es)) || ""; }
-        // Recomendaciones oficiales de cada experiencia (data/yenny.json) + pronóstico
+        // Recomendaciones oficiales de cada experiencia (data/jenny.json) + pronóstico
         return (window.EspoData ? EspoData.load().catch(function(){}) : Promise.resolve()).then(function(){ return EspoPlans.packFor(items, lang); }).then(function(pack){
           var dayTxt; try { dayTxt = new Date(day + "T12:00:00").toLocaleDateString(lang, { weekday: "long", day: "numeric", month: "long" }); } catch(e){ dayTxt = day; }
           var L = [U.rem_hi.replace("{name}", String(b.name || "").split(" ")[0]).replace("{day}", dayTxt), ""];
@@ -248,7 +248,7 @@
       info.innerHTML = "Aún no está conectado. Sigue los pasos de <code>tools/leads-apps-script.gs</code> y pega la URL en <code>leadsEndpoint</code> de <code>js/plans.js</code>.";
       document.getElementById("l-load").disabled = true; return;
     }
-    info.textContent = "Cada cliente que deja sus datos con Yenny, y cada escaneo de un QR de itinerario, queda guardado en tu hoja de Google.";
+    info.textContent = "Cada cliente que deja sus datos con Jenny, y cada escaneo de un QR de itinerario, queda guardado en tu hoja de Google.";
     var keyIn = document.getElementById("l-key"); try { keyIn.value = localStorage.getItem("esp_leads_key") || ""; } catch(e){}
     document.getElementById("l-load").addEventListener("click", function(){
       var out = document.getElementById("l-out"); out.textContent = "Cargando…";

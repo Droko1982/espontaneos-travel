@@ -59,7 +59,7 @@
       ov.querySelector(".qr-x").setAttribute("aria-label", t.close || "Close");
       ov.querySelector(".qr-hint").textContent = t.hint || "";
       ov.querySelector(".qr-file span").textContent = t.file || "📷";
-      // Evita que el clic "fuera del panel" de Yenny cierre el chat mientras se escanea.
+      // Evita que el clic "fuera del panel" de Jenny cierre el chat mientras se escanea.
       ov.addEventListener("click", (e) => { e.stopPropagation(); if (e.target === ov) finish(null); });
       ov.querySelector(".qr-x").addEventListener("click", () => finish(null));
       const onKey = (e) => { if (e.key === "Escape") { e.stopPropagation(); finish(null); } };

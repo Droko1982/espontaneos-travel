@@ -28,7 +28,7 @@ css/styles.css        Sistema de diseño (tokens claro/oscuro, layout, motion)
 js/data.js            Tours y galería (multilingües) — EDITAR AQUÍ el portafolio
 js/i18n.js            Diccionarios de interfaz (ES/EN/FR/DE/PT)
 js/main.js            Lógica: render, i18n, tema, filtros, modal, lightbox, formulario, SEO
-js/bot.js             Yenny en el sitio: itinerarios, QR, datos del cliente → WhatsApp
+js/bot.js             Jenny en el sitio: itinerarios, QR, datos del cliente → WhatsApp
 js/plans.js           EDITAR AQUÍ: configuración (BIZ), itinerarios armados, qué llevar y clima
 js/qrscan.js          Lector de QR con la cámara
 viaje.html + js/concierge.js   Conserje del viajero (funciona sin señal: sw.js)

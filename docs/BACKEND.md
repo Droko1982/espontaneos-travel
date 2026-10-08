@@ -12,7 +12,7 @@ El portal es una página privada del sitio (`https://…/portal.html`) donde:
 | Quién | Qué puede hacer |
 |---|---|
 | **Agencias aliadas (DMC)** | Pedir acceso, ver **tarifas netas** por año (vigencia) con la información de cada tour, ver las **condiciones para agencias**, exportar a CSV, **solicitar reservas**, ver sus solicitudes y reservas (con el enlace y QR del viajero) y guardar a sus clientes. Pantallas en **español e inglés**. |
-| **Asesores** | Bandeja de **leads** del chatbot Yenny, **CRM de clientes**, **reservas** (genera el código, el enlace `viaje.html?code=…` y el **QR**), y responder **solicitudes** de agencias. |
+| **Asesores** | Bandeja de **leads** del chatbot Jenny, **CRM de clientes**, **reservas** (genera el código, el enlace `viaje.html?code=…` y el **QR**), y responder **solicitudes** de agencias. |
 | **Administración** | Todo lo anterior, más: aprobar agencias y usuarios, crear cuentas de asesores, administrar agencias, **importar tarifas** (CSV/JSON) y **condiciones** (JSON), y descargar **respaldos**. |
 
 Todo se guarda en **Firebase** (de Google), en el **plan gratuito Spark**: Firebase Authentication (inicio de sesión) + Cloud Firestore (base de datos).
@@ -84,7 +84,7 @@ Pestaña **Asesores** → **Crear cuenta de asesor** (o **Usuarios** → **Crear
 
 Para **quitar el acceso**: *Bloquear* al usuario, o *Desactivar* la agencia en **Agencias** (todos sus usuarios pierden el acceso de inmediato).
 
-### Leads del chatbot (Yenny)
+### Leads del chatbot (Jenny)
 Pestaña **Leads**: filtra por fechas, etapa (*Visita por QR*, *Dejó sus datos*, *Pasó a WhatsApp*), origen y "solo sin contactar". Puedes **marcar contactado**, abrir el enlace que dejó el cliente y **crear el cliente** en el CRM (te pide confirmar la autorización de datos).
 
 ### Clientes (CRM)
@@ -137,7 +137,7 @@ Pestaña **Condiciones** → carga `privado/condiciones-agencia-2026.json` (form
 1. Prepara el CSV de tarifas con `vigencia` = **2027** e impórtalo eligiendo **2027**. Las de 2026 se conservan.
 2. Importa `privado/condiciones-agencia-2027.json` (con `"vigencia": 2027`).
 3. Las agencias ven un selector de **Vigencia** que abre por defecto el año más reciente con tarifas.
-4. Cuando el equipo actualice el portafolio público (`data/yenny.json` con `vigencia` 2027), la duración, horarios e "incluye" que ven las agencias saldrán del portafolio nuevo.
+4. Cuando el equipo actualice el portafolio público (`data/jenny.json` con `vigencia` 2027), la duración, horarios e "incluye" que ven las agencias saldrán del portafolio nuevo.
 
 ---
 

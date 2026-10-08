@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Espontáneos Travel — Yenny, asistente de pre-venta del sitio
-   Lee la MISMA fuente que el sitio y el conserje: data/yenny.json (+ i18n).
+   Espontáneos Travel — Jenny, asistente de pre-venta del sitio
+   Lee la MISMA fuente que el sitio y el conserje: data/jenny.json (+ i18n).
    Reglas: no inventa datos (null/POR_VALIDAR → asesor), nunca muestra tarifas
    netas, cada respuesta termina con una siguiente acción, 5 idiomas, y el
    mensaje a WhatsApp lleva tour + código, personas, fecha, hotel e idioma.
@@ -11,7 +11,7 @@
   const LANGNAME = { es: "Español", en: "English", fr: "Français", de: "Deutsch", pt: "Português", it: "Italiano" };
   const UI = {
     es: {
-      launch: "¿Te ayudo?", close: "Cerrar", title: "Yenny", subtitle: "Tu anfitriona · en línea",
+      launch: "¿Te ayudo?", close: "Cerrar", title: "Jenny", subtitle: "Tu anfitriona · en línea",
       menu_prompt: "Elige un tema o escríbeme tu pregunta 👇", more: "➕ Más temas", back: "↩ Menú", other: "Otra pregunta",
       foot: "Información oficial del portafolio · un asesor confirma los detalles", ask_ph: "Escribe tu pregunta…", send: "Enviar",
       m_reservar: "📅 Reservar", m_horarios: "🕘 Horarios", m_duracion: "⏱️ Duración", m_incluye: "✅ Qué incluye", m_llevar: "🎒 Qué llevar",
@@ -27,10 +27,10 @@
       f_guide: "Idioma del guía", no_match: "No tengo esa respuesta exacta 🙈 Te paso con un asesor por WhatsApp para que te ayude.",
       wa_q: "¡Hola Espontáneos Travel! Tengo una pregunta:", wa_default: "¡Hola Espontáneos Travel! Me gustaría más información sobre sus experiencias.",
       open_wa: "Abrir WhatsApp", go_sust: "Ver sección Sostenibilidad", go_tours: "Ver experiencias", pay_btn: "💳 Pagar anticipo",
-      wa_tour: "🌿 Experiencia:", wa_guide: "🧭 Idioma del guía:", confirm_book: "¿Quieres reservar *{tour}*?", wa_lead_tour: "¡Hola Espontáneos Travel! Quiero reservar:", consent: "Autorizo el tratamiento de mis datos según la {link} (Ley 1581 de 2012).", consent_link: "política de privacidad", consent_req: "Para continuar, acepta la política de datos 🙂", greet_fallback: "¡Hola! Soy Yenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?"
+      wa_tour: "🌿 Experiencia:", wa_guide: "🧭 Idioma del guía:", confirm_book: "¿Quieres reservar *{tour}*?", wa_lead_tour: "¡Hola Espontáneos Travel! Quiero reservar:", consent: "Autorizo el tratamiento de mis datos según la {link} (Ley 1581 de 2012).", consent_link: "política de privacidad", consent_req: "Para continuar, acepta la política de datos 🙂", greet_fallback: "¡Hola! Soy Jenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?"
     },
     en: {
-      launch: "Need help?", close: "Close", title: "Yenny", subtitle: "Your host · online",
+      launch: "Need help?", close: "Close", title: "Jenny", subtitle: "Your host · online",
       menu_prompt: "Pick a topic or type your question 👇", more: "➕ More topics", back: "↩ Menu", other: "Another question",
       foot: "Official portfolio information · an advisor confirms the details", ask_ph: "Type your question…", send: "Send",
       m_reservar: "📅 Book", m_horarios: "🕘 Schedules", m_duracion: "⏱️ Duration", m_incluye: "✅ What's included", m_llevar: "🎒 What to bring",
@@ -46,10 +46,10 @@
       f_guide: "Guide language", no_match: "I don't have that exact answer 🙈 Let me connect you with an advisor on WhatsApp.",
       wa_q: "Hi Espontáneos Travel! I have a question:", wa_default: "Hi Espontáneos Travel! I'd like more information about your experiences.",
       open_wa: "Open WhatsApp", go_sust: "See the Sustainability section", go_tours: "See experiences", pay_btn: "💳 Pay deposit",
-      wa_tour: "🌿 Experience:", wa_guide: "🧭 Guide language:", confirm_book: "Would you like to book *{tour}*?", wa_lead_tour: "Hi Espontáneos Travel! I'd like to book:", consent: "I authorise the processing of my data under the {link} (Colombian Law 1581 of 2012).", consent_link: "privacy policy", consent_req: "To continue, please accept the data policy 🙂", greet_fallback: "Hi! I'm Yenny from Espontáneos Travel 🌿 How can I help?"
+      wa_tour: "🌿 Experience:", wa_guide: "🧭 Guide language:", confirm_book: "Would you like to book *{tour}*?", wa_lead_tour: "Hi Espontáneos Travel! I'd like to book:", consent: "I authorise the processing of my data under the {link} (Colombian Law 1581 of 2012).", consent_link: "privacy policy", consent_req: "To continue, please accept the data policy 🙂", greet_fallback: "Hi! I'm Jenny from Espontáneos Travel 🌿 How can I help?"
     },
     fr: {
-      launch: "Besoin d'aide ?", close: "Fermer", title: "Yenny", subtitle: "Votre hôte · en ligne",
+      launch: "Besoin d'aide ?", close: "Fermer", title: "Jenny", subtitle: "Votre hôte · en ligne",
       menu_prompt: "Choisissez un sujet ou écrivez votre question 👇", more: "➕ Plus de sujets", back: "↩ Menu", other: "Autre question",
       foot: "Informations officielles du portefeuille · un conseiller confirme les détails", ask_ph: "Écrivez votre question…", send: "Envoyer",
       m_reservar: "📅 Réserver", m_horarios: "🕘 Horaires", m_duracion: "⏱️ Durée", m_incluye: "✅ Ce qui est inclus", m_llevar: "🎒 Quoi emporter",
@@ -65,10 +65,10 @@
       f_guide: "Langue du guide", no_match: "Je n'ai pas cette réponse exacte 🙈 Je vous mets en contact avec un conseiller sur WhatsApp.",
       wa_q: "Bonjour Espontáneos Travel ! J'ai une question :", wa_default: "Bonjour Espontáneos Travel ! Je souhaite plus d'informations sur vos expériences.",
       open_wa: "Ouvrir WhatsApp", go_sust: "Voir la section Durabilité", go_tours: "Voir les expériences", pay_btn: "💳 Payer l'acompte",
-      wa_tour: "🌿 Expérience :", wa_guide: "🧭 Langue du guide :", confirm_book: "Voulez-vous réserver *{tour}* ?", wa_lead_tour: "Bonjour Espontáneos Travel ! Je souhaite réserver :", consent: "J'autorise le traitement de mes données selon la {link} (loi colombienne 1581 de 2012).", consent_link: "politique de confidentialité", consent_req: "Pour continuer, acceptez la politique de données 🙂", greet_fallback: "Bonjour ! Je suis Yenny, d'Espontáneos Travel 🌿 Comment puis-je vous aider ?"
+      wa_tour: "🌿 Expérience :", wa_guide: "🧭 Langue du guide :", confirm_book: "Voulez-vous réserver *{tour}* ?", wa_lead_tour: "Bonjour Espontáneos Travel ! Je souhaite réserver :", consent: "J'autorise le traitement de mes données selon la {link} (loi colombienne 1581 de 2012).", consent_link: "politique de confidentialité", consent_req: "Pour continuer, acceptez la politique de données 🙂", greet_fallback: "Bonjour ! Je suis Jenny, d'Espontáneos Travel 🌿 Comment puis-je vous aider ?"
     },
     de: {
-      launch: "Hilfe?", close: "Schließen", title: "Yenny", subtitle: "Ihre Gastgeberin · online",
+      launch: "Hilfe?", close: "Schließen", title: "Jenny", subtitle: "Ihre Gastgeberin · online",
       menu_prompt: "Wählen Sie ein Thema oder schreiben Sie Ihre Frage 👇", more: "➕ Weitere Themen", back: "↩ Menü", other: "Andere Frage",
       foot: "Offizielle Portfolio-Informationen · ein Berater bestätigt die Details", ask_ph: "Ihre Frage…", send: "Senden",
       m_reservar: "📅 Buchen", m_horarios: "🕘 Uhrzeiten", m_duracion: "⏱️ Dauer", m_incluye: "✅ Inklusive", m_llevar: "🎒 Was mitnehmen",
@@ -84,10 +84,10 @@
       f_guide: "Sprache des Guides", no_match: "Darauf habe ich keine genaue Antwort 🙈 Ich verbinde Sie per WhatsApp mit einem Berater.",
       wa_q: "Hallo Espontáneos Travel! Ich habe eine Frage:", wa_default: "Hallo Espontáneos Travel! Ich hätte gern mehr Informationen zu Ihren Erlebnissen.",
       open_wa: "WhatsApp öffnen", go_sust: "Bereich Nachhaltigkeit ansehen", go_tours: "Erlebnisse ansehen", pay_btn: "💳 Anzahlung leisten",
-      wa_tour: "🌿 Erlebnis:", wa_guide: "🧭 Sprache des Guides:", confirm_book: "Möchten Sie *{tour}* buchen?", wa_lead_tour: "Hallo Espontáneos Travel! Ich möchte buchen:", consent: "Ich stimme der Verarbeitung meiner Daten gemäß der {link} zu (kolumbianisches Gesetz 1581 von 2012).", consent_link: "Datenschutzerklärung", consent_req: "Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren 🙂", greet_fallback: "Hallo! Ich bin Yenny von Espontáneos Travel 🌿 Wie kann ich helfen?"
+      wa_tour: "🌿 Erlebnis:", wa_guide: "🧭 Sprache des Guides:", confirm_book: "Möchten Sie *{tour}* buchen?", wa_lead_tour: "Hallo Espontáneos Travel! Ich möchte buchen:", consent: "Ich stimme der Verarbeitung meiner Daten gemäß der {link} zu (kolumbianisches Gesetz 1581 von 2012).", consent_link: "Datenschutzerklärung", consent_req: "Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren 🙂", greet_fallback: "Hallo! Ich bin Jenny von Espontáneos Travel 🌿 Wie kann ich helfen?"
     },
     pt: {
-      launch: "Posso ajudar?", close: "Fechar", title: "Yenny", subtitle: "Sua anfitriã · online",
+      launch: "Posso ajudar?", close: "Fechar", title: "Jenny", subtitle: "Sua anfitriã · online",
       menu_prompt: "Escolha um tema ou escreva sua pergunta 👇", more: "➕ Mais temas", back: "↩ Menu", other: "Outra pergunta",
       foot: "Informação oficial do portfólio · um consultor confirma os detalhes", ask_ph: "Escreva sua pergunta…", send: "Enviar",
       m_reservar: "📅 Reservar", m_horarios: "🕘 Horários", m_duracion: "⏱️ Duração", m_incluye: "✅ O que inclui", m_llevar: "🎒 O que levar",
@@ -103,18 +103,18 @@
       f_guide: "Idioma do guia", no_match: "Não tenho essa resposta exata 🙈 Vou passar você para um consultor no WhatsApp.",
       wa_q: "Olá Espontáneos Travel! Tenho uma pergunta:", wa_default: "Olá Espontáneos Travel! Gostaria de mais informações sobre as experiências.",
       open_wa: "Abrir WhatsApp", go_sust: "Ver seção Sustentabilidade", go_tours: "Ver experiências", pay_btn: "💳 Pagar sinal",
-      wa_tour: "🌿 Experiência:", wa_guide: "🧭 Idioma do guia:", confirm_book: "Quer reservar *{tour}*?", wa_lead_tour: "Olá Espontáneos Travel! Quero reservar:", consent: "Autorizo o tratamento dos meus dados conforme a {link} (Lei colombiana 1581 de 2012).", consent_link: "política de privacidade", consent_req: "Para continuar, aceite a política de dados 🙂", greet_fallback: "Olá! Sou a Yenny, da Espontáneos Travel 🌿 Como posso ajudar?"
+      wa_tour: "🌿 Experiência:", wa_guide: "🧭 Idioma do guia:", confirm_book: "Quer reservar *{tour}*?", wa_lead_tour: "Olá Espontáneos Travel! Quero reservar:", consent: "Autorizo o tratamento dos meus dados conforme a {link} (Lei colombiana 1581 de 2012).", consent_link: "política de privacidade", consent_req: "Para continuar, aceite a política de dados 🙂", greet_fallback: "Olá! Sou a Jenny, da Espontáneos Travel 🌿 Como posso ajudar?"
     }
   };
 
-  // Temas del árbol (id del nodo en yenny.json → etiqueta del menú)
+  // Temas del árbol (id del nodo en jenny.json → etiqueta del menú)
   const PRIMARY = ["reservar", "horarios", "duracion", "que_incluye", "que_llevar", "precios", "pagos", "plans", "asesor"];
   const MORE = ["compartido", "traslados", "ninos_mayores", "accesibilidad", "idiomas", "clima", "temporadas", "cancelacion", "sostenibilidad", "empresa", "redes", "scan"];
   const LABEL = { reservar: "m_reservar", horarios: "m_horarios", duracion: "m_duracion", que_incluye: "m_incluye", que_llevar: "m_llevar", precios: "m_precios",
     pagos: "m_pagos", plans: "m_plans", asesor: "m_asesor", traslados: "m_traslados", ninos_mayores: "m_ninos", accesibilidad: "m_access", idiomas: "m_idiomas",
     clima: "m_clima", temporadas: "m_temporadas", cancelacion: "m_cancel", sostenibilidad: "m_sost", empresa: "m_empresa", redes: "m_redes", compartido: "m_compartido", scan: "m_scan" };
   const TOUR_Q = ["horarios", "duracion", "que_incluye", "que_llevar"];          // preguntas que necesitan una experiencia
-  // Palabras clave para el texto libre (se suman a pregunta_tipo de yenny.json)
+  // Palabras clave para el texto libre (se suman a pregunta_tipo de jenny.json)
   const KW = {
     horarios: ["hora", "horario", "a que hora", "a que horas sale", "recogen", "pickup", "what time", "schedule", "heure", "uhrzeit"],
     duracion: ["dura", "cuanto tiempo", "cuantas horas", "duracion", "how long", "duration", "duree", "dauer", "duracao"],
@@ -154,11 +154,11 @@
   /* ---------- Interfaz ---------- */
   function build() {
     launch = el("button", "espo-launch", `<span class="espo-launch__ava">Y<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
-    launch.setAttribute("aria-label", "Yenny");
+    launch.setAttribute("aria-label", "Jenny");
     launchTxt = launch.querySelector(".espo-launch__txt");
     badge = launch.querySelector(".espo-badge");
     panel = el("div", "espo-panel");
-    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Yenny");
+    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Jenny");
     panel.innerHTML =
       `<div class="espo-head">
          <span class="espo-head__ava">Y</span>
@@ -184,7 +184,7 @@
       if (!opened) return;
       // composedPath: los chips que se re-pintan siguen contando como "dentro del panel"
       const path = (typeof e.composedPath === "function") ? e.composedPath() : [];
-      if (path.some(n => n && n.hasAttribute && n.hasAttribute("data-plan-yenny"))) return;   // botones que abren a Yenny
+      if (path.some(n => n && n.hasAttribute && n.hasAttribute("data-plan-jenny"))) return;   // botones que abren a Jenny
       if (path.length) { if (path.indexOf(panel) === -1 && path.indexOf(launch) === -1) closePanel(); }
       else if (!panel.contains(e.target) && !launch.contains(e.target)) closePanel();
     });
@@ -453,7 +453,7 @@
       const s = words.filter((w, i, a) => a.indexOf(w) === i).reduce((a, w) => a + (hasWord(t, w) ? w.length : 0), 0);
       if (s > bestScore) { bestScore = s; best = x.id; }
     });
-    // 2) ¿qué pregunta? (palabras clave + pregunta_tipo de yenny.json, salvo las frases genéricas del tour compartido)
+    // 2) ¿qué pregunta? (palabras clave + pregunta_tipo de jenny.json, salvo las frases genéricas del tour compartido)
     let topic = null, tScore = 0;
     Object.keys(KW).forEach(id => {
       let kws = KW[id].slice();

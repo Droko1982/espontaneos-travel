@@ -1,9 +1,9 @@
 /* ==========================================================================
-   Espontáneos Travel — Fuente única de datos de Yenny (data/yenny.json)
-   Lo usan: el sitio (tarjetas, FAQ, sostenibilidad), Yenny (bot.js), el
+   Espontáneos Travel — Fuente única de datos de Jenny (data/jenny.json)
+   Lo usan: el sitio (tarjetas, FAQ, sostenibilidad), Jenny (bot.js), el
    conserje (concierge.js), el panel y el portal. También funciona en Node
    (tools/build-static.js) para generar el HTML base en español (SEO).
-   Traducciones: data/yenny.i18n.json (en, fr, de, pt). Español = fuente.
+   Traducciones: data/jenny.i18n.json (en, fr, de, pt). Español = fuente.
    ========================================================================== */
 (function (root, factory) {
   const api = factory();
@@ -19,8 +19,8 @@
     if (loading) return loading;
     base = base || "";
     const get = (u) => fetch(base + u, { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)).catch(() => null);
-    loading = Promise.all([get("data/yenny.json"), get("data/yenny.i18n.json")]).then(([y, i]) => {
-      if (!y) throw new Error("yenny.json");
+    loading = Promise.all([get("data/jenny.json"), get("data/jenny.i18n.json")]).then(([y, i]) => {
+      if (!y) throw new Error("jenny.json");
       Y = y; I = i || {};
       return api;
     });

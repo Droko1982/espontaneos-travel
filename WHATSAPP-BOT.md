@@ -2,8 +2,8 @@
 
 Dos piezas trabajan juntas:
 
-1. **Yenny, la asistente web** (ya en el sitio): responde al instante con la misma
-   información del portafolio (`data/yenny.json`): horarios, duración, qué incluye, qué
+1. **Jenny, la asistente web** (ya en el sitio): responde al instante con la misma
+   información del portafolio (`data/jenny.json`): horarios, duración, qué incluye, qué
    llevar, pagos, traslados… y **abre WhatsApp con el resumen ya redactado** (experiencia
    y código, personas, fecha, hotel e idioma). Funciona en 5 idiomas.
 2. **WhatsApp Business app** (gratis): configura los mensajes automáticos de abajo para
@@ -23,7 +23,7 @@ Dos piezas trabajan juntas:
 *(WhatsApp Business → Ajustes → Herramientas para la empresa → Mensaje de bienvenida)*
 
 ```
-¡Hola! 👋 Soy Yenny, de *Espontáneos Travel* 🌿☕
+¡Hola! 👋 Soy Jenny, de *Espontáneos Travel* 🌿☕
 Experiencias rurales, culturales, de naturaleza y sin barreras en el Paisaje Cultural Cafetero (RNT 91795).
 
 Cuéntanos qué buscas o escribe el número de una opción:
@@ -55,7 +55,7 @@ Para cotizar más rápido, cuéntanos:
 
 ## 3) Respuestas rápidas
 *(Herramientas para la empresa → Respuestas rápidas → Agregar. El "atajo" se escribe
-precedido de "/". Los textos son los mismos de Yenny para que nunca se contradigan.)*
+precedido de "/". Los textos son los mismos de Jenny para que nunca se contradigan.)*
 
 **Atajo `/experiencias`**
 ```
@@ -133,16 +133,16 @@ etc. Si lo quieres, lo planeamos e implementamos como fase aparte.
 
 ---
 
-## 6) QR de itinerarios + Yenny (ya en el sitio)
+## 6) QR de itinerarios + Jenny (ya en el sitio)
 
 1. En `anfitrion.html` → **"QR de itinerario"**: eliges el itinerario y escribes el
    origen/aliado (ej. `HOTEL-SAZAGUA`). Imprime el QR en hoteles, flyers o redes.
 2. El cliente lo escanea con la cámara del celular (o con **📷 Escanear QR** dentro de
-   Yenny) → Yenny le muestra el itinerario; puede elegirlo o ver otros.
+   Jenny) → Jenny le muestra el itinerario; puede elegirlo o ver otros.
 3. Deja sus datos (nombre, fecha, personas, alojamiento, accesibilidad, alimentación)
-   y Yenny arma el **resumen para WhatsApp**: incluye el origen del QR y un enlace a su
+   y Jenny arma el **resumen para WhatsApp**: incluye el origen del QR y un enlace a su
    **itinerario provisional**, que puedes abrir y reenviar.
-4. Yenny le da la lista de **qué llevar** según el clima de cada destino (gorra,
+4. Jenny le da la lista de **qué llevar** según el clima de cada destino (gorra,
    bloqueador, repelente, impermeable…). Si el viaje es en los próximos ~15 días, usa
    el **pronóstico real** (Open-Meteo, gratis) y ajusta la lista.
 
@@ -153,7 +153,7 @@ Los itinerarios, los artículos y los perfiles de clima se editan en `js/plans.j
 | Campo | Para qué | Si se deja vacío |
 |---|---|---|
 | `leadsEndpoint` | Guarda cada cliente en Google Sheets (escaneos de QR, resúmenes, envíos a WhatsApp). Instalación: `tools/leads-apps-script.gs`. | No se guarda nada |
-| `payLink` | Botón **💳 Pagar anticipo** en "Formas de pago" de Yenny. | No aparece el botón |
+| `payLink` | Botón **💳 Pagar anticipo** en "Formas de pago" de Jenny. | No aparece el botón |
 | `reviewUrl` | Enlace "Escribir reseña" de tu Perfil de Empresa en Google (`g.page/r/…/review`). | Abre tu ficha en Google Maps |
 | `priceFrom` (en cada itinerario) | Muestra "Desde USD X por persona". | Se cotiza a la medida |
 
@@ -169,7 +169,7 @@ Por seguridad, un enlace de viaje generado en el panel (`?d=`) **nunca** muestra
   confirmar disponibilidad.
 - **Recordatorio de víspera**: pega el enlace o código del viajero. Se arma el mensaje del
   día en su idioma, con horarios, pronóstico y qué llevar, listo para enviar por WhatsApp.
-- **Clientes de Yenny**: con la clave de tu Apps Script ves los últimos clientes y cuántos
+- **Clientes de Jenny**: con la clave de tu Apps Script ves los últimos clientes y cuántos
   escaneos, resúmenes y envíos trae cada aliado o QR.
 
 ## 9) Para el viajero

@@ -1,14 +1,14 @@
 /* ==========================================================================
    Espontáneos Travel — Motor del sitio (rediseño 2026)
-   Datos: js/data.js (tours, fotos, resúmenes) + data/yenny.json (duración,
-   horario, incluye, recomendaciones — la misma fuente de Yenny).
+   Datos: js/data.js (tours, fotos, resúmenes) + data/jenny.json (duración,
+   horario, incluye, recomendaciones — la misma fuente de Jenny).
    ========================================================================== */
 (function () {
   "use strict";
 
   /* ---------- Config ---------- */
   const CFG = {
-    whatsapp: "573187200023",            // +57 318 720 0023 (VALIDAR: la web anterior enlazaba a 318 730 0023)
+    whatsapp: "573187200023",            // +57 318 720 0023 (confirmado)
     email: "info@espontaneostravel.com",
     siteUrl: "https://www.espontaneostravel.com",
     formEndpoint: "https://formsubmit.co/ajax/info@espontaneostravel.com"
@@ -272,7 +272,7 @@
     $("#modal-incl").innerHTML = incl.map(x => `<li>${I.check}<span>${esc(x)}</span></li>`).join("");
     const noin = $("#modal-noincl");
     noin.innerHTML = i && i.no_incluye.length ? `<b>${esc(t("modal_notincl_t"))}:</b> ${esc(i.no_incluye.join(" · "))}. ${esc(t("modal_notincl"))}` : esc(t("modal_notincl"));
-    // recomendaciones de Yenny
+    // recomendaciones de Jenny
     const tips = $("#modal-tips");
     if (i && i.rec.items.length) { tips.hidden = false; tips.innerHTML = `<h4>${esc(t("modal_tips"))}</h4><p class="modal__tips-t">${esc(i.rec.titulo)}</p><ul>${i.rec.items.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`; }
     else tips.hidden = true;
@@ -491,11 +491,11 @@
       mm.classList.add("open"); burger.setAttribute("aria-expanded", "true"); document.body.style.overflow = "hidden"; $("#mm-close").focus();
     });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && mm.classList.contains("open")) { closeMM(); burger.focus(); } });
-    // Botones "Armarlo con Yenny" (delegado: funciona aunque los planes se repinten o los datos no carguen)
+    // Botones "Armarlo con Jenny" (delegado: funciona aunque los planes se repinten o los datos no carguen)
     document.addEventListener("click", (e) => {
-      const b = e.target.closest && e.target.closest("[data-plan-yenny]"); if (!b) return;
+      const b = e.target.closest && e.target.closest("[data-plan-jenny]"); if (!b) return;
       e.preventDefault();
-      const id = b.getAttribute("data-plan-yenny");
+      const id = b.getAttribute("data-plan-jenny");
       if (window.EspoBot && EspoBot.openPlan) EspoBot.openPlan(id); else location.search = "?plan=" + encodeURIComponent(id);
     });
     $("#mm-close").addEventListener("click", closeMM);
@@ -535,7 +535,7 @@
     });
   }
 
-  /* ---------- API pública (Yenny y otros módulos) ---------- */
+  /* ---------- API pública (Jenny y otros módulos) ---------- */
   window.EspoApp = {
     getLang: () => currentLang,
     tours: () => visibleTours(),

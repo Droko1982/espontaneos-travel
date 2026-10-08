@@ -5,9 +5,9 @@
    Solo guarda los archivos del conserje y el pronóstico; no toca el resto del sitio.
    Al cambiar estos archivos no hace falta tocar nada: con red siempre se descargan.
    ========================================================================== */
-const CACHE = "esp-conserje-v2";
-const CORE = ["viaje.html", "css/styles.css", "css/maps.css", "js/kb.js", "js/yenny-data.js", "js/plans.js", "js/qrscan.js", "js/concierge.js", "js/maps.js",
-  "data/bookings.json", "data/yenny.json", "data/yenny.i18n.json", "data/geo.json", "assets/img/logo.png", "assets/img/icon-192.png", "viaje.webmanifest"];
+const CACHE = "esp-conserje-v3";
+const CORE = ["viaje.html", "css/styles.css", "css/maps.css", "js/kb.js", "js/jenny-data.js", "js/plans.js", "js/qrscan.js", "js/concierge.js", "js/maps.js",
+  "data/bookings.json", "data/jenny.json", "data/jenny.i18n.json", "data/geo.json", "assets/img/logo.png", "assets/img/icon-192.png", "viaje.webmanifest"];
 
 self.addEventListener("install", (e) => {
   // Cada archivo por separado: si uno falta, el resto igual queda disponible sin señal

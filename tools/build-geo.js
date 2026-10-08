@@ -18,7 +18,7 @@
      node tools/build-geo.js --refresh   # ignora la caché y re-consulta todo
 
    Para un tour nuevo o el portafolio 2027: añade/edita la entrada en
-   LUGARES (abajo) usando el id_web de data/yenny.json y vuelve a correr.
+   LUGARES (abajo) usando el id_web de data/jenny.json y vuelve a correr.
    Ver docs/MAPAS.md.
    ===================================================================== */
 'use strict';
@@ -28,7 +28,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'data', 'geo.json');
-const YENNY = path.join(ROOT, 'data', 'yenny.json');
+const JENNY = path.join(ROOT, 'data', 'jenny.json');
 const CACHE_FILE = path.join(__dirname, '.cache', 'geo-cache.json');
 const UA = 'EspontaneosTravel-geo/1.0 (info@espontaneostravel.com)';
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
@@ -123,7 +123,7 @@ const PUEBLOS = {
 };
 
 /* ---------------------------------------------------------------------
-   4) LUGARES POR TOUR (clave = id_web de data/yenny.json)
+   4) LUGARES POR TOUR (clave = id_web de data/jenny.json)
    tipo:
      'fijo'  → lugar concreto (punto) + ruta OSRM desde el hub (o por paradas).
      'zona'  → varía según el hotel/condiciones. Con `punto`: centro
@@ -446,13 +446,13 @@ async function osrmRoute(seq) {
    Principal
    ===================================================================== */
 (async function main() {
-  const yenny = JSON.parse(fs.readFileSync(YENNY, 'utf8'));
-  const tours = yenny.tours || [];
+  const jenny = JSON.parse(fs.readFileSync(JENNY, 'utf8'));
+  const tours = jenny.tours || [];
   const ids = tours.map(t => t.id_web);
   const missing = ids.filter(id => !LUGARES[id]);
   const extra = Object.keys(LUGARES).filter(id => !ids.includes(id));
-  if (missing.length) { console.error('✗ Tours de yenny.json sin entrada en LUGARES:', missing.join(', ')); process.exit(1); }
-  if (extra.length) console.warn('! Entradas en LUGARES que no existen en yenny.json:', extra.join(', '));
+  if (missing.length) { console.error('✗ Tours de jenny.json sin entrada en LUGARES:', missing.join(', ')); process.exit(1); }
+  if (extra.length) console.warn('! Entradas en LUGARES que no existen en jenny.json:', extra.join(', '));
   // Categorías del sitio (js/data.js) para colorear marcadores sin depender de la página
   const CAT = {};
   try {
@@ -460,7 +460,7 @@ async function osrmRoute(seq) {
     const T = new Function(src + '\n;return typeof TOURS !== "undefined" ? TOURS : [];')();
     for (const x of T) CAT[x.id] = x.cat;
     const sinGeo = T.map(x => x.id).filter(id => !LUGARES[id]);
-    if (sinGeo.length) console.warn('! Tours de js/data.js sin datos en yenny.json (no se mapean):', sinGeo.join(', '));
+    if (sinGeo.length) console.warn('! Tours de js/data.js sin datos en jenny.json (no se mapean):', sinGeo.join(', '));
   } catch (e) { console.warn('! No se pudo leer js/data.js para categorías:', e.message); }
 
   // 1) Geocodificar
@@ -512,7 +512,7 @@ async function osrmRoute(seq) {
     const id = t.id_web, L = LUGARES[id];
     const base = { tipo: L.tipo, nombre_lugar: L.nombre_lugar, tour: t.nombre, codigo: t.codigo, cat: CAT[id] || null, duracion_h: t.duracion_horas == null ? null : t.duracion_horas };
     if (L.tipo === 'movil') {
-      lugares[id] = Object.assign(base, { modalidad: L.modalidad || 'hotel', servicio: L.servicio || ['armenia'], ruta: null, fuente: 'data/yenny.json (notas del portafolio 2026)', nota: L.nota });
+      lugares[id] = Object.assign(base, { modalidad: L.modalidad || 'hotel', servicio: L.servicio || ['armenia'], ruta: null, fuente: 'data/jenny.json (notas del portafolio 2026)', nota: L.nota });
       continue;
     }
     if (L.generica) {
@@ -589,8 +589,8 @@ async function osrmRoute(seq) {
       descripcion: 'Geodatos de Espontáneos Travel para js/maps.js: hubs, lugares por tour, pueblos y distancias por carretera precalculadas.',
       generado: new Date().toISOString(),
       generador: 'tools/build-geo.js',
-      tours_fuente: 'data/yenny.json (vigencia ' + (yenny._meta && yenny._meta.vigencia) + ')',
-      vigencia: (yenny._meta && yenny._meta.vigencia) || null,
+      tours_fuente: 'data/jenny.json (vigencia ' + (jenny._meta && jenny._meta.vigencia) + ')',
+      vigencia: (jenny._meta && jenny._meta.vigencia) || null,
       nota_vigencia: 'Distancias y tiempos de OSRM sin tráfico (vías de montaña: pueden tardar más). Zonas genéricas y lugares marcados validar:true deben confirmarse con el área de operaciones. Regenerar con: node tools/build-geo.js',
       fuentes: [
         'OpenStreetMap Nominatim (geocodificación) — https://nominatim.openstreetmap.org',

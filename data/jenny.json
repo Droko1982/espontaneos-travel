@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "descripcion": "Fuente única de datos de Yenny (sitio, conserje y portal). Generado a partir de jenny-arbol-faq.json (brief de rediseño, oct. 2026) con limpieza de textos del portafolio.",
+  "descripcion": "Fuente única de datos de Jenny (sitio, conserje y portal). Generado a partir de jenny-arbol-faq.json (brief de rediseño, oct. 2026) con limpieza de textos del portafolio.",
   "version": "2026-10-08",
   "empresa": "Espontáneos Travel SAS",
   "fuentes": [
@@ -10,7 +10,7 @@
    "Política de Sostenibilidad ET",
    "Base de Conocimiento Chatbot - Espontáneos Travel (docx)"
   ],
-  "regla_de_oro": "Campos null o POR_VALIDAR: Yenny NO inventa; responde 'te lo confirma un asesor' y pasa a WhatsApp.",
+  "regla_de_oro": "Campos null o POR_VALIDAR: Jenny NO inventa; responde 'te lo confirma un asesor' y pasa a WhatsApp.",
   "precios": "El tarifario 2026 es NETO (agencias): nunca se muestra al público. Solo se publica PVP aprobado (hoy: Tour Compartido Cocora + Salento). El resto se cotiza por WhatsApp. Las condiciones con tarifas o suplementos están fuera del repositorio (privado/) y se cargan al portal DMC.",
   "horario": "fijo = hora(s) de recogida en el hotel; ventana = el viajero elige la hora de inicio dentro del rango; desde = a partir de esa hora; null = por confirmar con un asesor",
   "recomendacion_fuente": "'documento ET' = texto oficial; 'propuesta (VALIDAR)' = redactada a partir del portafolio, pendiente de revisión de Carolina Toro",
@@ -21,7 +21,7 @@
  "contacto": {
   "whatsapp": "573187200023",
   "whatsapp_display": "+57 318 720 0023",
-  "whatsapp_validar": "La web anterior enlazaba a 318 730 0023; se usa 318 720 0023 (VALIDAR)",
+  "whatsapp_confirmado": "318 720 0023 confirmado el 8-oct-2026; la web anterior enlazaba a 318 730 0023",
   "correo": "info@espontaneostravel.com",
   "rnt": "91795",
   "instagram": "https://instagram.com/espontaneostravel/",
@@ -37,7 +37,7 @@
  "arbol": [
   {
    "id": "saludo",
-   "jenny": "¡Hola! Soy Yenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?",
+   "jenny": "¡Hola! Soy Jenny, de Espontáneos Travel 🌿 ¿En qué te ayudo?",
    "opciones": [
     "empresa",
     "horarios",

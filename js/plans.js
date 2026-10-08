@@ -1,6 +1,6 @@
 /* ==========================================================================
    Espontáneos Travel — Itinerarios armados + "Qué llevar" según el clima.
-   Compartido por el sitio (Yenny), el conserje (viaje.html) y el panel.
+   Compartido por el sitio (Jenny), el conserje (viaje.html) y el panel.
    - PLANS: itinerarios que el cliente elige (cada uno tiene su QR: ?plan=ID).
    - CLIMATE: perfil de clima por destino → lista de qué llevar + consejo.
    - Pronóstico real (gratis, sin clave) de Open-Meteo cuando la fecha está
@@ -234,7 +234,7 @@
   }
 
   /* Lista de qué llevar para un conjunto de paradas [{tour|tourId|title, date?}].
-     Prioridad: la recomendación oficial de cada experiencia (data/yenny.json, vía EspoData);
+     Prioridad: la recomendación oficial de cada experiencia (data/jenny.json, vía EspoData);
      si una parada no la tiene, se usa el perfil de clima. El pronóstico solo agrega avisos.
      Devuelve { items:[{i,label}], tips:[], days:[{title, date, climate, fc}] }. */
   function packFor(stops, lang) {
@@ -264,7 +264,7 @@
     });
     return Promise.all(jobs).then(() => ({ items: items, tips: tips, days: days }));
   }
-  // Pronóstico para una experiencia en una fecha (lo usa Yenny en "Qué llevar")
+  // Pronóstico para una experiencia en una fecha (lo usa Jenny en "Qué llevar")
   function forecastFor(tourId, iso) { const k = climateFor({ tour: tourId }); return k ? forecast(k, iso) : Promise.resolve(null); }
 
   /* ---------- Textos de interfaz (5 idiomas) ---------- */

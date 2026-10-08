@@ -1,7 +1,7 @@
 {
   "name": "Mi viaje · Espontáneos Travel",
   "short_name": "Mi viaje",
-  "description": "Tu itinerario, qué llevar y Yenny, tu anfitriona, incluso sin señal.",
+  "description": "Tu itinerario, qué llevar y Jenny, tu anfitriona, incluso sin señal.",
   "start_url": "viaje.html",
   "scope": "./",
   "display": "standalone",

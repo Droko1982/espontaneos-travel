@@ -3,7 +3,7 @@
   "descripcion": "Geodatos de Espontáneos Travel para js/maps.js: hubs, lugares por tour, pueblos y distancias por carretera precalculadas.",
   "generado": "2026-10-08T05:59:45.923Z",
   "generador": "tools/build-geo.js",
-  "tours_fuente": "data/yenny.json (vigencia 2026)",
+  "tours_fuente": "data/jenny.json (vigencia 2026)",
   "vigencia": 2026,
   "nota_vigencia": "Distancias y tiempos de OSRM sin tráfico (vías de montaña: pueden tardar más). Zonas genéricas y lugares marcados validar:true deben confirmarse con el área de operaciones. Regenerar con: node tools/build-geo.js",
   "fuentes": [
@@ -1487,7 +1487,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten."
   },
   "senderovida": {
@@ -1549,7 +1549,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten."
   },
   "respiracion": {
@@ -1565,7 +1565,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Se realiza en la reserva natural más cercana al hotel o en el mismo hotel si sus instalaciones lo permiten."
   },
   "parapente": {
@@ -2300,7 +2300,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Se realiza en Armenia, Pereira o municipios a máximo 20 minutos; puede hacerse en el hotel."
   },
   "gastronomica": {
@@ -2339,7 +2339,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
   },
   "cataquesos": {
@@ -2355,7 +2355,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
   },
   "catacocteles": {
@@ -2417,7 +2417,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
   },
   "siembra": {
@@ -2550,7 +2550,7 @@
     "pereira"
    ],
    "ruta": null,
-   "fuente": "data/yenny.json (notas del portafolio 2026)",
+   "fuente": "data/jenny.json (notas del portafolio 2026)",
    "nota": "Actividad móvil: se realiza en el hotel o locación donde estés alojado."
   }
  },

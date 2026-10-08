@@ -2,7 +2,7 @@
    Uso:  node tools/build-static.js
    Rellena los bloques <!-- BUILD:x:start --> … <!-- BUILD:x:end --> con las mismas
    plantillas que usa el navegador (js/render.js). Volver a ejecutar tras cambiar
-   data/yenny.json, js/data.js o las fotos (tools/localize_images.py). */
+   data/jenny.json, js/data.js o las fotos (tools/localize_images.py). */
 "use strict";
 const fs = require("fs"), path = require("path"), vm = require("vm");
 const ROOT = path.join(__dirname, "..");
@@ -23,7 +23,7 @@ const { TOURS, CATEGORIES, GALLERY, EspoPlans } = ctx;
 const T = Object.assign({}, ctx.I18N.es, (typeof ctx.I18N_EXTRA !== "undefined" && ctx.I18N_EXTRA.es) || {}, ctx.I18N_2026.es);
 const t = (k) => T[k] || k;
 
-const D = require("../js/yenny-data.js").use(JSON.parse(read("data/yenny.json")), {});
+const D = require("../js/jenny-data.js").use(JSON.parse(read("data/jenny.json")), {});
 const R = require("../js/render.js");
 const FAQ = require("../js/faq.js");
 const esc = R.esc;

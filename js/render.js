@@ -90,7 +90,7 @@
     <span class="plan-card__tag">${esc(t("plan_days").replace("{n}", p.days))}</span>
     <h4>${esc(p.nombre)}</h4>
     <ol class="plan-card__stops">${p.stops.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
-    <button class="btn btn--ghost btn--sm" type="button" data-plan-yenny="${esc(p.id)}">${esc(t("plan_see"))}</button>
+    <button class="btn btn--ghost btn--sm" type="button" data-plan-jenny="${esc(p.id)}">${esc(t("plan_see"))}</button>
   </article>`).join("\n  ");
     return `<h3 class="plans__sub">${esc(t("plans_official"))}</h3>
 <div class="plans__grid">

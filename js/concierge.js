@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Espontáneos Travel — Conserje con Yenny (motor). Zero-cost, estático.
+   Espontáneos Travel — Conserje con Jenny (motor). Zero-cost, estático.
    Carga data/bookings.json por ?code=, arma itinerario + chat multilingüe.
    ========================================================================== */
 (function () {
@@ -242,13 +242,13 @@
     });
     return score > 0 ? best : null;
   }
-  // Temas que tienen respuesta oficial en data/yenny.json: se responde con esa (misma fuente que el sitio)
+  // Temas que tienen respuesta oficial en data/jenny.json: se responde con esa (misma fuente que el sitio)
   const OFFICIAL = { weather: "clima", rain: "clima", access: "accesibilidad", children: "ninos_mayores", travelers: "ninos_mayores",
     payment: "pagos", cancellation: "cancelacion", airport: "traslados" };
   const ED = () => (window.EspoData && EspoData.ready() ? EspoData : null);
   const ROUTE_T = { es: "Tu ruta y distancias", en: "Your route & distances", fr: "Votre itinéraire et distances", de: "Ihre Route & Entfernungen", pt: "Sua rota e distâncias" };
   const TIPS_T = { es: "Para esta experiencia", en: "For this experience", fr: "Pour cette expérience", de: "Für dieses Erlebnis", pt: "Para esta experiência" };
-  // Respaldo: temas oficiales de Yenny (data/yenny.json) por palabras clave + pregunta_tipo traducido
+  // Respaldo: temas oficiales de Jenny (data/jenny.json) por palabras clave + pregunta_tipo traducido
   const OFFICIAL_KW = {
     clima: ["clima", "lluvia", "llover", "llueve", "frio", "calor", "temperatura", "weather", "rain", "cold", "meteo", "pluie", "wetter", "regen", "chuva", "tempo"],
     pagos: ["pago", "pagar", "anticipo", "saldo", "nequi", "daviplata", "tarjeta", "payment", "pay", "deposit", "paiement", "zahlung", "pagamento"],
@@ -522,7 +522,7 @@
     });
     let storedLang = null; try { storedLang = localStorage.getItem("esp_lang"); } catch (e) {}
     if (SUPPORTED.includes(storedLang)) lang = storedLang;
-    // Datos oficiales de Yenny (duraciones, recomendaciones); si no cargan, el conserje funciona igual
+    // Datos oficiales de Jenny (duraciones, recomendaciones); si no cargan, el conserje funciona igual
     const dataReady = window.EspoData ? EspoData.load().catch(() => null) : Promise.resolve(null);
     const dparam = getParam("d");
     if (dparam) { const b = decodeBooking(dparam); if (b) { booking = fromLink(b); if (!storedLang && SUPPORTED.includes(b.lang)) lang = b.lang; } dataReady.then(renderAll); return; }

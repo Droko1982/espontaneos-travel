@@ -1,9 +1,9 @@
 /**
- * Espontáneos Travel — Guarda en Google Sheets cada cliente que atiende Yenny
+ * Espontáneos Travel — Guarda en Google Sheets cada cliente que atiende Jenny
  * (escaneos de QR de itinerario, resúmenes y envíos a WhatsApp). Gratis, sin servidor.
  *
  * INSTALACIÓN (≈5 minutos):
- * 1. Crea una hoja de cálculo en Google Sheets (ej. "Clientes Yenny").
+ * 1. Crea una hoja de cálculo en Google Sheets (ej. "Clientes Jenny").
  * 2. Menú Extensiones → Apps Script. Borra lo que haya y pega TODO este archivo.
  * 3. Cambia CLAVE_PANEL por una clave tuya: es la que escribirás en el panel del
  *    anfitrión para ver los clientes. No la compartas.
@@ -34,7 +34,7 @@ function limpio_(v, max) {
   return /^[=+\-@]/.test(s) ? "'" + s : s;
 }
 
-// Lo envía el sitio (Yenny) con cada evento
+// Lo envía el sitio (Jenny) con cada evento
 function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
