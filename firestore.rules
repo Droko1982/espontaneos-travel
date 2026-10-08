@@ -367,7 +367,7 @@ service cloud.firestore {
     }
     function validPublica(codigo, d) {
       return codigo.matches('[A-Z0-9]{10,24}')
-        && d.keys().hasOnly(['code', 'lang', 'name', 'party', 'status', 'region', 'host', 'driver', 'guide', 'hotel', 'itinerary', 'payLink'])
+        && d.keys().hasOnly(['code', 'lang', 'name', 'party', 'status', 'region', 'host', 'driver', 'guide', 'hotel', 'itinerary', 'payLink', 'vence'])
         && d.keys().hasAll(['code', 'name', 'itinerary'])
         && d.code == codigo
         && (d.name is string) && d.name.size() > 0 && d.name.size() <= 60
@@ -378,11 +378,13 @@ service cloud.firestore {
         && (!('guide' in d) || guideOk(d.guide))
         && (!('hotel' in d) || hotelOk(d.hotel))
         && itineraryOk(d.itinerary)
-        && (!('payLink' in d) || payLinkOk(d.payLink));
+        && (!('payLink' in d) || payLinkOk(d.payLink))
+        && (!('vence' in d) || (d.vence is timestamp));
     }
 
     match /reservas_publicas/{codigo} {
-      allow get: if true;
+      // El viajero lee con el código exacto hasta "vence" (30 días después del viaje); el equipo, siempre.
+      allow get: if !('vence' in resource.data) || request.time < resource.data.vence || isStaff();
       allow list: if false;
       allow create, update: if isStaff()
                             && validPublica(codigo, request.resource.data)

@@ -2,8 +2,12 @@
 
 ## Estado actual (8 de octubre de 2026)
 
-- **Sitio:** https://www.espontaneostravel.com (GitHub Pages, rama `main`, carpeta raíz `/`).
-  `espontaneostravel.com` sin www redirige a www. El archivo `CNAME` del repositorio lo crea GitHub: no borrarlo.
+- **Sitio:** https://www.espontaneostravel.com (GitHub Pages, publicado por GitHub Actions con cada push a `main`).
+  `espontaneostravel.com` sin www redirige a www. No borrar el archivo `CNAME`.
+- **Qué se publica:** solo los archivos públicos que lista `.github/workflows/publicar.yml` (páginas, `assets/`,
+  `css/`, `js/`, `data/`). Los documentos internos (`docs/`, `*.md`), `tools/` y la configuración de Firebase
+  quedan en el repositorio pero **no** en el dominio. Si agregas una página o carpeta nueva, súmala ahí.
+  Estado de cada publicación: https://github.com/Droko1982/espontaneos-travel/actions
 - **Repositorio:** https://github.com/Droko1982/espontaneos-travel
 - **Dominio registrado en:** GoDaddy (vence el 22-feb-2027).
 - **DNS administrado en:** GoDaddy (servidores `ns77/ns78.domaincontrol.com`).
@@ -23,8 +27,8 @@
 
 ## HTTPS
 
-En https://github.com/Droko1982/espontaneos-travel/settings/pages, cuando GitHub emita el certificado
-(de minutos a 24 h), marcar **Enforce HTTPS**.
+Certificado de Let's Encrypt emitido por GitHub (se renueva solo) y **Enforce HTTPS** activado (8-oct-2026):
+`http://` redirige a `https://`. Configuración: https://github.com/Droko1982/espontaneos-travel/settings/pages
 
 ## Volver atrás (solo en emergencia)
 

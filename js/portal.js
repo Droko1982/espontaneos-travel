@@ -269,9 +269,19 @@ export function ownTripLink(u) {
   return "";
 }
 
+// El código del viajero deja de funcionar 30 días después del último día del viaje (privacidad).
+// La regla de Firestore (match /reservas_publicas) niega la lectura pública después de "vence".
+export const CODE_DAYS_AFTER = 30;
+export function codeExpiry(itinerary, now = new Date()) {
+  const last = (itinerary || []).map(i => i && i.date).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d || "")).sort().pop();
+  const base = last ? new Date(last + "T23:59:59-05:00") : now;   // fin del día en Colombia
+  return new Date(base.getTime() + CODE_DAYS_AFTER * 864e5);
+}
+
 /**
  * Documento PÚBLICO de una reserva (reservas_publicas/{código}): solo lo que necesita el conserje.
  * b: { code, lang, name, party, status, region, host, driver, guide, hotel, itinerary, payLink }
+ * Agrega "vence" (fecha en que el código deja de abrir el conserje).
  */
 export function buildPublicBooking(b, prefixes) {
   const str = (v, n) => String(v == null ? "" : v).trim().slice(0, n);
@@ -288,6 +298,7 @@ export function buildPublicBooking(b, prefixes) {
       tourId: str(it.tourId, 40), maps: httpsUrl(it.maps)
     }))
   };
+  pub.vence = codeExpiry(pub.itinerary);
   if (Number.isInteger(b.party) && b.party >= 1 && b.party <= 500) pub.party = b.party;
   const lat = b.hotel && b.hotel.lat, lon = b.hotel && b.hotel.lon;
   if (typeof lat === "number" && Number.isFinite(lat) && Math.abs(lat) <= 90 && typeof lon === "number" && Number.isFinite(lon) && Math.abs(lon) <= 180) {

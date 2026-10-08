@@ -1,0 +1,47 @@
+# Publica el sitio en GitHub Pages con cada push a main.
+# Solo sube los archivos PÚBLICOS (lista abajo): documentos internos (docs/, *.md),
+# herramientas (tools/) y configuración de Firebase no quedan en www.espontaneostravel.com.
+# Si agregas una página o carpeta nueva que el sitio necesita, súmala a "Armar el sitio".
+name: Publicar sitio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Armar el sitio (solo archivos públicos)
+        run: |
+          mkdir _site
+          cp *.html robots.txt sitemap.xml *.webmanifest sw.js CNAME .nojekyll _site/
+          cp -r assets css js _site/
+          mkdir -p _site/data/plantillas
+          cp data/*.json _site/data/
+          cp data/plantillas/*.csv _site/data/plantillas/
+          echo "Archivos publicados: $(find _site -type f | wc -l)"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
