@@ -1,55 +1,33 @@
 # Despliegue y dominio — Espontáneos Travel
 
-## Estado actual
+## Estado actual (8 de octubre de 2026)
 
-- **Preview en vivo (GitHub Pages):** https://droko1982.github.io/espontaneos-travel/
-- Repo: https://github.com/Droko1982/espontaneos-travel
-- Rama publicada: `main` (carpeta raíz `/`).
+- **Sitio:** https://www.espontaneostravel.com (GitHub Pages, rama `main`, carpeta raíz `/`).
+  `espontaneostravel.com` sin www redirige a www. El archivo `CNAME` del repositorio lo crea GitHub: no borrarlo.
+- **Repositorio:** https://github.com/Droko1982/espontaneos-travel
+- **Dominio registrado en:** GoDaddy (vence el 22-feb-2027).
+- **DNS administrado en:** GoDaddy (servidores `ns77/ns78.domaincontrol.com`).
+- **Correo (info@):** sigue en **Hostinger**. No cancelar ese servicio de correo.
 
-## Conectar el dominio espontaneostravel.com
+## Registros DNS en GoDaddy (no cambiar sin revisar)
 
-> ⚠️ No subas el archivo `CNAME` hasta tener el DNS apuntando a GitHub Pages;
-> de lo contrario el enlace `*.github.io` dejará de funcionar como preview.
+| Tipo | Nombre | Valor | Para qué |
+|---|---|---|---|
+| A | @ | 185.199.108.153 · 185.199.109.153 · 185.199.110.153 · 185.199.111.153 | Web (GitHub Pages) |
+| CNAME | www | droko1982.github.io | Web (GitHub Pages) |
+| TXT | _github-pages-challenge-Droko1982 | (código de GitHub) | Verificación del dominio en GitHub |
+| MX | @ | mx1.hostinger.com (5) · mx2.hostinger.com (10) | **Correo** |
+| TXT | @ | v=spf1 include:_spf.mail.hostinger.com ~all | **Correo** (SPF) |
+| CNAME | hostingermail-a/b/c._domainkey | hostingermail-a/b/c.dkim.mail.hostinger.com | **Correo** (DKIM) |
+| CNAME | autodiscover / autoconfig | autodiscover / autoconfig.mail.hostinger.com | **Correo** (configuración automática) |
 
-### 1. En tu proveedor de dominio (DNS)
+## HTTPS
 
-**Opción A — dominio raíz `espontaneostravel.com`** (registros A):
+En https://github.com/Droko1982/espontaneos-travel/settings/pages, cuando GitHub emita el certificado
+(de minutos a 24 h), marcar **Enforce HTTPS**.
 
-```
-A   @   185.199.108.153
-A   @   185.199.109.153
-A   @   185.199.110.153
-A   @   185.199.111.153
-```
+## Volver atrás (solo en emergencia)
 
-**Subdominio `www`** (recomendado como principal):
-
-```
-CNAME   www   droko1982.github.io.
-```
-
-### 2. Crear el archivo CNAME
-
-Crea un archivo llamado `CNAME` (sin extensión) en la raíz del repo con una sola línea:
-
-```
-www.espontaneostravel.com
-```
-
-Súbelo (`git add CNAME && git commit && git push`). GitHub detectará el dominio.
-
-### 3. En GitHub → Settings → Pages
-
-- **Custom domain:** `www.espontaneostravel.com` → Save.
-- Marca **Enforce HTTPS** cuando el certificado esté listo (unos minutos).
-
-### 4. SEO
-
-Las URLs canónicas, `hreflang`, Open Graph y `sitemap.xml` ya apuntan a
-`https://www.espontaneostravel.com/`. Al terminar:
-
-- Verifica el dominio en **Google Search Console** y envía `sitemap.xml`.
-- Añade `assets/img/og-cover.jpg` (1200×630) para las vistas previas al compartir.
-
----
-Autor: Dr. Mauricio Rodríguez Herrera · mrodriguez@uniquindio.edu.co
+En GoDaddy → Dominio → DNS → Servidores de nombres, volver a `ns1.dns-parking.com` y `ns2.dns-parking.com`
+(Hostinger) reactiva la configuración anterior, incluido el sitio viejo, si la cuenta de Hostinger
+que lo administra sigue activa.
