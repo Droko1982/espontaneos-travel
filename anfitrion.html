@@ -183,7 +183,7 @@
     if (!/^[A-Z0-9-]{4,}$/.test(code)) return Promise.resolve(null);
     return fetch("data/bookings.json",{cache:"no-store"}).then(function(r){ return r.json(); }).then(function(db){
       var b = db.bookings && db.bookings[code];
-      return b ? { booking: b, link: base + "viaje.html?code=" + encodeURIComponent(code) } : null;
+      return b ? { booking: (window.EspoPlans && EspoPlans.demoShift) ? EspoPlans.demoShift(b) : b, link: base + "viaje.html?code=" + encodeURIComponent(code) } : null;
     }).catch(function(){ return null; });
   }
   (function(){

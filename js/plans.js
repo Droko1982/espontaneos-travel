@@ -199,6 +199,17 @@
   function localISO(d) { d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function addDays(iso, n) { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
 
+  /* Reservas de demostración ("demo": true en data/bookings.json): las fechas se corren para que el
+     viaje empiece siempre mañana; así el código de prueba nunca aparece como viaje terminado. */
+  function demoShift(b) {
+    if (!b || !b.demo || !Array.isArray(b.itinerary)) return b;
+    const first = b.itinerary.map(i => i && i.date).filter(Boolean).sort()[0];
+    if (!first) return b;
+    const tm = new Date(); tm.setDate(tm.getDate() + 1);
+    const n = Math.round((new Date(localISO(tm) + "T12:00:00") - new Date(first + "T12:00:00")) / 864e5);
+    return Object.assign({}, b, { itinerary: b.itinerary.map(i => (i && i.date ? Object.assign({}, i, { date: addDays(i.date, n) }) : i)) });
+  }
+
   /* Convierte un plan en itinerario con fechas reales (formato del conserje). */
   function planToItinerary(plan, startISO) {
     return plan.stops.map(s => {
@@ -442,6 +453,6 @@
     name: (plan, lang) => T(plan.name, lang),
     ui: (lang) => Object.assign({}, PUI.es, PUI[lang] || {}),
     climateLabel: (k, lang) => CLIMATE[k] ? T(CLIMATE[k].label, lang) : "",
-    cfg: BIZ, reviewUrl: () => BIZ.reviewUrl || REVIEW_FALLBACK, sendLead, newLeadId, safePayLink, localISO, isOfficialPhone, safeHttps
+    cfg: BIZ, reviewUrl: () => BIZ.reviewUrl || REVIEW_FALLBACK, sendLead, newLeadId, safePayLink, localISO, demoShift, isOfficialPhone, safeHttps
   };
 })();

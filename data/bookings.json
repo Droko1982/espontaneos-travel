@@ -1,9 +1,10 @@
 {
-  "_info": "SOLO DATOS DE DEMOSTRACIÓN (ficticios). Este archivo es PÚBLICO: nunca pongas reservas reales aquí. Las reservas reales se crean en el portal (portal.html) y se guardan en Firebase.",
+  "_info": "SOLO DATOS DE DEMOSTRACIÓN (ficticios). Con \"demo\": true las fechas se corren para que el viaje empiece siempre mañana. Este archivo es PÚBLICO: nunca pongas reservas reales aquí. Las reservas reales se crean en el portal (portal.html) y se guardan en Firebase.",
   "updated": "2026-10-06",
   "bookings": {
     "ESP-7Q2X9": {
       "code": "ESP-7Q2X9",
+      "demo": true,
       "lang": "es",
       "name": "Laura Gómez",
       "party": 2,
@@ -104,6 +105,7 @@
     },
     "ESP-K4M8T": {
       "code": "ESP-K4M8T",
+      "demo": true,
       "lang": "en",
       "name": "James Parker",
       "party": 3,

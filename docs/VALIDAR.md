@@ -99,6 +99,6 @@ márcalo con `[x]` y, si cambia un dato, edítalo en el archivo indicado.
       exactas (hoy se calculan desde el centro del municipio).
 - [ ] Mapas con teselas de OpenStreetMap (uso normal permitido con atribución). Si el tráfico crece
       mucho, contratar un proveedor de teselas (p. ej. CARTO con licencia comercial o MapTiler).
-- [ ] Agregar una política de seguridad de contenido (CSP) a `portal.html` y probar el portal completo
-      en Firebase real antes de darle acceso a agencias (la revisión de seguridad quedó a medias:
-      reservas públicas separadas, correo verificado y QR local ya están hechos).
+- [x] Política de seguridad de contenido (CSP) en `portal.html` (solo código propio y el SDK de Firebase).
+- [ ] Probar el portal completo en Firebase real antes de darle acceso a agencias (también confirma que
+      la CSP no bloquea nada: si algo falla, la consola del navegador lo dice).

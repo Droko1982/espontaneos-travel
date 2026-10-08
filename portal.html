@@ -7,6 +7,9 @@
 <meta name="description" content="Portal privado para agencias aliadas (DMC) y el equipo de Espontáneos Travel.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- Política de seguridad (CSP): solo se ejecuta código de este sitio y del SDK oficial de Firebase (www.gstatic.com).
+     Si cambias el script en línea del tema, recalcula su hash sha256. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com 'sha256-L4OhRwT04MSGfxIA4vJtMPxbFtXUBqZyBO4Adg/TxfE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.gstatic.com https://content-firebaseappcheck.googleapis.com; frame-src https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="theme-color" content="#272E19">
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +47,7 @@
   <div class="p-toast p-toast--error" id="p-alert" role="alert" aria-live="assertive"></div>
 </div>
 
+<script src="js/vendor/qrcode.min.js"></script>
 <script type="module" src="js/portal.js"></script>
 </body>
 </html>

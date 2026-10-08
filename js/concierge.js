@@ -530,7 +530,7 @@
     fetch("data/bookings.json", { cache: "no-store" })
       .then(r => r.json())
       .then(db => {
-        if (code && db.bookings && db.bookings[code]) { useBooking(db.bookings[code]); dataReady.then(renderAll); return; }
+        if (code && db.bookings && db.bookings[code]) { const b = db.bookings[code]; useBooking(window.EspoPlans && EspoPlans.demoShift ? EspoPlans.demoShift(b) : b); dataReady.then(renderAll); return; }
         fromBackend(code);
       })
       .catch(() => fromBackend(code));
