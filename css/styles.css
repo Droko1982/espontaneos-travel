@@ -954,3 +954,28 @@ a.trust__item:hover { text-decoration-color: currentColor; }
 .review__ava { width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--brand); color: var(--on-brand); font-weight: 600; }
 .reviews__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 1.6rem; }
 .reviews__note { text-align: center; color: var(--text-muted); font-size: .85rem; margin-top: .9rem; }
+
+/* Jenny: panel compacto que no tapa la página + modo ampliado (botón ⤢ en el encabezado).
+   La conversación gana espacio: encabezado y opciones más compactos; las opciones ocupan como máximo ~2 filas. */
+.espo-panel { width: min(360px, calc(100vw - 32px)); height: min(520px, calc(100vh - 110px)); transition: opacity .3s var(--ease), transform .35s var(--ease-out), visibility .3s, width .3s var(--ease), height .3s var(--ease); }
+.espo-panel--max { width: min(760px, calc(100vw - 40px)); height: calc(100vh - 40px); height: calc(100dvh - 40px); }
+.espo-head { padding: .6rem .7rem .6rem .9rem; gap: .55rem; }
+.espo-head__ava { width: 36px; height: 36px; font-size: 1.05rem; }
+.espo-head__btn { color: #fff; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; transition: background .2s; flex: none; }
+.espo-head__btn:hover { background: rgba(255,255,255,.18); }
+.espo-head__max svg { width: 18px; height: 18px; }
+.espo-head__max .i-min, .espo-panel--max .espo-head__max .i-max { display: none; }
+.espo-panel--max .espo-head__max .i-min { display: block; }
+.espo-body { position: relative; padding: .85rem; }
+.espo-panel--max .espo-body { padding: 1.1rem 1.4rem; }
+.espo-panel--max .espo-msg { max-width: 78%; font-size: .95rem; }
+.espo-quick { padding: .5rem .6rem; gap: .35rem; max-height: 6.6rem; }
+.espo-panel--max .espo-quick { max-height: 30%; }
+.espo-quick .espo-chip, .c-chips .espo-chip { padding: .38rem .7rem; font-size: .8rem; }
+.espo-ask { padding: .45rem .55rem; }
+.espo-foot { padding: .25rem .5rem; font-size: .64rem; }
+@media (max-width: 480px) {
+  .espo-panel, .espo-panel--max { right: 8px; bottom: 8px; width: calc(100vw - 16px); height: calc(100vh - 16px); height: calc(100dvh - 16px); }
+  .espo-head__max { display: none; }   /* en el celular ya ocupa toda la pantalla */
+  .espo-quick { max-height: 7.4rem; }
+}

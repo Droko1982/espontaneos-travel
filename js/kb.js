@@ -22,8 +22,8 @@ const CUI = {
     m_guide: "🧑‍🏫 Mi guía", m_pack: "🎒 Qué llevar", m_tips: "💵 Propinas", m_phrases: "🗣️ Frases en español",
     m_reco: "⭐ Recomendaciones", m_emergency: "🚨 Emergencias", m_host: "💬 Hablar con mi anfitrión",
     wa_change: "Hola, soy {name} (reserva {code}). Quiero *cambiar un horario* de mi itinerario:",
-    wa_taxi: "Hola, soy {name} (reserva {code}). ¿Me ayudan a *pedir un taxi*? Estoy en:",
-    wa_lost: "Hola, soy {name} (reserva {code}). *Necesito ayuda para ubicarme.* Mi ubicación:",
+    wa_taxi: "Hola, soy {name} (reserva {code}). ¿Me ayudan a *pedir un taxi*?",
+    wa_lost: "Hola, soy {name} (reserva {code}). *Necesito ayuda para ubicarme.*",
     wa_access: "Hola, soy {name} (reserva {code}). Necesito *apoyo de accesibilidad* (silla de ruedas / coche para bebé / otro):",
     wa_generic: "Hola, soy {name} (reserva {code}). Tengo una consulta:"
   },
@@ -43,8 +43,8 @@ const CUI = {
     m_guide: "🧑‍🏫 My guide", m_pack: "🎒 What to pack", m_tips: "💵 Tipping", m_phrases: "🗣️ Spanish phrases",
     m_reco: "⭐ Recommendations", m_emergency: "🚨 Emergencies", m_host: "💬 Talk to my host",
     wa_change: "Hi, I'm {name} (booking {code}). I'd like to *change a time* in my itinerary:",
-    wa_taxi: "Hi, I'm {name} (booking {code}). Can you help me *get a taxi*? I'm at:",
-    wa_lost: "Hi, I'm {name} (booking {code}). *I need help finding my way.* My location:",
+    wa_taxi: "Hi, I'm {name} (booking {code}). Can you help me *get a taxi*?",
+    wa_lost: "Hi, I'm {name} (booking {code}). *I need help finding my way.*",
     wa_access: "Hi, I'm {name} (booking {code}). I need *accessibility support* (wheelchair / baby seat / other):",
     wa_generic: "Hi, I'm {name} (booking {code}). I have a question:"
   },
@@ -64,8 +64,8 @@ const CUI = {
     m_guide: "🧑‍🏫 Mon guide", m_pack: "🎒 À emporter", m_tips: "💵 Pourboires", m_phrases: "🗣️ Phrases en espagnol",
     m_reco: "⭐ Recommandations", m_emergency: "🚨 Urgences", m_host: "💬 Parler à mon hôte",
     wa_change: "Bonjour, je suis {name} (réservation {code}). Je souhaite *changer un horaire* :",
-    wa_taxi: "Bonjour, je suis {name} (réservation {code}). Pouvez-vous m'aider à *trouver un taxi* ? Je suis à :",
-    wa_lost: "Bonjour, je suis {name} (réservation {code}). *J'ai besoin d'aide pour m'orienter.* Ma position :",
+    wa_taxi: "Bonjour, je suis {name} (réservation {code}). Pouvez-vous m'aider à *trouver un taxi* ?",
+    wa_lost: "Bonjour, je suis {name} (réservation {code}). *J'ai besoin d'aide pour m'orienter.*",
     wa_access: "Bonjour, je suis {name} (réservation {code}). J'ai besoin d'un *soutien d'accessibilité* (fauteuil / siège bébé / autre) :",
     wa_generic: "Bonjour, je suis {name} (réservation {code}). J'ai une question :"
   },
@@ -85,8 +85,8 @@ const CUI = {
     m_guide: "🧑‍🏫 Mein Guide", m_pack: "🎒 Packliste", m_tips: "💵 Trinkgeld", m_phrases: "🗣️ Sätze auf Spanisch",
     m_reco: "⭐ Empfehlungen", m_emergency: "🚨 Notfälle", m_host: "💬 Mit Gastgeber sprechen",
     wa_change: "Hallo, ich bin {name} (Buchung {code}). Ich möchte eine *Uhrzeit ändern*:",
-    wa_taxi: "Hallo, ich bin {name} (Buchung {code}). Können Sie mir ein *Taxi besorgen*? Ich bin bei:",
-    wa_lost: "Hallo, ich bin {name} (Buchung {code}). *Ich brauche Hilfe bei der Orientierung.* Mein Standort:",
+    wa_taxi: "Hallo, ich bin {name} (Buchung {code}). Können Sie mir ein *Taxi besorgen*?",
+    wa_lost: "Hallo, ich bin {name} (Buchung {code}). *Ich brauche Hilfe bei der Orientierung.*",
     wa_access: "Hallo, ich bin {name} (Buchung {code}). Ich brauche *Barrierefreiheits-Unterstützung* (Rollstuhl / Babysitz / anderes):",
     wa_generic: "Hallo, ich bin {name} (Buchung {code}). Ich habe eine Frage:"
   },
@@ -106,8 +106,8 @@ const CUI = {
     m_guide: "🧑‍🏫 Meu guia", m_pack: "🎒 O que levar", m_tips: "💵 Gorjetas", m_phrases: "🗣️ Frases em espanhol",
     m_reco: "⭐ Recomendações", m_emergency: "🚨 Emergências", m_host: "💬 Falar com meu anfitrião",
     wa_change: "Olá, sou {name} (reserva {code}). Quero *mudar um horário* do meu itinerário:",
-    wa_taxi: "Olá, sou {name} (reserva {code}). Podem me ajudar a *pedir um táxi*? Estou em:",
-    wa_lost: "Olá, sou {name} (reserva {code}). *Preciso de ajuda para me localizar.* Minha localização:",
+    wa_taxi: "Olá, sou {name} (reserva {code}). Podem me ajudar a *pedir um táxi*?",
+    wa_lost: "Olá, sou {name} (reserva {code}). *Preciso de ajuda para me localizar.*",
     wa_access: "Olá, sou {name} (reserva {code}). Preciso de *apoio de acessibilidade* (cadeira de rodas / bebê conforto / outro):",
     wa_generic: "Olá, sou {name} (reserva {code}). Tenho uma dúvida:"
   }

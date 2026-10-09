@@ -8,6 +8,7 @@
 (function () {
   "use strict";
 
+  const LANG_ES = { es: "español", en: "inglés", fr: "francés", de: "alemán", pt: "portugués", it: "italiano" };
   const LANGNAME = { es: "Español", en: "English", fr: "Français", de: "Deutsch", pt: "Português", it: "Italiano" };
   const UI = {
     es: {
@@ -107,6 +108,39 @@
     }
   };
 
+  // Viajero con reserva que escribe en el sitio ("quiero cambiar de horario", "mi reserva"): lo llevamos a Mi viaje
+  // (allí el cambio es guiado) o, si no tiene el código, a WhatsApp con una plantilla clara para llenar.
+  const MT = {
+    es: { change: "Para cambiar un horario de tu reserva, abre *Mi viaje* con tu código: eliges la actividad y la nueva hora, y tu anfitrión recibe por WhatsApp un mensaje con todos los datos 👇",
+      view: "Tu itinerario, horarios, mapa y qué llevar están en *Mi viaje*. Ábrelo con tu código de reserva 👇", open: "🔑 Abrir Mi viaje", nocode: "💬 No tengo el código",
+      wa_change: "¡Hola Espontáneos Travel! 👋 Tengo una reserva y quiero *cambiar un horario*.\n• Nombre de la reserva: \n• Actividad: \n• Día y hora actuales: \n• Nuevo horario que prefiero: ",
+      wa_view: "¡Hola Espontáneos Travel! 👋 Tengo una reserva y necesito mi *código de viaje*.\n• Nombre de la reserva: \n• Fecha del viaje: " },
+    en: { change: "To change a time in your booking, open *My trip* with your code: pick the activity and the new time, and your host gets a WhatsApp message with all the details 👇",
+      view: "Your itinerary, times, map and packing list are in *My trip*. Open it with your booking code 👇", open: "🔑 Open My trip", nocode: "💬 I don't have the code",
+      wa_change: "Hi Espontáneos Travel! 👋 I have a booking and I'd like to *change a time*.\n• Booking name: \n• Activity: \n• Current day and time: \n• New time I'd prefer: ",
+      wa_view: "Hi Espontáneos Travel! 👋 I have a booking and I need my *trip code*.\n• Booking name: \n• Travel date: " },
+    fr: { change: "Pour changer un horaire de votre réservation, ouvrez *Mon voyage* avec votre code : choisissez l'activité et la nouvelle heure, et votre hôte reçoit un message WhatsApp avec tous les détails 👇",
+      view: "Votre itinéraire, horaires, carte et liste d'affaires sont dans *Mon voyage*. Ouvrez-le avec votre code de réservation 👇", open: "🔑 Ouvrir Mon voyage", nocode: "💬 Je n'ai pas le code",
+      wa_change: "Bonjour Espontáneos Travel ! 👋 J'ai une réservation et je souhaite *changer un horaire*.\n• Nom de la réservation : \n• Activité : \n• Jour et heure actuels : \n• Nouvel horaire souhaité : ",
+      wa_view: "Bonjour Espontáneos Travel ! 👋 J'ai une réservation et j'ai besoin de mon *code de voyage*.\n• Nom de la réservation : \n• Date du voyage : " },
+    de: { change: "Um eine Uhrzeit Ihrer Buchung zu ändern, öffnen Sie *Meine Reise* mit Ihrem Code: Sie wählen die Aktivität und die neue Uhrzeit, und Ihr Gastgeber erhält per WhatsApp eine Nachricht mit allen Angaben 👇",
+      view: "Ihr Reiseplan, Uhrzeiten, Karte und Packliste sind in *Meine Reise*. Öffnen Sie sie mit Ihrem Buchungscode 👇", open: "🔑 Meine Reise öffnen", nocode: "💬 Ich habe keinen Code",
+      wa_change: "Hallo Espontáneos Travel! 👋 Ich habe eine Buchung und möchte eine *Uhrzeit ändern*.\n• Name der Buchung: \n• Aktivität: \n• Aktueller Tag und Uhrzeit: \n• Gewünschte neue Zeit: ",
+      wa_view: "Hallo Espontáneos Travel! 👋 Ich habe eine Buchung und brauche meinen *Reisecode*.\n• Name der Buchung: \n• Reisedatum: " },
+    pt: { change: "Para mudar um horário da sua reserva, abra *Minha viagem* com seu código: você escolhe a atividade e o novo horário, e seu anfitrião recebe pelo WhatsApp uma mensagem com todos os dados 👇",
+      view: "Seu roteiro, horários, mapa e o que levar estão em *Minha viagem*. Abra com seu código de reserva 👇", open: "🔑 Abrir Minha viagem", nocode: "💬 Não tenho o código",
+      wa_change: "Olá Espontáneos Travel! 👋 Tenho uma reserva e quero *mudar um horário*.\n• Nome da reserva: \n• Atividade: \n• Dia e horário atuais: \n• Novo horário que prefiro: ",
+      wa_view: "Olá Espontáneos Travel! 👋 Tenho uma reserva e preciso do meu *código de viagem*.\n• Nome da reserva: \n• Data da viagem: " }
+  };
+  const ALIAS = {
+    parquecafe: ["parque del cafe", "coffee park", "parc du cafe", "kaffeepark", "parque do cafe"],
+    finca: ["tour del cafe", "tour de cafe", "coffee tour", "coffee farm", "finca cafetera", "fazenda de cafe", "ferme de cafe", "kaffeefarm", "kaffee-tour", "kaffeetour"],
+    catacafe: ["cata de cafe", "coffee tasting", "degustation de cafe", "kaffeeverkostung", "degustacao de cafe"]
+  };
+  const CHANGE_VERB = /\b(cambi|mover|muev|reprogram|modific|aplaz|adelant|change|reschedul|move|modifi|deplac|andern|aendern|verschieb|mudar|alterar|remarc)\w*/;
+  const TIME_WORD = /\b(hora|horas|horario|horarios|fecha|dia|time|date|day|heure|horaire|jour|uhr|uhrzeit|zeit|termin|tag|data|reserva|booking|reservation|buchung)\b/;
+  const MY_TRIP = /\b(mi|my|ma|mon|mein|meine|minha|meu)\s+(reserva|viaje|codigo|booking|trip|code|reservation|voyage|buchung|reise|viagem)\b/;
+
   // Temas del árbol (id del nodo en jenny.json → etiqueta del menú)
   const PRIMARY = ["reservar", "horarios", "duracion", "que_incluye", "que_llevar", "precios", "pagos", "plans", "asesor"];
   const MORE = ["compartido", "traslados", "ninos_mayores", "accesibilidad", "idiomas", "clima", "temporadas", "cancelacion", "sostenibilidad", "empresa", "redes", "scan"];
@@ -149,7 +183,7 @@
   const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>';
-  let launch, panel, body, quick, headTitle, headSub, launchTxt, badge, askForm, askIn;
+  let launch, panel, body, quick, headTitle, headSub, launchTxt, badge, askForm, askIn, maxBtn, lastBot = null;
 
   /* ---------- Interfaz ---------- */
   function build() {
@@ -163,6 +197,7 @@
       `<div class="espo-head">
          <span class="espo-head__ava">J</span>
          <span class="espo-head__t"><b class="espo-h-title"></b><span class="espo-h-sub"></span></span>
+         <button class="espo-head__btn espo-head__max" type="button" aria-pressed="false"><svg class="i-max" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><svg class="i-min" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></button>
          <button class="espo-head__close" aria-label="✕"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
        </div>
        <div class="espo-body" aria-live="polite"></div>
@@ -180,15 +215,21 @@
     panel.querySelector(".espo-head__close").addEventListener("click", closePanel);
     askForm.addEventListener("submit", (e) => { e.preventDefault(); const q = askIn.value.trim(); if (!q || busy) return; askIn.value = ""; addBubble(esc(q), "user"); freeText(q); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && opened) closePanel(); });
-    document.addEventListener("click", (e) => {
-      if (!opened) return;
-      // composedPath: los chips que se re-pintan siguen contando como "dentro del panel"
-      const path = (typeof e.composedPath === "function") ? e.composedPath() : [];
-      if (path.some(n => n && n.hasAttribute && n.hasAttribute("data-plan-jenny"))) return;   // botones que abren a Jenny
-      if (path.length) { if (path.indexOf(panel) === -1 && path.indexOf(launch) === -1) closePanel(); }
-      else if (!panel.contains(e.target) && !launch.contains(e.target)) closePanel();
-    });
+    // Jenny no se cierra al hacer clic en la página: se puede leer y navegar el sitio con el chat abierto.
+    maxBtn = panel.querySelector(".espo-head__max");
+    maxBtn.addEventListener("click", () => setMax(!panel.classList.contains("espo-panel--max")));
+    let savedMax = false; try { savedMax = localStorage.getItem("esp_jenny_max") === "1"; } catch (e) {}
+    setMax(savedMax, true);
     refreshStatic();
+  }
+  const MAX_LBL = { es: ["Ampliar el chat", "Reducir el chat"], en: ["Expand chat", "Shrink chat"], fr: ["Agrandir le chat", "Réduire le chat"],
+    de: ["Chat vergrößern", "Chat verkleinern"], pt: ["Ampliar o chat", "Reduzir o chat"] };
+  function setMax(on, quiet) {
+    panel.classList.toggle("espo-panel--max", on);
+    maxBtn.setAttribute("aria-pressed", String(on));
+    maxBtn.setAttribute("aria-label", (MAX_LBL[lang] || MAX_LBL.es)[on ? 1 : 0]);
+    maxBtn.title = maxBtn.getAttribute("aria-label");
+    if (!quiet) { try { localStorage.setItem("esp_jenny_max", on ? "1" : "0"); } catch (e) {} reveal(lastBot); }
   }
   function refreshStatic() {
     launchTxt.textContent = U().launch; headTitle.textContent = U().title; headSub.textContent = U().subtitle;
@@ -196,6 +237,7 @@
     askIn.placeholder = U().ask_ph; askIn.setAttribute("aria-label", U().ask_ph);
     panel.querySelector(".espo-head__close").setAttribute("aria-label", U().close || "✕");
     askForm.querySelector("button").setAttribute("aria-label", U().send);
+    if (maxBtn) setMax(panel.classList.contains("espo-panel--max"), true);
   }
   function openPanel() {
     opened = true; panel.classList.add("open"); launch.classList.add("hide");
@@ -207,9 +249,17 @@
   function addBubble(html, who) {
     const b = el("div", "espo-msg " + who);
     b.innerHTML = String(html).replace(/\*(.+?)\*/g, "<b>$1</b>");
-    body.appendChild(b); scrollDown(); return b;
+    body.appendChild(b);
+    if (who === "bot") { lastBot = b; reveal(b); } else scrollDown();
+    return b;
   }
   function scrollDown() { body.scrollTop = body.scrollHeight; }
+  // Si el mensaje no cabe, se muestra desde su primera línea; si cabe, se baja hasta el final
+  function reveal(b) {
+    if (!b || !b.isConnected) return;
+    if (b.offsetHeight > body.clientHeight - 24) body.scrollTop = Math.max(0, b.offsetTop - 8);
+    else scrollDown();
+  }
   function typing() { const t = el("div", "espo-typing", "<span></span><span></span><span></span>"); body.appendChild(t); scrollDown(); return t; }
   function botSay(messages) {
     return new Promise((resolve) => {
@@ -232,6 +282,7 @@
       btn.addEventListener("click", () => onChip(c));
       quick.appendChild(btn);
     });
+    reveal(lastBot);
   }
   function onChip(c) {
     if (busy) return;
@@ -239,6 +290,7 @@
     if (c.scan) { scanQR(); return; }
     if (c.wa) { EspoApp.openWhatsApp(c.waMsg || composeWA()); if (HAS_PLANS && ctx.leadId && ctx.consent) EspoPlans.sendLead(leadData("whatsapp")); }
     if (c.open) { EspoApp.openTour(c.open); closePanel(); }
+    if (c.nav) { location.href = c.nav; return; }
     if (c.href) { window.open(c.href, "_blank", "noopener"); }
     if (c.anchor) { closePanel(); const s = document.querySelector(c.anchor); if (s) s.scrollIntoView({ behavior: "smooth" }); }
     if (c.share) { window.open("https://wa.me/?text=" + encodeURIComponent(c.share), "_blank", "noopener"); }
@@ -290,6 +342,11 @@
     if (id === "menu" || id === "more") ctx.intent = null;
     if (id === "menu") return { msgs: [U().menu_prompt], chips: menuChips() };
     if (id === "more") return { msgs: [U().menu_prompt], chips: menuChips(true).filter(c => !PRIMARY.some(p => c.to === "n:" + p)).concat([{ label: U().back, to: "menu" }]) };
+    if (id.startsWith("mytrip:")) {
+      const M = MT[lang] || MT.es, change = id === "mytrip:change";
+      return { msgs: [change ? M.change : M.view], chips: [{ label: M.open, nav: "viaje.html" },
+        { label: M.nocode, kind: "wa", wa: true, waMsg: change ? M.wa_change : M.wa_view }].concat(change ? [{ label: U().m_cancel, to: "n:cancelacion" }] : [], [{ label: U().back, to: "menu" }]) };
+    }
     if (!D() || !D().ready()) return { msgs: [U().no_match], chips: nextChips("asesor") };
 
     if (id.startsWith("n:")) {
@@ -410,7 +467,7 @@
     const msgs = [];
     if (q === "horarios") {
       if (!i.horario) msgs.push(U().a_tbd);
-      else msgs.push(U().a_horario.replace("{tour}", i.nombre).replace("{h}", D().fmtHorario(i.horario, lang)) + (i.horario_nota ? "\n" + i.horario_nota : ""));
+      else msgs.push(U().a_horario.replace("{tour}", i.nombre).replace("{h}", D().fmtHorario(i.horario, lang)).replace(/\.\.$/, ".") + (i.horario_nota ? "\n" + i.horario_nota : ""));
       const key = i.notas.find(n => /horario|ingreso|opera|schedule|open|horaire|uhr|horár/i.test(n)); if (key) msgs.push("ℹ️ " + key);
     } else if (q === "duracion") {
       msgs.push(i.dur == null ? U().a_tbd : U().a_dur.replace("{tour}", i.nombre).replace("{d}", D().fmtDur(i.dur, lang)));
@@ -446,6 +503,9 @@
   function freeText(q) {
     if (!D() || !D().ready()) { const no = () => noMatch(q); D() ? D().load().then(() => freeText(q), no) : no(); return; }
     const t = norm(q);
+    // 0) ¿ya tiene reserva? (cambiar un horario / ver su viaje)
+    const chg = CHANGE_VERB.test(t) && TIME_WORD.test(t);
+    if (chg || MY_TRIP.test(t)) { go(chg ? "mytrip:change" : "mytrip:view"); return; }
     // 1) ¿menciona una experiencia? (palabras completas y distintivas del nombre)
     let best = null, bestScore = 0;
     EspoApp.tours().forEach(x => {
@@ -462,6 +522,8 @@
       const s = kws.reduce((a, k) => { const nk = norm(k).replace(/[¿?¡!]/g, "").trim(); return a + (nk && hasStem(t, nk) ? nk.length : 0); }, 0);
       if (s > tScore) { tScore = s; topic = id; }
     });
+    // Nombres que la gente usa y no salen de las palabras del título ("tour del café", "parque del café")
+    Object.keys(ALIAS).forEach(id => { if (bestScore < 10 && ALIAS[id].some(a => t.indexOf(a) >= 0)) { bestScore = 10; best = id; } });
     if (best && bestScore >= 5) {
       if (topic && TOUR_Q.indexOf(topic) >= 0) { go("ta:" + best + ":" + topic); return; }
       const info = D().tour(best, lang);
@@ -618,6 +680,16 @@
     if (ctx.kit) parts.push(T.wa_kit);
     if (ctx.src) parts.push(T.wa_src + " " + ctx.src);
     parts.push(T.wa_lang + " " + (LANGNAME[lang] || "Español"));
+    if (lang !== "es") {   // resumen en español para el equipo (el cliente escribe en su idioma)
+      const es = [];
+      if (ctx.planId) es.push("Plan " + EspoPlans.name(EspoPlans.planById(ctx.planId), "es"));
+      else if (ctx.tourId && D() && D().ready() && D().tour(ctx.tourId, "es")) es.push(D().tour(ctx.tourId, "es").nombre + (ctx.tourCode ? " (" + ctx.tourCode + ")" : ""));
+      else if (ctx.tourName) es.push(ctx.tourName);
+      es.push(ctx.date || "fecha flexible", ctx.party + " pers.");
+      if (ctx.hotel) es.push("hotel " + ctx.hotel);
+      es.push("guía en " + (LANG_ES[ctx.guide || lang] || "español"), "cliente escribe en " + (LANG_ES[lang] || lang));
+      parts.push("", "🇪🇸 Resumen: " + es.join(" · "));
+    }
     if (ctx.link) parts.push("", T.wa_link, ctx.link);
     return parts.join("\n");
   }

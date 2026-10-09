@@ -218,6 +218,8 @@
   }
   function onChip(c) {
     if (busy) return;
+    pendingText = null;
+    if (c.fn) { addMsg("<span>" + esc(c.label) + "</span>", "user"); c.fn(); return; }
     if (c.more) { chips(menuChips(true)); return; }
     if (c.pack) { addMsg("<span>" + esc(c.label) + "</span>", "user"); packChat(); return; }
     if (c.share) { window.open("https://wa.me/?text=" + encodeURIComponent(c.share), "_blank", "noopener"); backMenu(); return; }
@@ -235,11 +237,14 @@
   function norm(s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
   function matchTopic(text) {
     const t = norm(text); if (!t || typeof CKB_KW === "undefined") return null;
-    let best = null, score = 0;
+    let best = null, score = 0, changeScore = 0;
     Object.keys(CKB_KW).forEach(id => {
       let s = 0; (CKB_KW[id] || []).forEach(k => { const nk = norm(k); if (nk && t.indexOf(nk) >= 0) s += nk.length > 3 ? 2 : 1; });
       if (s > score) { score = s; best = id; }
+      if (id === "change") changeScore = s;
     });
+    // "quiero cambiar de horario": el verbo manda (cambiar/mover/reprogramar) sobre "horario" o "cambio" de dinero
+    if (changeScore > 0 && /\b(hora|horas|horario|horarios|time|times|heure|horaire|uhr|uhrzeit|zeit|dia|dias|day|fecha|date|jour|tag|data)\b/.test(t)) return "change";
     return score > 0 ? best : null;
   }
   // Temas que tienen respuesta oficial en data/jenny.json: se responde con esa (misma fuente que el sitio)
@@ -291,6 +296,7 @@
   }
   function runTopic(id) {
     const k = topicById(id); if (!k) return;
+    if (id === "change" && booking) { changeFlow(); return; }
     const act = k.action || "info";
     if (ED()) {
       if (id === "pack" || id === "clothing") { packChat(); return; }
@@ -312,14 +318,191 @@
     // answer text
     const ans = (k.a && (k.a[lang] || k.a.es)) || "";
     const after = [];
+    if (act === "wa:wa_taxi" || act === "wa:wa_lost") {
+      const base = fill(U()[act.slice(3)]);
+      botSay([ans]).then(() => waWithLocation(base));
+      return;
+    }
     if (act.startsWith("wa:")) {
       const waKey = act.slice(3);
-      after.push({ label: U().wa_open, kind: "wa", wa: true, waMsg: U()[waKey] });
+      after.push({ label: U().wa_open, kind: "wa", wa: true, waMsg: fill(U()[waKey]) + ctxLines() });
     } else if (act.startsWith("maps:")) {
       after.push({ label: U().maps_btn, href: mapsUrl(act.slice(5)) });
     }
     after.push({ label: U().back });
     botSay([ans]).then(() => chips(after.length === 1 ? menuChips() : after.concat([])));
+  }
+
+  /* ---------- Cambiar un horario (guiado): actividad → nueva hora → vista previa → WhatsApp ----------
+     El mensaje lleva todo lo que el anfitrión necesita: código, actividad, día y hora actuales, hora deseada,
+     personas, hotel y el enlace del viaje. Si el viajero no escribe en español, se agrega un resumen en español. */
+  const CHG = {
+    es: { which: "¿Qué actividad quieres mover? 👇", other: "✍️ Otra cosa", other_ask: "Cuéntame qué quieres cambiar (actividad, día y hora) y lo preparo para tu anfitrión 👇",
+      now: "*{act}* está programada para el *{day}* a las *{time}*.", window: "Horario oficial de esta experiencia: {h}",
+      when: "¿A qué hora te gustaría? Elige una opción o escríbela abajo (ej. 11:00 o «domingo 10:00»).",
+      official: "{t} (horario oficial)", earlier: "{t} (1 h antes)", later: "{t} (1 h después)", later2: "{t} (2 h después)",
+      other_day: "📅 Otro día", type_time: "✍️ Escribir otra hora", type_ask: "Escríbeme el día y la hora que prefieres 👇",
+      same_day: "mismo día", preview: "Este es el mensaje para tu anfitrión 👇", note: "El cambio queda *confirmado cuando tu anfitrión te responda*: depende del guía, del conductor y de la disponibilidad.",
+      send: "📲 Enviar por WhatsApp", edit: "✏️ Elegir otra hora", sent: "¡Listo! Cuando tu anfitrión confirme, el cambio aparece en tu itinerario.",
+      hi: "Hola, soy {name} (reserva {code}) 👋", title: "⏰ *Solicitud de cambio de horario*", act: "• Actividad: {v}", was: "• Programada: {v}", want: "• Nuevo horario que prefiero: {v}",
+      free: "• Lo que necesito cambiar: {v}", party: "• Personas: {v}", hotel: "• Hotel: {v}", thanks: "Quedo atento/a a la confirmación. ¡Gracias!", link: "Mi viaje:" },
+    en: { which: "Which activity do you want to move? 👇", other: "✍️ Something else", other_ask: "Tell me what you'd like to change (activity, day and time) and I'll prepare it for your host 👇",
+      now: "*{act}* is scheduled for *{day}* at *{time}*.", window: "Official schedule for this experience: {h}",
+      when: "What time would you prefer? Pick an option or type it below (e.g. 11:00 or “Sunday 10:00”).",
+      official: "{t} (official time)", earlier: "{t} (1 h earlier)", later: "{t} (1 h later)", later2: "{t} (2 h later)",
+      other_day: "📅 Another day", type_time: "✍️ Type another time", type_ask: "Type the day and time you prefer 👇",
+      same_day: "same day", preview: "Here is the message for your host 👇", note: "The change is *confirmed once your host replies*: it depends on the guide, the driver and availability.",
+      send: "📲 Send on WhatsApp", edit: "✏️ Pick another time", sent: "Done! Once your host confirms, the change will show in your itinerary.",
+      hi: "Hi, I'm {name} (booking {code}) 👋", title: "⏰ *Schedule change request*", act: "• Activity: {v}", was: "• Scheduled: {v}", want: "• New time I'd prefer: {v}",
+      free: "• What I need to change: {v}", party: "• Travellers: {v}", hotel: "• Hotel: {v}", thanks: "Looking forward to your confirmation. Thank you!", link: "My trip:" },
+    fr: { which: "Quelle activité voulez-vous déplacer ? 👇", other: "✍️ Autre chose", other_ask: "Dites-moi ce que vous voulez changer (activité, jour et heure) et je le prépare pour votre hôte 👇",
+      now: "*{act}* est prévue le *{day}* à *{time}*.", window: "Horaire officiel de cette expérience : {h}",
+      when: "À quelle heure préférez-vous ? Choisissez une option ou écrivez-la ci-dessous (ex. 11:00 ou « dimanche 10:00 »).",
+      official: "{t} (horaire officiel)", earlier: "{t} (1 h plus tôt)", later: "{t} (1 h plus tard)", later2: "{t} (2 h plus tard)",
+      other_day: "📅 Un autre jour", type_time: "✍️ Écrire une autre heure", type_ask: "Écrivez le jour et l'heure souhaités 👇",
+      same_day: "même jour", preview: "Voici le message pour votre hôte 👇", note: "Le changement est *confirmé quand votre hôte répond* : il dépend du guide, du chauffeur et des disponibilités.",
+      send: "📲 Envoyer sur WhatsApp", edit: "✏️ Choisir une autre heure", sent: "C'est fait ! Dès que votre hôte confirme, le changement apparaît dans votre itinéraire.",
+      hi: "Bonjour, je suis {name} (réservation {code}) 👋", title: "⏰ *Demande de changement d'horaire*", act: "• Activité : {v}", was: "• Prévue : {v}", want: "• Nouvel horaire souhaité : {v}",
+      free: "• Ce que je dois changer : {v}", party: "• Voyageurs : {v}", hotel: "• Hôtel : {v}", thanks: "Dans l'attente de votre confirmation. Merci !", link: "Mon voyage :" },
+    de: { which: "Welche Aktivität möchten Sie verschieben? 👇", other: "✍️ Etwas anderes", other_ask: "Schreiben Sie, was Sie ändern möchten (Aktivität, Tag und Uhrzeit), und ich bereite es für Ihren Gastgeber vor 👇",
+      now: "*{act}* ist für *{day}* um *{time}* geplant.", window: "Offizielle Zeit dieses Erlebnisses: {h}",
+      when: "Welche Uhrzeit wäre Ihnen lieber? Wählen Sie eine Option oder schreiben Sie sie unten (z. B. 11:00 oder „Sonntag 10:00“).",
+      official: "{t} (offizielle Zeit)", earlier: "{t} (1 Std. früher)", later: "{t} (1 Std. später)", later2: "{t} (2 Std. später)",
+      other_day: "📅 Anderer Tag", type_time: "✍️ Andere Uhrzeit schreiben", type_ask: "Schreiben Sie den gewünschten Tag und die Uhrzeit 👇",
+      same_day: "gleicher Tag", preview: "Das ist die Nachricht an Ihren Gastgeber 👇", note: "Die Änderung ist *bestätigt, sobald Ihr Gastgeber antwortet*: Sie hängt von Guide, Fahrer und Verfügbarkeit ab.",
+      send: "📲 Per WhatsApp senden", edit: "✏️ Andere Uhrzeit wählen", sent: "Erledigt! Sobald Ihr Gastgeber bestätigt, erscheint die Änderung in Ihrem Reiseplan.",
+      hi: "Hallo, ich bin {name} (Buchung {code}) 👋", title: "⏰ *Anfrage zur Zeitänderung*", act: "• Aktivität: {v}", was: "• Geplant: {v}", want: "• Gewünschte neue Zeit: {v}",
+      free: "• Was ich ändern möchte: {v}", party: "• Reisende: {v}", hotel: "• Hotel: {v}", thanks: "Ich freue mich auf Ihre Bestätigung. Vielen Dank!", link: "Meine Reise:" },
+    pt: { which: "Qual atividade você quer mudar? 👇", other: "✍️ Outra coisa", other_ask: "Conte o que quer mudar (atividade, dia e horário) e eu preparo para o seu anfitrião 👇",
+      now: "*{act}* está marcada para *{day}* às *{time}*.", window: "Horário oficial desta experiência: {h}",
+      when: "Que horário você prefere? Escolha uma opção ou escreva abaixo (ex. 11:00 ou «domingo 10:00»).",
+      official: "{t} (horário oficial)", earlier: "{t} (1 h antes)", later: "{t} (1 h depois)", later2: "{t} (2 h depois)",
+      other_day: "📅 Outro dia", type_time: "✍️ Escrever outro horário", type_ask: "Escreva o dia e o horário que prefere 👇",
+      same_day: "mesmo dia", preview: "Esta é a mensagem para o seu anfitrião 👇", note: "A mudança fica *confirmada quando seu anfitrião responder*: depende do guia, do motorista e da disponibilidade.",
+      send: "📲 Enviar pelo WhatsApp", edit: "✏️ Escolher outro horário", sent: "Pronto! Quando seu anfitrião confirmar, a mudança aparece no seu roteiro.",
+      hi: "Olá, sou {name} (reserva {code}) 👋", title: "⏰ *Pedido de mudança de horário*", act: "• Atividade: {v}", was: "• Marcada: {v}", want: "• Novo horário que prefiro: {v}",
+      free: "• O que preciso mudar: {v}", party: "• Viajantes: {v}", hotel: "• Hotel: {v}", thanks: "Aguardo a confirmação. Obrigado(a)!", link: "Minha viagem:" }
+  };
+  const C = () => CHG[lang] || CHG.es;
+  const CTX = {
+    es: { hotel: "🏨 Mi hotel: {v}", next: "🗓️ Próxima actividad: {v}", here: "📍 Estoy aquí: {v}", share: "📍 (Te comparto mi ubicación por aquí)",
+      loc_btn: "📍 Enviar con mi ubicación", no_loc: "📲 Enviar sin ubicación", loc_wait: "Buscando tu ubicación… (acepta el permiso del navegador)",
+      loc_ok: "Ubicación lista ✅ Toca para enviarla a tu anfitrión.", loc_fail: "No pude obtener tu ubicación. Envía el mensaje y compártela en WhatsApp (📎 → Ubicación).", send: "📲 Enviar por WhatsApp" },
+    en: { hotel: "🏨 My hotel: {v}", next: "🗓️ Next activity: {v}", here: "📍 I'm here: {v}", share: "📍 (I'll share my location here)",
+      loc_btn: "📍 Send with my location", no_loc: "📲 Send without location", loc_wait: "Getting your location… (allow the browser permission)",
+      loc_ok: "Location ready ✅ Tap to send it to your host.", loc_fail: "I couldn't get your location. Send the message and share it on WhatsApp (📎 → Location).", send: "📲 Send on WhatsApp" },
+    fr: { hotel: "🏨 Mon hôtel : {v}", next: "🗓️ Prochaine activité : {v}", here: "📍 Je suis ici : {v}", share: "📍 (Je partage ma position ici)",
+      loc_btn: "📍 Envoyer avec ma position", no_loc: "📲 Envoyer sans position", loc_wait: "Recherche de votre position… (autorisez le navigateur)",
+      loc_ok: "Position prête ✅ Touchez pour l'envoyer à votre hôte.", loc_fail: "Impossible d'obtenir votre position. Envoyez le message et partagez-la sur WhatsApp (📎 → Position).", send: "📲 Envoyer sur WhatsApp" },
+    de: { hotel: "🏨 Mein Hotel: {v}", next: "🗓️ Nächste Aktivität: {v}", here: "📍 Ich bin hier: {v}", share: "📍 (Ich teile hier meinen Standort)",
+      loc_btn: "📍 Mit meinem Standort senden", no_loc: "📲 Ohne Standort senden", loc_wait: "Standort wird ermittelt… (bitte im Browser erlauben)",
+      loc_ok: "Standort bereit ✅ Tippen Sie, um ihn Ihrem Gastgeber zu senden.", loc_fail: "Standort nicht verfügbar. Senden Sie die Nachricht und teilen Sie ihn in WhatsApp (📎 → Standort).", send: "📲 Per WhatsApp senden" },
+    pt: { hotel: "🏨 Meu hotel: {v}", next: "🗓️ Próxima atividade: {v}", here: "📍 Estou aqui: {v}", share: "📍 (Compartilho minha localização por aqui)",
+      loc_btn: "📍 Enviar com minha localização", no_loc: "📲 Enviar sem localização", loc_wait: "Buscando sua localização… (aceite a permissão do navegador)",
+      loc_ok: "Localização pronta ✅ Toque para enviar ao seu anfitrião.", loc_fail: "Não consegui obter sua localização. Envie a mensagem e compartilhe no WhatsApp (📎 → Localização).", send: "📲 Enviar pelo WhatsApp" }
+  };
+  const X = () => CTX[lang] || CTX.es;
+  // Líneas de contexto: hotel, próxima actividad y enlace del viaje (para que el anfitrión no tenga que preguntar)
+  function ctxLines(loc) {
+    const L = [], h = (booking && booking.hotel) || {}, i = nextIndex(), it = i >= 0 ? booking.itinerary[i] : null;
+    if (loc !== undefined) L.push(loc ? sub(X().here, { v: loc }) : X().share);
+    if (h.name) L.push(sub(X().hotel, { v: h.name + (h.area ? " (" + h.area + ")" : "") }));
+    if (it) L.push(sub(X().next, { v: titleOf(it) + " · " + fmtDay(it) + " " + (it.time || "") }));
+    L.push(C().link + " " + tripLink());
+    return "\n" + L.join("\n");
+  }
+  function getLocation() {
+    return new Promise(res => {
+      if (!navigator.geolocation) { res(""); return; }
+      let done = false; const fin = v => { if (!done) { done = true; res(v); } };
+      setTimeout(() => fin(""), 10000);
+      try {
+        navigator.geolocation.getCurrentPosition(
+          pos => fin("https://maps.google.com/?q=" + pos.coords.latitude.toFixed(5) + "," + pos.coords.longitude.toFixed(5)),
+          () => fin(""), { enableHighAccuracy: true, timeout: 9000, maximumAge: 60000 });
+      } catch (e) { fin(""); }
+    });
+  }
+  // Taxi / perdido: primero la ubicación (opcional), luego el botón de WhatsApp (toque del usuario: no lo bloquea el navegador)
+  function waWithLocation(base) {
+    chips([
+      { label: X().loc_btn, fn: () => botSay([X().loc_wait]).then(() => getLocation()).then(loc => {
+        const msg = base + ctxLines(loc);
+        botSay([loc ? X().loc_ok : X().loc_fail]).then(() => chips([{ label: X().send, kind: "wa", wa: true, waMsg: msg }, { label: U().back }]));
+      }) },
+      { label: X().no_loc, kind: "wa", wa: true, waMsg: base + ctxLines("") },
+      { label: U().back }
+    ]);
+  }
+  let pendingText = null;   // si no es null, lo próximo que escriba el viajero responde a esta pregunta
+  const sub = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (o[k] != null ? o[k] : m));
+  const pad = n => String(n).padStart(2, "0");
+  function hm(t) { const m = /(\d{1,2}):(\d{2})/.exec(String(t || "")); return m ? +m[1] * 60 + +m[2] : null; }
+  function fmtHM(min) { return pad(Math.floor(min / 60)) + ":" + pad(min % 60); }
+  function longDay(it) {
+    const d = itemDate(it);
+    if (isNaN(d)) return it.date || "";
+    try { return d.toLocaleDateString(lang, { weekday: "long", day: "numeric", month: "long" }); } catch (e) { return it.date; }
+  }
+  function tripLink() {
+    const code = getParam("code");
+    return code ? location.origin + location.pathname + "?code=" + encodeURIComponent(code) : location.href;
+  }
+  // Opciones de hora: respetan el horario oficial de la experiencia si existe (fijo / ventana / desde)
+  function timeOptions(it) {
+    const cur = hm(it.time), h = (ED() && it.tourId && (ED().tour(it.tourId, lang) || {}).horario) || null;
+    const out = [], add = (min, key) => { if (min == null || min < 300 || min > 21 * 60 || min === cur || out.some(o => o.t === fmtHM(min))) return; out.push({ t: fmtHM(min), key }); };
+    if (h && h.tipo === "fijo" && h.horas) h.horas.forEach(x => add(hm(x), "official"));
+    else if (h && h.tipo === "ventana") { for (let m = hm(h.desde); m != null && m <= hm(h.hasta) && out.length < 4; m += 30) add(m, "official"); }
+    else if (h && h.tipo === "desde") { const b = hm(h.hora); add(b, "official"); add(b + 60, "official"); add(b + 120, "official"); }
+    else if (cur != null) { add(cur - 60, "earlier"); add(cur + 60, "later"); add(cur + 120, "later2"); }
+    return out.slice(0, 4);
+  }
+  function changeFlow() {
+    pendingText = null;
+    const now = new Date(), list = (booking.itinerary || []).map((it, i) => ({ it, i })).filter(x => !(itemDate(x.it) < now));
+    const stops = (list.length ? list : (booking.itinerary || []).map((it, i) => ({ it, i }))).slice(0, 8);
+    botSay([C().which]).then(() => chips(stops.map(x => ({ label: fmtDay(x.it) + " · " + (x.it.time || "") + " — " + titleOf(x.it), fn: () => changeWhen(x.it) }))
+      .concat([{ label: C().other, fn: changeOther }, { label: U().back }])));
+  }
+  function changeWhen(it) {
+    const D = ED(), tour = D && it.tourId ? D.tour(it.tourId, lang) : null;
+    const msgs = [sub(C().now, { act: titleOf(it), day: longDay(it), time: it.time || "—" })];
+    if (tour && tour.horario) msgs.push(sub(C().window, { h: D.fmtHorario(tour.horario, lang) }));
+    msgs.push(C().when);
+    const pick = (v) => changePreview(it, v);
+    pendingText = (q) => pick(q);
+    botSay(msgs).then(() => chips(timeOptions(it).map(o => ({ label: sub(C()[o.key], { t: o.t }), fn: () => pick(o.t + " (" + C().same_day + ")") }))
+      .concat([{ label: C().other_day, fn: () => askText(C().type_ask, pick) }, { label: C().type_time, fn: () => askText(C().type_ask, pick) }, { label: U().back }])));
+  }
+  function changeOther() { askText(C().other_ask, (q) => changePreview(null, q)); }
+  function askText(prompt, cb) {
+    pendingText = cb;
+    botSay([prompt]).then(() => { chips([{ label: U().back }]); const inp = $("#c-ask-in"); if (inp) inp.focus(); });
+  }
+  function changeMessage(it, want) {
+    const c = C(), b = booking, h = b.hotel || {};
+    const L = [sub(c.hi, { name: b.name || "", code: b.code || "" }), "", c.title];
+    if (it) { L.push(sub(c.act, { v: titleOf(it) }), sub(c.was, { v: longDay(it) + ", " + (it.time || "") }), sub(c.want, { v: want })); }
+    else L.push(sub(c.free, { v: want }));
+    if (b.party) L.push(sub(c.party, { v: b.party }));
+    if (h.name) L.push(sub(c.hotel, { v: h.name + (h.area ? " (" + h.area + ")" : "") }));
+    L.push("", c.thanks);
+    if (lang !== "es") {   // resumen en español para el equipo
+      L.push("", "🇪🇸 Cambio de horario · " + (b.code || "") + (it ? " · " + (typeof it.title === "object" ? it.title.es || titleOf(it) : titleOf(it)) + " · " + (it.date || "") + " " + (it.time || "") + " → " + want.replace(C().same_day, CHG.es.same_day) : " · " + want));
+    }
+    L.push("", c.link + " " + tripLink());
+    return L.join("\n");
+  }
+  function changePreview(it, want) {
+    pendingText = null;
+    want = String(want || "").trim().slice(0, 120);
+    const msg = changeMessage(it, want);
+    botSay([C().preview, msg, C().note]).then(() => chips([
+      { label: C().send, kind: "wa", fn: () => { window.open(waHost(msg), "_blank", "noopener"); botSay([C().sent]).then(() => chips(menuChips())); } },
+      ...(it ? [{ label: C().edit, fn: () => changeWhen(it) }] : []),
+      { label: U().back }
+    ]));
   }
 
   /* ---------- Qué llevar (clima + pronóstico por parada) ---------- */
@@ -521,6 +704,7 @@
     if (askForm) askForm.addEventListener("submit", (e) => {
       e.preventDefault(); const inp = $("#c-ask-in"); const q = (inp.value || "").trim();
       if (!q || busy) return; inp.value = ""; addMsg("<span>" + esc(q) + "</span>", "user");
+      if (pendingText) { const cb = pendingText; pendingText = null; cb(q); return; }
       const m = matchTopic(q);
       const o = m ? null : officialMatch(q);
       if (m) runTopic(m);
