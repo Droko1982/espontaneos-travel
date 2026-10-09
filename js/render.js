@@ -77,6 +77,38 @@
 </div>`;
   }
 
+  /* Reseñas de Google: r = EspoData.resenas() · ctx: { t, lang }
+     Las reseñas se muestran en su idioma original (lang del bloque). */
+  const LOCALE = { es: "es-CO", en: "en-GB", fr: "fr-FR", de: "de-DE", pt: "pt-BR" };
+  function score(n, lang) { return new Intl.NumberFormat(LOCALE[lang] || "es-CO", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n); }
+  function month(ym, lang) {
+    if (!ym) return "";
+    const d = new Date(ym + "-15T12:00:00Z");
+    return isNaN(d) ? "" : new Intl.DateTimeFormat(LOCALE[lang] || "es-CO", { month: "short", year: "numeric", timeZone: "UTC" }).format(d);
+  }
+  const stars = n => "★★★★★".slice(0, Math.round(n)) + "☆☆☆☆☆".slice(0, 5 - Math.round(n));
+  function resenas(r, ctx) {
+    const t = ctx.t, lang = ctx.lang || "es", sc = score(r.calificacion, lang);
+    const ext = ' target="_blank" rel="noopener"';
+    return `<div class="reviews__summary reveal">
+  <span class="reviews__score">${esc(sc)}</span>
+  <span class="reviews__stars" role="img" aria-label="${esc(t("rev_stars").replace("{r}", sc))}">${stars(r.calificacion)}</span>
+  <span class="reviews__count">${esc(t("rev_count").replace("{n}", r.total))}</span>
+</div>
+${r.destacadas.length ? `<div class="reviews__grid">
+  ${r.destacadas.map(d => `<figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="${esc(t("rev_stars").replace("{r}", d.estrellas))}">${stars(d.estrellas)}</span>
+    <blockquote${d.idioma ? ` lang="${esc(d.idioma)}"` : ""}>${esc(d.texto)}</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">${esc(d.nombre.charAt(0))}</span><b>${esc(d.nombre)}</b>${d.fecha ? `<span>${esc(month(d.fecha, lang))}</span>` : ""}</figcaption>
+  </figure>`).join("\n  ")}
+</div>` : ""}
+<div class="reviews__cta">
+  ${r.url_ver ? `<a class="btn btn--ghost" href="${esc(r.url_ver)}"${ext}>${esc(t("rev_all"))}</a>` : ""}
+  ${r.url_escribir ? `<a class="btn btn--primary" href="${esc(r.url_escribir)}"${ext}>${esc(t("rev_write"))}</a>` : ""}
+</div>
+<p class="reviews__note">${esc(t("rev_note"))}</p>`;
+  }
+
   /* Planes oficiales (con alojamiento) + itinerarios sugeridos */
   function planes(oficiales, sugeridos, ctx) {
     const t = ctx.t;
@@ -103,5 +135,5 @@
 </div>`;
   }
 
-  return { esc, card, faq, sost, planes, ICON };
+  return { esc, card, faq, sost, resenas, score, planes, ICON };
 });

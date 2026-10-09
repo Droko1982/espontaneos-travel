@@ -239,6 +239,19 @@
     observeReveals();
   }
 
+  /* Reseñas de Google: sección y sello en la franja de confianza (ocultos si no hay datos) */
+  function renderResenas() {
+    if (!D() || !D().ready() || !D().resenas) return;
+    const r0 = D().resenas(), r = r0 && r0.visible ? r0 : null, sec = document.getElementById("resenas"), badge = document.getElementById("trust-google");
+    if (sec) sec.hidden = !r;
+    if (badge) badge.hidden = !r;
+    if (!r) return;
+    const c = $("#resenas-content"); if (c) c.innerHTML = R().resenas(r, { t, lang: currentLang });
+    const bt = document.getElementById("trust-google-txt");
+    if (bt) bt.textContent = t("trust_google").replace("{r}", R().score(r.calificacion, currentLang));
+    observeReveals();
+  }
+
   /* ---------- Ficha de experiencia ---------- */
   let lastFocus = null, modalId = null;
   function openModal(id) {
@@ -349,7 +362,7 @@
     renderAllData();
     document.dispatchEvent(new CustomEvent("espo:lang", { detail: currentLang }));
   }
-  function renderAllData() { renderFilters(); renderTours(); renderGallery(); renderTourSelect(); renderPlans(); renderSust(); injectTourJsonLd(); }
+  function renderAllData() { renderFilters(); renderTours(); renderGallery(); renderTourSelect(); renderPlans(); renderSust(); renderResenas(); injectTourJsonLd(); }
   function setMeta(attr, key, val) {
     let el = document.head.querySelector(`meta[${attr}="${key}"]`);
     if (!el) { el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); }

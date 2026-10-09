@@ -40,6 +40,12 @@
   }
   function isOfficialPhone(p) { return BIZ.officialPhones.indexOf(String(p || "").replace(/\D/g, "")) >= 0; }
   function safeHttps(u) { try { const x = new URL(String(u)); return x.protocol === "https:" ? x.href : ""; } catch (e) { return ""; } }
+  // Enlace para escribir reseña: data/jenny.json → resenas.url_escribir (BIZ.reviewUrl lo reemplaza si se llena)
+  function googleReviewUrl() {
+    const D = typeof window !== "undefined" && window.EspoData;
+    const r = D && D.ready && D.ready() && D.resenas ? D.resenas() : null;
+    return (r && r.url_escribir) || "";
+  }
   const REVIEW_FALLBACK = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Espontáneos Travel Armenia Quindío");
 
   /* ---------- Itinerarios armados (el QR de cada uno abre index.html?plan=ID) ----------
@@ -453,6 +459,6 @@
     name: (plan, lang) => T(plan.name, lang),
     ui: (lang) => Object.assign({}, PUI.es, PUI[lang] || {}),
     climateLabel: (k, lang) => CLIMATE[k] ? T(CLIMATE[k].label, lang) : "",
-    cfg: BIZ, reviewUrl: () => BIZ.reviewUrl || REVIEW_FALLBACK, sendLead, newLeadId, safePayLink, localISO, demoShift, isOfficialPhone, safeHttps
+    cfg: BIZ, reviewUrl: () => BIZ.reviewUrl || googleReviewUrl() || REVIEW_FALLBACK, sendLead, newLeadId, safePayLink, localISO, demoShift, isOfficialPhone, safeHttps
   };
 })();

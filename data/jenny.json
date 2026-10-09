@@ -29,6 +29,16 @@
   "web": "https://www.espontaneostravel.com",
   "ubicacion": "Armenia, Quindío, Colombia"
  },
+ "resenas": {
+  "_como_llenar": "Datos del Perfil de Empresa de Google. calificacion: promedio (ej. 4.9); total: número de reseñas; actualizado: AAAA-MM-DD; url_ver: enlace del perfil en Google Maps; url_escribir: enlace de 'Pedir reseñas' (https://g.page/r/…/review). destacadas: 3 a 6 reseñas públicas tal como están en Google, con el nombre como aparece allí (nombre + inicial). La sección del sitio se muestra sola cuando hay calificación y total.",
+  "fuente": "Google",
+  "calificacion": null,
+  "total": null,
+  "actualizado": null,
+  "url_ver": "",
+  "url_escribir": "",
+  "destacadas": []
+ },
  "general": {
   "que_llevar": "Para disfrutar al máximo del Paisaje Cultural Cafetero lleva ropa muy cómoda, bloqueador solar, repelente, buena hidratación y tu documento de identidad a la mano. ☀️💧",
   "no_incluye_siempre": "No incluye gastos no relacionados.",

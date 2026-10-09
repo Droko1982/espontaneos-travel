@@ -153,7 +153,7 @@
 
   /* ---------- Interfaz ---------- */
   function build() {
-    launch = el("button", "espo-launch", `<span class="espo-launch__ava">Y<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
+    launch = el("button", "espo-launch", `<span class="espo-launch__ava">J<span class="espo-badge">1</span></span><span class="espo-launch__txt"></span>`);
     launch.setAttribute("aria-label", "Jenny");
     launchTxt = launch.querySelector(".espo-launch__txt");
     badge = launch.querySelector(".espo-badge");
@@ -161,7 +161,7 @@
     panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "Jenny");
     panel.innerHTML =
       `<div class="espo-head">
-         <span class="espo-head__ava">Y</span>
+         <span class="espo-head__ava">J</span>
          <span class="espo-head__t"><b class="espo-h-title"></b><span class="espo-h-sub"></span></span>
          <button class="espo-head__close" aria-label="✕"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
        </div>

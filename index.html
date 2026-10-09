@@ -181,6 +181,7 @@
 <div class="trust" role="list">
   <div class="container trust__inner">
     <span class="trust__item" role="listitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span data-i18n="trust_rnt">RNT 91795</span></span>
+    <a class="trust__item" role="listitem" href="#resenas" id="trust-google" hidden><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg><span id="trust-google-txt"></span></a>
     <span class="trust__item" role="listitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span data-i18n="trust_local">Guías y familias locales</span></span>
     <a class="trust__item" role="listitem" href="#sostenibilidad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a10 10 0 0 0-7 17c2-6 5-8 7-8s5 2 7 8a10 10 0 0 0-7-17z"/></svg><span data-i18n="trust_sustain">Turismo sostenible</span></a>
     <a class="trust__item" role="listitem" href="#sin-barreras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="4" r="2"/><path d="M19 13l-5-1-2 7M5 13l5-1M12 12v-2"/><circle cx="12" cy="19" r="2.2"/></svg><span data-i18n="trust_access">Sin barreras</span></a>
@@ -1103,6 +1104,21 @@
       <li class="step reveal" data-delay="3"><span class="step__num"></span><h3 data-i18n="step3_t">Confirma</h3><p data-i18n="step3_d">Envía nombres, documentos y el soporte del anticipo del 50% para garantizar tu cupo.</p></li>
       <li class="step reveal" data-delay="4"><span class="step__num"></span><h3 data-i18n="step4_t">Vive</h3><p data-i18n="step4_d">Jenny te acompaña en el viaje con tu itinerario, horarios y qué llevar.</p></li>
     </ol>
+  </div>
+</section>
+
+<!-- ============ Reseñas de Google (se muestra sola cuando data/jenny.json → resenas tiene datos) ============ -->
+<section class="section section--tight reviews" id="resenas" hidden>
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow" data-i18n="rev_eyebrow">Reseñas en Google</span>
+      <h2 class="section-title" data-i18n="rev_title">Lo que dicen nuestros viajeros</h2>
+    </div>
+    <div id="resenas-content">
+<!-- BUILD:resenas:start -->
+
+<!-- BUILD:resenas:end -->
+    </div>
   </div>
 </section>
 

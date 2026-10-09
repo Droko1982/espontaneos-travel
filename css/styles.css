@@ -938,3 +938,19 @@ a.trust__item:hover { text-decoration-color: currentColor; }
 @media (max-width: 480px) { .totop { bottom: 142px; } }
 .toast__link { color: var(--sun-300); text-decoration: underline; font-weight: 600; margin-left: .3rem; }
 @media (max-width: 420px) { .c-top .brand__text { display: none; } }   /* encabezado del conserje a 360 px */
+
+/* Reseñas de Google (index.html#resenas; datos en data/jenny.json → resenas) */
+.reviews__summary { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .4rem .8rem; margin-bottom: 1.6rem; }
+.reviews__score { font-family: var(--font-display); font-size: 2.4rem; font-weight: 600; line-height: 1; color: var(--text); }
+.reviews__stars, .review__stars { color: var(--accent-strong); letter-spacing: .08em; font-size: 1.25rem; line-height: 1; }
+.reviews__count { color: var(--text-soft); font-weight: 600; }
+.reviews__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 1rem; }
+.review { margin: 0; display: flex; flex-direction: column; gap: .7rem; padding: 1.2rem 1.25rem; background: var(--card); border: 1px solid var(--border-soft); border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+.review__stars { font-size: 1rem; }
+.review blockquote { margin: 0; color: var(--text); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+.review figcaption { display: flex; align-items: center; gap: .55rem; margin-top: auto; color: var(--text-muted); font-size: .9rem; }
+.review figcaption b { color: var(--text); font-weight: 600; }
+.review figcaption span:last-child:not(.review__ava)::before { content: "·"; margin-right: .5rem; }
+.review__ava { width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--brand); color: var(--on-brand); font-weight: 600; }
+.reviews__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: 1.6rem; }
+.reviews__note { text-align: center; color: var(--text-muted); font-size: .85rem; margin-top: .9rem; }

@@ -85,6 +85,21 @@
       historias: s.historias.map(h => ({ nombre: h.nombre, rol: pick(h.rol, xh[h.nombre] && xh[h.nombre].rol), texto: pick(h.texto, xh[h.nombre] && xh[h.nombre].texto) }))
     };
   }
+  /* Reseñas de Google (data/jenny.json → resenas). visible = hay calificación y total (sección del sitio);
+     url_escribir sirve aunque la sección aún no se muestre (botón de reseña del conserje). */
+  function resenas() {
+    const r = Y && Y.resenas;
+    if (!r) return null;
+    const https = u => (/^https:\/\/[^\s]+$/.test(u || "") ? u : "");
+    return {
+      visible: Number(r.calificacion) > 0 && Number(r.total) > 0,
+      calificacion: Math.min(5, Number(r.calificacion)), total: Math.round(Number(r.total)), actualizado: r.actualizado || "",
+      url_ver: https(r.url_ver), url_escribir: https(r.url_escribir),
+      destacadas: (r.destacadas || []).filter(d => d && d.texto && d.nombre).slice(0, 6).map(d => ({
+        nombre: String(d.nombre), texto: String(d.texto), estrellas: Math.max(1, Math.min(5, Math.round(Number(d.estrellas) || 5))),
+        fecha: /^\d{4}-\d{2}/.test(d.fecha || "") ? d.fecha.slice(0, 7) : "", idioma: /^[a-z]{2}$/.test(d.idioma || "") ? d.idioma : "" }))
+    };
+  }
   function contacto() { return (Y && Y.contacto) || { whatsapp: "573187200023", rnt: "91795", correo: "info@espontaneostravel.com" }; }
   function meta() { return (Y && Y._meta) || {}; }
 
@@ -124,6 +139,6 @@
   // Agrupación por duración para filtros: corta (≤2 h), media (3–5 h), día completo (≥6 h)
   function durBucket(n) { if (n == null) return ""; return n <= 2 ? "corta" : n <= 5 ? "media" : "completa"; }
 
-  const api = { load, use, ready, published, tour, tours, node, planes, planesNoIncluye, general, sost, contacto, meta, fmtHorario, fmtDur, hhmm, durBucket };
+  const api = { load, use, ready, published, tour, tours, node, planes, planesNoIncluye, general, sost, resenas, contacto, meta, fmtHorario, fmtDur, hhmm, durBucket };
   return api;
 });

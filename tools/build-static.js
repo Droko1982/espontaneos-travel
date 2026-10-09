@@ -61,6 +61,8 @@ const planes = R.planes(D.planes("es"), sug, { t, noIncluye: D.planesNoIncluye("
   waPlan: name => "https://wa.me/573187200023?text=" + encodeURIComponent(t("wa_plan_msg").replace("{plan}", name)) });
 
 const sost = R.sost(D.sost("es"), { t });
+const rev0 = D.resenas(), rev = rev0 && rev0.visible ? rev0 : null;
+const resenas = rev ? R.resenas(rev, { t, lang: "es" }) : "";
 const faq = R.faq(FAQ.items(D, "es"));
 
 const gal = [["palma2.jpg", "Palmas de cera"], ["paramo.jpg", "Páramo"], ["termales.jpg", "Aguas termales"],
@@ -75,7 +77,10 @@ function put(name, content) {
   if (!re.test(html)) throw new Error("Falta el bloque BUILD:" + name);
   html = html.replace(re, `$1\n${content}\n$2`);
 }
-put("tours", cards); put("planes", planes); put("sost", sost); put("faq", faq); put("gallery", gal);
+put("tours", cards); put("planes", planes); put("sost", sost); put("faq", faq); put("gallery", gal); put("resenas", resenas);
+// La sección de reseñas y el sello de Google solo se ven cuando hay datos
+html = html.replace(/(id="resenas")( hidden)?/, rev ? "$1" : "$1 hidden").replace(/(id="trust-google")( hidden)?/, rev ? "$1" : "$1 hidden");
+if (rev) html = html.replace(/(<span id="trust-google-txt">)[^<]*(<\/span>)/, "$1" + esc(t("trust_google").replace("{r}", R.score(rev.calificacion, "es"))) + "$2");
 fs.writeFileSync(path.join(ROOT, "index.html"), html);
 console.log(`index.html: ${tours.length} tarjetas, ${D.planes("es").length} planes + ${sug.length} itinerarios, ${FAQ.items(D, "es").length} preguntas, galería ${gal ? gal.split("<figure").length - 1 : 0}`);
 void GALLERY;
