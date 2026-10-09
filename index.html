@@ -181,7 +181,7 @@
 <div class="trust" role="list">
   <div class="container trust__inner">
     <span class="trust__item" role="listitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span data-i18n="trust_rnt">RNT 91795</span></span>
-    <a class="trust__item" role="listitem" href="#resenas" id="trust-google" hidden><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg><span id="trust-google-txt"></span></a>
+    <a class="trust__item" role="listitem" href="#resenas" id="trust-google"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg><span id="trust-google-txt">5,0 en Google</span></a>
     <span class="trust__item" role="listitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span data-i18n="trust_local">Guías y familias locales</span></span>
     <a class="trust__item" role="listitem" href="#sostenibilidad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a10 10 0 0 0-7 17c2-6 5-8 7-8s5 2 7 8a10 10 0 0 0-7-17z"/></svg><span data-i18n="trust_sustain">Turismo sostenible</span></a>
     <a class="trust__item" role="listitem" href="#sin-barreras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="4" r="2"/><path d="M19 13l-5-1-2 7M5 13l5-1M12 12v-2"/><circle cx="12" cy="19" r="2.2"/></svg><span data-i18n="trust_access">Sin barreras</span></a>
@@ -1108,7 +1108,7 @@
 </section>
 
 <!-- ============ Reseñas de Google (se muestra sola cuando data/jenny.json → resenas tiene datos) ============ -->
-<section class="section section--tight reviews" id="resenas" hidden>
+<section class="section section--tight reviews" id="resenas">
   <div class="container">
     <div class="section-head center reveal">
       <span class="eyebrow" data-i18n="rev_eyebrow">Reseñas en Google</span>
@@ -1116,7 +1116,48 @@
     </div>
     <div id="resenas-content">
 <!-- BUILD:resenas:start -->
-
+<div class="reviews__summary reveal">
+  <span class="reviews__score">5,0</span>
+  <span class="reviews__stars" role="img" aria-label="5,0 de 5 estrellas">★★★★★</span>
+  <span class="reviews__count">10 reseñas en Google</span>
+</div>
+<div class="reviews__grid">
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="es">Carolina y Jairo fueron excelentes. Recomendamos mucho organizar un tour con Espontaneos Travel! Fueron muy amables, puntuales, profesionales y generosos en nuestra caminata por el Valle del Cocora.</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">V</span><b>Virginia P.</b></figcaption>
+  </figure>
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="es">Excelente servicio, la amabilidad del conductor guía es insuperable, muy atento y dispuesto para lo que necesitáramos o pidiéramos, carro muy confortable y amplio, a ojos cerrados los recomiendo….feliz y muy agradecido por el servicio prestado.</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">L</span><b>Luis Eduardo M.</b></figcaption>
+  </figure>
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="en">My wife and I did several private tours with these folks and both were great. Planning and communication from the company were great and so were the interpreters and guides. …</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">A</span><b>Allen B.</b></figcaption>
+  </figure>
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="es">El eje cafetero es un lugar mágico, que te brinda la oportunidad de enriquecer tu espíritu, con paisajes, cultura y diversión. Gracias David por brindarnos una experiencia mágica con tus atenciones durante el recorrido</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">J</span><b>Josè Luis P.</b></figcaption>
+  </figure>
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="es">Excelente servicio!!! Restaurante, tours y guias</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">D</span><b>Dora C.</b></figcaption>
+  </figure>
+  <figure class="review reveal">
+    <span class="review__stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span>
+    <blockquote lang="es">Amabilidad y cumplimiento en el servicio!</blockquote>
+    <figcaption><span class="review__ava" aria-hidden="true">I</span><b>Ingrid G.</b></figcaption>
+  </figure>
+</div>
+<div class="reviews__cta">
+  <a class="btn btn--ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Espont%C3%A1neos%20Travel%20Armenia%20Quind%C3%ADo" target="_blank" rel="noopener">Ver todas en Google</a>
+  
+</div>
+<p class="reviews__note">Reseñas escritas por viajeros en Google, en su idioma original.</p>
 <!-- BUILD:resenas:end -->
     </div>
   </div>

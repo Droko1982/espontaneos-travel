@@ -32,12 +32,20 @@
  "resenas": {
   "_como_llenar": "Datos del Perfil de Empresa de Google. calificacion: promedio (ej. 4.9); total: número de reseñas; actualizado: AAAA-MM-DD; url_ver: enlace del perfil en Google Maps; url_escribir: enlace de 'Pedir reseñas' (https://g.page/r/…/review). destacadas: 3 a 6 reseñas públicas tal como están en Google, con el nombre como aparece allí (nombre + inicial). La sección del sitio se muestra sola cuando hay calificación y total.",
   "fuente": "Google",
-  "calificacion": null,
-  "total": null,
-  "actualizado": null,
-  "url_ver": "",
+  "calificacion": 5.0,
+  "total": 10,
+  "actualizado": "2026-10-08",
+  "url_ver": "https://www.google.com/maps/search/?api=1&query=Espont%C3%A1neos%20Travel%20Armenia%20Quind%C3%ADo",
   "url_escribir": "",
-  "destacadas": []
+  "_nota_destacadas": "Textos tal como están en Google (8-oct-2026), sin fecha porque Google solo muestra 'hace un año'. La de Allen B. está cortada donde Google dice 'Más'. No se destaca la reseña del propio Mauricio Rodríguez (dueño).",
+  "destacadas": [
+   {"nombre": "Virginia P.", "estrellas": 5, "idioma": "es", "texto": "Carolina y Jairo fueron excelentes. Recomendamos mucho organizar un tour con Espontaneos Travel! Fueron muy amables, puntuales, profesionales y generosos en nuestra caminata por el Valle del Cocora."},
+   {"nombre": "Luis Eduardo M.", "estrellas": 5, "idioma": "es", "texto": "Excelente servicio, la amabilidad del conductor guía es insuperable, muy atento y dispuesto para lo que necesitáramos o pidiéramos, carro muy confortable y amplio, a ojos cerrados los recomiendo….feliz y muy agradecido por el servicio prestado."},
+   {"nombre": "Allen B.", "estrellas": 5, "idioma": "en", "texto": "My wife and I did several private tours with these folks and both were great. Planning and communication from the company were great and so were the interpreters and guides. …"},
+   {"nombre": "Josè Luis P.", "estrellas": 5, "idioma": "es", "texto": "El eje cafetero es un lugar mágico, que te brinda la oportunidad de enriquecer tu espíritu, con paisajes, cultura y diversión. Gracias David por brindarnos una experiencia mágica con tus atenciones durante el recorrido"},
+   {"nombre": "Dora C.", "estrellas": 5, "idioma": "es", "texto": "Excelente servicio!!! Restaurante, tours y guias"},
+   {"nombre": "Ingrid G.", "estrellas": 5, "idioma": "es", "texto": "Amabilidad y cumplimiento en el servicio!"}
+  ]
  },
  "general": {
   "que_llevar": "Para disfrutar al máximo del Paisaje Cultural Cafetero lleva ropa muy cómoda, bloqueador solar, repelente, buena hidratación y tu documento de identidad a la mano. ☀️💧",
